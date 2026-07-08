@@ -29,7 +29,14 @@ public class AuthController {
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<TokenResponse>> login(@Valid @RequestBody LoginRequest request) {
         TokenResponse response;
-        if ("STAFF".equalsIgnoreCase(request.getUserType())) {
+        String userType = request.getUserType();
+        if (userType == null || userType.isBlank()) {
+            if (authService.isStaffUser(request.getUsername())) {
+                response = authService.loginStaff(request);
+            } else {
+                response = authService.loginCustomer(request);
+            }
+        } else if ("STAFF".equalsIgnoreCase(userType) || "ADMIN".equalsIgnoreCase(userType)) {
             response = authService.loginStaff(request);
         } else {
             response = authService.loginCustomer(request);
@@ -59,8 +66,12 @@ public class AuthController {
     @Operation(summary = "Lấy thông tin tài khoản hiện tại")
     @GetMapping("/me")
     public ResponseEntity<ApiResponse<Map<String, Object>>> getMe(Authentication authentication) {
+        if (authentication == null) {
+            throw com.gateos.common.exception.BusinessException.unauthorized("Chưa đăng nhập hoặc token không hợp lệ", "ERR-AUTH-004");
+        }
         return ResponseEntity.ok(ApiResponse.ok(
                 Map.of("username", authentication.getName(), "roles", authentication.getAuthorities())
         ));
     }
+
 }

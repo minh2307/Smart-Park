@@ -14,7 +14,7 @@ public class LoginRequest {
 
     /**
      * Phân biệt đăng nhập Staff hay Customer.
-     * Giá trị: "STAFF" hoặc "CUSTOMER" (mặc định "CUSTOMER")
+     * Giá trị: "STAFF" hoặc "CUSTOMER"
      */
-    private String userType = "CUSTOMER";
+    private String userType;
 }

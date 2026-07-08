@@ -2,6 +2,8 @@ package com.gateos.module.order.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gateos.config.SecurityConfig;
+import com.gateos.module.auth.entity.Customer;
+import com.gateos.module.auth.repository.CustomerRepository;
 import com.gateos.module.order.dto.CreateOrderRequest;
 import com.gateos.module.order.entity.Order;
 import com.gateos.module.order.service.OrderService;
@@ -20,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -44,6 +47,9 @@ class OrderControllerTest {
     private OrderService orderService;
 
     @MockBean
+    private CustomerRepository customerRepository;
+
+    @MockBean
     private JwtTokenProvider jwtTokenProvider;
 
     @Test
@@ -63,6 +69,8 @@ class OrderControllerTest {
                 .totalAmount(BigDecimal.valueOf(200000))
                 .build();
 
+        Customer mockCustomer = Customer.builder().id(1L).username("1").build();
+        when(customerRepository.findByUsername("1")).thenReturn(Optional.of(mockCustomer));
         when(orderService.createOrder(anyLong(), any(CreateOrderRequest.class))).thenReturn(order);
 
         // Act & Assert
@@ -165,6 +173,8 @@ class OrderControllerTest {
     void shouldCancelOrder_WhenCustomer() throws Exception {
         // Arrange
         Order cancelled = Order.builder().id(10L).paymentStatus(Order.PaymentStatus.CANCELLED).build();
+        Customer mockCustomer = Customer.builder().id(1L).username("1").build();
+        when(customerRepository.findByUsername("1")).thenReturn(Optional.of(mockCustomer));
         when(orderService.cancelOrder(eq(10L), anyLong())).thenReturn(cancelled);
 
         // Act & Assert
@@ -175,3 +185,4 @@ class OrderControllerTest {
                 .andExpect(jsonPath("$.data.paymentStatus").value("CANCELLED"));
     }
 }
+

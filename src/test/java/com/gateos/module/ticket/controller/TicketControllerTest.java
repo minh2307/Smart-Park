@@ -1,6 +1,8 @@
 package com.gateos.module.ticket.controller;
 
 import com.gateos.config.SecurityConfig;
+import com.gateos.module.auth.entity.Customer;
+import com.gateos.module.auth.repository.CustomerRepository;
 import com.gateos.module.ticket.entity.Ticket;
 import com.gateos.module.ticket.service.TicketService;
 import com.gateos.security.JwtAuthenticationFilter;
@@ -17,6 +19,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -36,12 +39,17 @@ class TicketControllerTest {
     private TicketService ticketService;
 
     @MockBean
+    private CustomerRepository customerRepository;
+
+    @MockBean
     private JwtTokenProvider jwtTokenProvider;
 
     @Test
     @WithMockUser(username = "cust", roles = {"CUSTOMER"})
     void shouldGetMyTickets_WhenCustomer() throws Exception {
         // Arrange
+        Customer mockCustomer = Customer.builder().id(1L).username("cust").build();
+        when(customerRepository.findByUsername("cust")).thenReturn(Optional.of(mockCustomer));
         when(ticketService.getMyTickets(eq(1L), any(PageRequest.class)))
                 .thenReturn(new PageImpl<>(List.of(Ticket.builder().id(10L).ticketCode("GOS-123").build())));
 
@@ -101,3 +109,4 @@ class TicketControllerTest {
                 .andExpect(content().bytes(fakeQr));
     }
 }
+

@@ -20,7 +20,9 @@ public class OrderItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id", nullable = false)
+    @com.fasterxml.jackson.annotation.JsonIgnore
     private Order order;
+
 
     @Column(name = "ticket_type_id", nullable = false)
     private Long ticketTypeId;
