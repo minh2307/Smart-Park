@@ -24,6 +24,10 @@ public class Order {
     @Column(name = "customer_id", nullable = false)
     private Long customerId;
 
+    @Column(name = "venue_id", nullable = false)
+    private Long venueId;
+
+
     @Column(name = "order_code", unique = true, nullable = false, length = 50)
     private String orderCode;
 
@@ -44,9 +48,10 @@ public class Order {
     @Column(name = "payment_time")
     private LocalDateTime paymentTime;
 
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @Builder.Default
     private List<OrderItem> items = new ArrayList<>();
+
 
     @CreatedDate
     @Column(name = "created_at", updatable = false)

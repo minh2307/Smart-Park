@@ -53,7 +53,9 @@ public class SecurityConfig {
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/v1/auth/me").authenticated()
                         .requestMatchers(PUBLIC_PATHS).permitAll()
+
                         .requestMatchers(HttpMethod.GET, "/api/v1/attractions/**").permitAll()
                         // Admin only
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/venues/**").hasRole("ADMIN")

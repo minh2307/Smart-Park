@@ -46,10 +46,12 @@ public class OrderService {
 
         Order order = Order.builder()
                 .customerId(customerId)
+                .venueId(request.getVenueId())
                 .orderCode("GOS-" + UUID.randomUUID().toString().replace("-", "").substring(0, 12).toUpperCase())
                 .paymentStatus(Order.PaymentStatus.PENDING)
                 .totalAmount(BigDecimal.ZERO)
                 .build();
+
 
         order = orderRepository.save(order);
 

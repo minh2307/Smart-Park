@@ -17,6 +17,7 @@ import org.springframework.security.authentication.LockedException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.Collections;
 import java.util.List;
@@ -93,6 +94,24 @@ class GlobalExceptionHandlerTest {
         assertNotNull(response.getBody());
         assertFalse(response.getBody().isSuccess());
         assertEquals("Invalid constraint", response.getBody().getMessage());
+        assertEquals("ERR-VALIDATION-002", response.getBody().getErrorCode());
+    }
+
+    @Test
+    void shouldHandleMethodArgumentTypeMismatchException() {
+        // Arrange
+        MethodArgumentTypeMismatchException ex = mock(MethodArgumentTypeMismatchException.class);
+        when(ex.getName()).thenReturn("ticketId");
+        when(ex.getMessage()).thenReturn("Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'");
+
+        // Act
+        ResponseEntity<ApiResponse<Void>> response = exceptionHandler.handleMethodArgumentTypeMismatch(ex);
+
+        // Assert
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertNotNull(response.getBody());
+        assertFalse(response.getBody().isSuccess());
+        assertEquals("Tham số 'ticketId' không đúng định dạng hoặc kiểu dữ liệu yêu cầu", response.getBody().getMessage());
         assertEquals("ERR-VALIDATION-002", response.getBody().getErrorCode());
     }
 

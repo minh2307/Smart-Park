@@ -132,7 +132,7 @@ public class AuthService {
                         .username(staff.getUsername())
                         .fullName(staff.getFullName())
                         .email(staff.getEmail())
-                        .userType("STAFF")
+                        .userType(staff.getRole() == Staff.StaffRole.ADMIN ? "ADMIN" : "STAFF")
                         .build())
                 .build();
     }
@@ -222,4 +222,9 @@ public class AuthService {
                 .authorities("ROLE_" + staff.getRole().name())
                 .build();
     }
+
+    public boolean isStaffUser(String username) {
+        return staffRepository.existsByUsername(username);
+    }
 }
+

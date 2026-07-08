@@ -1,6 +1,9 @@
 package com.gateos.module.ticket.controller;
 
+import com.gateos.common.exception.BusinessException;
 import com.gateos.common.response.ApiResponse;
+import com.gateos.module.auth.entity.Customer;
+import com.gateos.module.auth.repository.CustomerRepository;
 import com.gateos.module.ticket.entity.Ticket;
 import com.gateos.module.ticket.service.TicketService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,15 +26,20 @@ import org.springframework.web.bind.annotation.*;
 public class TicketController {
 
     private final TicketService ticketService;
+    private final CustomerRepository customerRepository;
 
     @Operation(summary = "Lấy danh sách vé của khách hàng hiện tại")
     @GetMapping("/customers/me/tickets")
     @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponse<Page<Ticket>>> getMyTickets(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "20") int size) {
-        // In production, extract customerId from SecurityContext UserDetails
-        return ResponseEntity.ok(ApiResponse.ok(ticketService.getMyTickets(1L, PageRequest.of(page, size))));
+            @RequestParam(defaultValue = "20") int size,
+            Authentication authentication) {
+        String username = authentication.getName();
+        Customer customer = customerRepository.findByUsername(username)
+                .orElseThrow(() -> BusinessException.unauthorized("Không tìm thấy thông tin khách hàng", "ERR-AUTH-004"));
+        
+        return ResponseEntity.ok(ApiResponse.ok(ticketService.getMyTickets(customer.getId(), PageRequest.of(page, size))));
     }
 
     @Operation(summary = "Lấy chi tiết vé")
@@ -48,3 +57,4 @@ public class TicketController {
                 .body(qrImage);
     }
 }
+

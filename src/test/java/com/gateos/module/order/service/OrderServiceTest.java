@@ -73,7 +73,9 @@ class OrderServiceTest {
         assertEquals(BigDecimal.valueOf(300000), order.getTotalAmount());
         assertEquals(1, order.getItems().size());
         assertEquals(100L, order.getCustomerId());
+        assertEquals(1L, order.getVenueId());
         verify(orderRepository, times(2)).save(any(Order.class));
+
     }
 
     @Test

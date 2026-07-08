@@ -1,6 +1,9 @@
 package com.gateos.module.order.controller;
 
+import com.gateos.common.exception.BusinessException;
 import com.gateos.common.response.ApiResponse;
+import com.gateos.module.auth.entity.Customer;
+import com.gateos.module.auth.repository.CustomerRepository;
 import com.gateos.module.order.dto.CreateOrderRequest;
 import com.gateos.module.order.entity.Order;
 import com.gateos.module.order.service.OrderService;
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.*;
 public class OrderController {
 
     private final OrderService orderService;
+    private final CustomerRepository customerRepository;
 
     @Operation(summary = "Tạo đơn đặt vé mới (Customer)")
     @PostMapping
@@ -32,13 +36,12 @@ public class OrderController {
     public ResponseEntity<ApiResponse<Order>> createOrder(
             @Valid @RequestBody CreateOrderRequest request,
             Authentication authentication) {
-        // Extract customer id from token subject (username) - simplified, normally load from DB
-        Long customerId = Long.parseLong(
-                authentication.getName().replaceAll("[^0-9]", "").isEmpty() ? "1" : "1"
-        );
-        // In production, resolve customer ID via a UserContext service
+        String username = authentication.getName();
+        Customer customer = customerRepository.findByUsername(username)
+                .orElseThrow(() -> BusinessException.unauthorized("Không tìm thấy thông tin khách hàng", "ERR-AUTH-004"));
+        
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(ApiResponse.ok(orderService.createOrder(customerId, request), "Đặt vé thành công"));
+                .body(ApiResponse.ok(orderService.createOrder(customer.getId(), request), "Đặt vé thành công"));
     }
 
     @Operation(summary = "Lấy chi tiết đơn hàng theo mã")
@@ -60,6 +63,11 @@ public class OrderController {
     @PostMapping("/{id}/cancel")
     @PreAuthorize("hasRole('CUSTOMER')")
     public ResponseEntity<ApiResponse<Order>> cancel(@PathVariable Long id, Authentication authentication) {
-        return ResponseEntity.ok(ApiResponse.ok(orderService.cancelOrder(id, 1L), "Đơn hàng đã được hủy"));
+        String username = authentication.getName();
+        Customer customer = customerRepository.findByUsername(username)
+                .orElseThrow(() -> BusinessException.unauthorized("Không tìm thấy thông tin khách hàng", "ERR-AUTH-004"));
+        
+        return ResponseEntity.ok(ApiResponse.ok(orderService.cancelOrder(id, customer.getId()), "Đơn hàng đã được hủy"));
     }
 }
+
