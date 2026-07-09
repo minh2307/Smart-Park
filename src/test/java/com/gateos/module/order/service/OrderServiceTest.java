@@ -6,6 +6,8 @@ import com.gateos.module.order.entity.Order;
 import com.gateos.module.order.repository.OrderRepository;
 import com.gateos.module.tickettype.entity.TicketType;
 import com.gateos.module.tickettype.repository.TicketTypeRepository;
+import com.gateos.module.venue.entity.Venue;
+import com.gateos.module.venue.repository.VenueRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,6 +38,9 @@ class OrderServiceTest {
     @Mock
     private TicketTypeRepository ticketTypeRepository;
 
+    @Mock
+    private VenueRepository venueRepository;
+
     @InjectMocks
     private OrderService orderService;
 
@@ -54,13 +59,20 @@ class OrderServiceTest {
         itemReq.setQuantity(3);
         request.setItems(List.of(itemReq));
 
+        Venue venue = Venue.builder()
+                .id(1L)
+                .status(Venue.VenueStatus.ACTIVE)
+                .build();
+
         TicketType tt = TicketType.builder()
                 .id(5L)
+                .venueId(1L)
                 .name("VIP Ticket")
                 .price(BigDecimal.valueOf(100000))
                 .status(TicketType.TicketTypeStatus.ACTIVE)
                 .build();
 
+        when(venueRepository.findById(1L)).thenReturn(Optional.of(venue));
         when(ticketTypeRepository.findById(5L)).thenReturn(Optional.of(tt));
         when(orderRepository.save(any(Order.class))).thenAnswer(i -> i.getArgument(0));
 
@@ -79,14 +91,52 @@ class OrderServiceTest {
     }
 
     @Test
+    void shouldThrowNotFound_WhenVenueDoesNotExist() {
+        // Arrange
+        CreateOrderRequest request = new CreateOrderRequest();
+        request.setVenueId(999L);
+        when(venueRepository.findById(999L)).thenReturn(Optional.empty());
+
+        // Act & Assert
+        BusinessException ex = assertThrows(BusinessException.class, () -> orderService.createOrder(100L, request));
+        assertEquals("ERR-VEN-003", ex.getErrorCode());
+    }
+
+    @Test
+    void shouldThrowBadRequest_WhenVenueIsInactive() {
+        // Arrange
+        CreateOrderRequest request = new CreateOrderRequest();
+        request.setVenueId(1L);
+
+        Venue venue = Venue.builder()
+                .id(1L)
+                .status(Venue.VenueStatus.INACTIVE)
+                .build();
+
+        when(venueRepository.findById(1L)).thenReturn(Optional.of(venue));
+
+        // Act & Assert
+        BusinessException ex = assertThrows(BusinessException.class, () -> orderService.createOrder(100L, request));
+        assertEquals("ERR-VEN-002", ex.getErrorCode());
+    }
+
+    @Test
     void shouldThrowBadRequest_WhenQuantityGreaterThan10() {
         // Arrange
         CreateOrderRequest request = new CreateOrderRequest();
+        request.setVenueId(1L);
         CreateOrderRequest.OrderItemRequest item1 = new CreateOrderRequest.OrderItemRequest();
         item1.setQuantity(6);
         CreateOrderRequest.OrderItemRequest item2 = new CreateOrderRequest.OrderItemRequest();
         item2.setQuantity(5);
         request.setItems(List.of(item1, item2));
+
+        Venue venue = Venue.builder()
+                .id(1L)
+                .status(Venue.VenueStatus.ACTIVE)
+                .build();
+
+        when(venueRepository.findById(1L)).thenReturn(Optional.of(venue));
 
         // Act & Assert
         BusinessException ex = assertThrows(BusinessException.class, () -> orderService.createOrder(100L, request));
@@ -97,11 +147,18 @@ class OrderServiceTest {
     void shouldThrowNotFound_WhenTicketTypeDoesNotExist() {
         // Arrange
         CreateOrderRequest request = new CreateOrderRequest();
+        request.setVenueId(1L);
         CreateOrderRequest.OrderItemRequest item = new CreateOrderRequest.OrderItemRequest();
         item.setTicketTypeId(99L);
         item.setQuantity(2);
         request.setItems(List.of(item));
 
+        Venue venue = Venue.builder()
+                .id(1L)
+                .status(Venue.VenueStatus.ACTIVE)
+                .build();
+
+        when(venueRepository.findById(1L)).thenReturn(Optional.of(venue));
         when(ticketTypeRepository.findById(99L)).thenReturn(Optional.empty());
 
         // Act & Assert
@@ -113,10 +170,16 @@ class OrderServiceTest {
     void shouldThrowBadRequest_WhenTicketTypeIsInactive() {
         // Arrange
         CreateOrderRequest request = new CreateOrderRequest();
+        request.setVenueId(1L);
         CreateOrderRequest.OrderItemRequest item = new CreateOrderRequest.OrderItemRequest();
         item.setTicketTypeId(5L);
         item.setQuantity(2);
         request.setItems(List.of(item));
+
+        Venue venue = Venue.builder()
+                .id(1L)
+                .status(Venue.VenueStatus.ACTIVE)
+                .build();
 
         TicketType tt = TicketType.builder()
                 .id(5L)
@@ -124,11 +187,43 @@ class OrderServiceTest {
                 .status(TicketType.TicketTypeStatus.INACTIVE)
                 .build();
 
+        when(venueRepository.findById(1L)).thenReturn(Optional.of(venue));
         when(ticketTypeRepository.findById(5L)).thenReturn(Optional.of(tt));
 
         // Act & Assert
         BusinessException ex = assertThrows(BusinessException.class, () -> orderService.createOrder(100L, request));
         assertEquals("ERR-TKT-004", ex.getErrorCode());
+    }
+
+    @Test
+    void shouldThrowBadRequest_WhenTicketTypeVenueDoesNotMatchOrderVenue() {
+        // Arrange
+        CreateOrderRequest request = new CreateOrderRequest();
+        request.setVenueId(1L);
+        CreateOrderRequest.OrderItemRequest item = new CreateOrderRequest.OrderItemRequest();
+        item.setTicketTypeId(5L);
+        item.setQuantity(2);
+        request.setItems(List.of(item));
+
+        Venue venue = Venue.builder()
+                .id(1L)
+                .status(Venue.VenueStatus.ACTIVE)
+                .build();
+
+        TicketType tt = TicketType.builder()
+                .id(5L)
+                .venueId(2L) // Different venue!
+                .name("VIP Ticket")
+                .price(BigDecimal.valueOf(100000))
+                .status(TicketType.TicketTypeStatus.ACTIVE)
+                .build();
+
+        when(venueRepository.findById(1L)).thenReturn(Optional.of(venue));
+        when(ticketTypeRepository.findById(5L)).thenReturn(Optional.of(tt));
+
+        // Act & Assert
+        BusinessException ex = assertThrows(BusinessException.class, () -> orderService.createOrder(100L, request));
+        assertEquals("ERR-TKT-005", ex.getErrorCode());
     }
 
     @Test
