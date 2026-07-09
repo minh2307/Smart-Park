@@ -7,6 +7,8 @@ import com.gateos.module.order.entity.OrderItem;
 import com.gateos.module.order.repository.OrderRepository;
 import com.gateos.module.tickettype.entity.TicketType;
 import com.gateos.module.tickettype.repository.TicketTypeRepository;
+import com.gateos.module.venue.entity.Venue;
+import com.gateos.module.venue.repository.VenueRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,14 +31,25 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final TicketTypeRepository ticketTypeRepository;
+    private final VenueRepository venueRepository;
 
     @Value("${app.order.timeout-minutes:15}")
     private int orderTimeoutMinutes;
 
     @Transactional
     public Order createOrder(Long customerId, CreateOrderRequest request) {
+        // Validate venue existence and status
+        Venue venue = venueRepository.findById(request.getVenueId())
+                .orElseThrow(() -> BusinessException.notFound("Địa điểm không tồn tại", "ERR-VEN-003"));
+        if (venue.getStatus() == Venue.VenueStatus.INACTIVE) {
+            throw BusinessException.badRequest("Địa điểm này hiện không hoạt động", "ERR-VEN-002");
+        }
+
         // Validate total quantity <= 10 across all items per BR-ORD-01
-        int totalQty = request.getItems().stream().mapToInt(CreateOrderRequest.OrderItemRequest::getQuantity).sum();
+        int totalQty = request.getItems().stream()
+                .filter(java.util.Objects::nonNull)
+                .mapToInt(CreateOrderRequest.OrderItemRequest::getQuantity)
+                .sum();
         if (totalQty > 10) {
             throw BusinessException.badRequest("Bạn chỉ được đặt tối đa 10 vé cho mỗi lần giao dịch", "ERR-ORD-001");
         }
@@ -56,10 +69,16 @@ public class OrderService {
         order = orderRepository.save(order);
 
         for (CreateOrderRequest.OrderItemRequest itemReq : request.getItems()) {
+            if (itemReq == null) {
+                throw BusinessException.badRequest("Thông tin chi tiết vé không hợp lệ", "ERR-VALIDATION-002");
+            }
             TicketType tt = ticketTypeRepository.findById(itemReq.getTicketTypeId())
                     .orElseThrow(() -> BusinessException.notFound("Loại vé không tồn tại", "ERR-TKT-003"));
             if (tt.getStatus() == TicketType.TicketTypeStatus.INACTIVE) {
                 throw BusinessException.badRequest("Loại vé \"" + tt.getName() + "\" không còn kinh doanh", "ERR-TKT-004");
+            }
+            if (!tt.getVenueId().equals(request.getVenueId())) {
+                throw BusinessException.badRequest("Vé \"" + tt.getName() + "\" không thuộc địa điểm đã chọn", "ERR-TKT-005");
             }
 
             BigDecimal lineTotal = tt.getPrice().multiply(BigDecimal.valueOf(itemReq.getQuantity()));

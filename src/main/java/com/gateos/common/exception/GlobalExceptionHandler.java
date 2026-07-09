@@ -94,6 +94,13 @@ public class GlobalExceptionHandler {
                 .body(ApiResponse.error("Bạn không có quyền truy cập tài nguyên này", "ERR-AUTH-004"));
     }
 
+    @ExceptionHandler(org.springframework.http.converter.HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiResponse<Void>> handleHttpMessageNotReadable(org.springframework.http.converter.HttpMessageNotReadableException ex) {
+        log.warn("Malformed JSON request: {}", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.error("Dữ liệu yêu cầu không hợp lệ hoặc sai định dạng", "ERR-VALIDATION-002"));
+    }
+
     // ---- Generic Exception ----
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleGenericException(Exception ex) {
