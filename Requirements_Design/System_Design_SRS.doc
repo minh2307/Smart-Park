@@ -1,0 +1,1480 @@
+
+<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+<head>
+<meta charset="utf-8">
+<style>
+@page {
+    size: A4;
+    margin: 1in;
+}
+body {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 12pt;
+    line-height: 1.5;
+    color: #000000;
+}
+h1 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 18pt;
+    font-weight: bold;
+    color: #1F497D;
+    margin-top: 18pt;
+    margin-bottom: 8pt;
+    page-break-before: always;
+}
+h2 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14pt;
+    font-weight: bold;
+    color: #1F497D;
+    margin-top: 14pt;
+    margin-bottom: 6pt;
+}
+h3 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12pt;
+    font-weight: bold;
+    color: #595959;
+    margin-top: 10pt;
+    margin-bottom: 4pt;
+}
+p {
+    margin-top: 0;
+    margin-bottom: 6pt;
+    text-align: justify;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 6pt;
+    margin-bottom: 12pt;
+}
+table, th, td {
+    border: 1px solid #7F7F7F;
+}
+th {
+    background-color: #F2F2F2;
+    font-weight: bold;
+    padding: 6pt;
+    text-align: left;
+}
+td {
+    padding: 6pt;
+}
+pre {
+    font-family: 'Consolas', 'Courier New', Courier, monospace;
+    font-size: 10pt;
+    background-color: #F2F2F2;
+    border: 1px solid #D3D3D3;
+    padding: 6pt;
+    white-space: pre-wrap;
+    margin-bottom: 6pt;
+}
+code {
+    font-family: 'Consolas', 'Courier New', Courier, monospace;
+    font-size: 10pt;
+    background-color: #F2F2F2;
+    padding: 2pt;
+}
+ul, ol {
+    margin-top: 0;
+    margin-bottom: 6pt;
+    padding-left: 20pt;
+}
+li {
+    margin-bottom: 3pt;
+}
+blockquote {
+    border-left: 3pt solid #1F497D;
+    padding-left: 10pt;
+    margin-left: 0;
+    color: #595959;
+}
+</style>
+</head>
+<body>
+<h1>SOFTWARE REQUIREMENTS SPECIFICATION (SRS) - ENTERPRISE LEVEL</h1>
+<h2>SYSTEM: SMART PARK - SMART AMUSEMENT PARK MANAGEMENT &amp; BUSINESS INTELLIGENCE PLATFORM</h2>
+<h3>(Hệ thống Quản lý Khu vui chơi Thông minh tích hợp Business Intelligence)</h3>
+<hr>
+<h1>SECTION 1: SYSTEM INTRODUCTION &amp; DOMAIN MODEL (GIỚI THIỆU &amp; MÔ HÌNH MIỀN)</h1>
+<h2>1.1. Document Purpose (Mục tiêu tài liệu)</h2>
+<p>Tài liệu Đặc tả Yêu cầu Phần mềm (SRS) này tuân thủ tiêu chuẩn IEEE 29148 nhằm định nghĩa toàn bộ thiết kế kiến trúc, mô hình nghiệp vụ, cấu trúc dữ liệu giao dịch (OLTP - MySQL), thiết kế kho dữ liệu đám mây (OLAP - Google BigQuery), các giao diện API RESTful (Spring Boot 3 &amp; FastAPI) và 35 phân hệ nghiệp vụ của <strong>Hệ thống Quản lý Khu vui chơi Thông minh tích hợp Business Intelligence (Smart Park)</strong>.
+Tài liệu này là cẩm nang thiết kế kỹ thuật duy nhất cho toàn bộ kỹ sư phát triển phần mềm, quản trị cơ sở dữ liệu, chuyên gia kỹ thuật dữ liệu (Data Engineers), kỹ sư trí tuệ nhân tạo (AI Engineers), đội ngũ vận hành hệ thống và Ban Giám đốc điều hành khu vui chơi.</p>
+<h2>1.2. Product Scope (Phạm vi hệ thống Smart Park)</h2>
+<p>Smart Park là một nền tảng quản trị tổng thể tài nguyên doanh nghiệp (ERP) kết hợp hệ thống phân tích báo cáo thông minh (BI) dành riêng cho các khu vui chơi giải trí phức hợp quy mô lớn (Amusement Parks, Water Parks, Safari). 
+Trọng tâm thiết kế của Smart Park dựa trên các trục cốt lõi độc lập:</p>
+<ol>
+<li><strong>Hệ thống Vận hành Trực tuyến (Operational OLTP Subsystem):</strong> Quản lý quy trình phục vụ từ lúc khách hàng đến bãi xe, mua vé, qua cổng soát vé, sử dụng tủ đồ (Locker), chơi các trò chơi (Rides), ăn uống (Food Court), mua sắm (Retail) cho đến lúc phản hồi và rời bãi xe. Hệ thống được xây dựng trên nền tảng Spring Boot 3 kết hợp cơ sở dữ liệu MySQL và bộ nhớ đệm Redis.</li>
+<li><strong>Đường truyền dữ liệu sự kiện (Event-Driven Data Pipeline):</strong> Trích xuất toàn bộ thay đổi dữ liệu từ MySQL thông qua Debezium CDC đưa vào Apache Kafka Topics theo thời gian thực. Apache Spark tiêu thụ dữ liệu từ Kafka, thực hiện làm sạch, chuyển đổi và nạp vào Google BigQuery.</li>
+<li><strong>Nền tảng Phân tích Thông minh (Analytical OLAP Subsystem):</strong> Google BigQuery đóng vai trò là Kho dữ liệu đám mây trung tâm lưu trữ dữ liệu dưới dạng Star Schema, phục vụ trực tiếp cho Google Looker Studio để hiển thị 20 Dashboard BI trực quan hỗ trợ ra quyết định.</li>
+<li><strong>Phân hệ Trí tuệ Nhân tạo (AI Inference Subsystem):</strong> FastAPI đóng vai trò là microservice dự báo độc lập, thực hiện các dự báo vận hành qua REST API gọi bởi Spring Boot, không tham gia vào các thao tác lưu trữ nghiệp vụ CRUD.</li>
+</ol>
+<h2>1.3. Domain-Driven Design (DDD) &amp; Domain Model Mapping</h2>
+<p>Hệ thống được thiết kế theo phương pháp hướng miền (Domain-Driven Design). Dưới đây là ma trận phân bổ các nghiệp vụ cốt lõi vào 20 Bounded Contexts (Miền nghiệp vụ):</p>
+<pre><code>+------------------------------------------------------------------------------------------+
+|                                    SMART PARK PLATFORM                                   |
++------------------------------------------------------------------------------------------+
+|  [Organization Domain]  --&gt; Quản lý Phòng ban, Cơ cấu tổ chức, Chi nhánh công viên.       |
+|  [Employee Domain]      --&gt; Quản lý Nhân sự, Ca làm việc, Phân công tại cổng/trò chơi.   |
+|  [Customer Domain]      --&gt; Quản lý Hồ sơ khách hàng cá nhân, Phân khúc RFM.             |
+|  [Park &amp; Zone Domain]   --&gt; Sơ đồ khu vui chơi, Quản lý phân khu địa lý độc lập.        |
+|  [Ride Domain]          --&gt; Danh mục trò chơi, Quản lý công suất hàng đợi, Trực thiết bị. |
+|  [Maintenance Domain]   --&gt; Bảo trì thiết bị trò chơi, Phiếu kiểm tra kỹ thuật định kỳ.  |
+|  [Ticket Domain]        --&gt; Quản lý loại vé, Quy tắc áp dụng, Định giá động.             |
+|  [Booking &amp; Order Dom]  --&gt; Đặt vé trực tuyến, Thanh toán POS tại quầy, Hóa đơn VAT.      |
+|  [Membership Domain]    --&gt; Thẻ thành viên, Quy đổi điểm thưởng, Quản lý hạng VIP/Gold.   |
+|  [Promotion Domain]     --&gt; Chiến dịch khuyến mãi, Mã Coupon giảm giá theo đối tượng.    |
+|  [Food &amp; Beverage Dom]  --&gt; Quầy ẩm thực, Thực đơn số, Gọi món trực tiếp qua POS.        |
+|  [Retail Domain]        --&gt; Quầy bán đồ lưu niệm, Quản lý kho hàng SKU, Bán lẻ tại shop. |
+|  [Parking Domain]       --&gt; Nhận diện biển số thông minh, Phí đỗ xe tự động.             |
+|  [Locker Domain]        --&gt; Cho thuê tủ đồ thông minh qua ứng dụng, khóa từ tự động.     |
+|  [Incident Domain]      --&gt; Tiếp nhận cảnh báo an ninh, Sự cố trò chơi, Cảnh báo y tế.   |
+|  [Feedback Domain]      --&gt; Đánh giá chất lượng dịch vụ, Giải quyết khiếu nại.           |
+|  [Notification Domain]  --&gt; Email, SMS, Web Push, Thông báo đẩy thiết bị cầm tay.         |
+|  [Audit Domain]         --&gt; Ghi nhật ký thao tác bất biến tầng database.                |
+|  [BI &amp; Analytics Dom]   --&gt; CDC, Kafka Topics, Spark ETL, BigQuery DWH, Looker Studio.    |
++------------------------------------------------------------------------------------------+
+</code></pre>
+<hr>
+<h1>SECTION 2: SYSTEM ARCHITECTURE &amp; DIAGRAMS (KIẾN TRÚC &amp; SƠ ĐỒ)</h1>
+<h2>2.1. Sơ đồ ngữ cảnh doanh nghiệp (Business Context Diagram)</h2>
+<pre><code class="language-mermaid">graph TD
+    subgraph Smart_Park_Ecosystem
+        System((Smart Park Platform))
+    end
+
+    Customer[Khách hàng / Visitors]
+    Admin[Quản trị viên hệ thống]
+    Executive[Ban Giám đốc / Executives]
+    Staff[Nhân viên Vận hành / Kỹ thuật]
+    PaymentGateway[Cổng thanh toán MoMo/VNPay]
+    IoTDevice[Cổng Turnstile &amp; Barie bãi xe]
+    SMS_Gate[Dịch vụ SMS Gateway]
+
+    Customer --&gt;|1. Đăng ký thành viên, đặt vé, mua combo F&amp;B| System
+    System --&gt;|2. Vé điện tử QR, thẻ VIP, hóa đơn| Customer
+    System --&gt;|3. Lệnh quay cổng Turnstile, mở barie bãi xe| IoTDevice
+    IoTDevice --&gt;|4. Sự kiện quét vé, biển số xe| System
+    Staff --&gt;|5. Báo cáo sự cố, cập nhật trạng thái bảo trì| System
+    System --&gt;|6. Phân công ca trực, lịch bảo trì| Staff
+    Executive --&gt;|7. Truy vấn chỉ số tài chính, dự báo doanh thu| System
+    System --&gt;|8. Google Looker Studio Dashboards &amp; Dự báo AI| Executive
+    Admin --&gt;|9. Cấu hình giá, phân quyền vai trò| System
+    System --&gt;|10. Yêu cầu thanh toán| PaymentGateway
+    PaymentGateway --&gt;|11. Webhook kết quả thanh toán| System
+    System --&gt;|12. Gửi mã OTP, tin nhắn khẩn cấp| SMS_Gate
+</code></pre>
+<h2>2.2. Sơ đồ ngữ cảnh hệ thống (System Context Diagram)</h2>
+<pre><code class="language-mermaid">graph TD
+    subgraph Client_Applications
+        ReactApp[ReactJS &amp; TS Web Client]
+        MobileApp[React Native Mobile App]
+        POSApp[POS Terminals Web Client]
+    end
+
+    subgraph Smart_Park_Backend
+        Gateway[Nginx API Gateway]
+        Microservices[Spring Boot 3 Microservices Cluster]
+        Redis[Redis Cache - Session &amp; Token Store]
+        MySQL[(MySQL OLTP Primary DB)]
+    end
+
+    subgraph Third_Party_Integrations
+        WeatherAPI[Weather API Service]
+        SMTP[SMTP Email Server]
+        LPR[License Plate Recognition AI Engine]
+    end
+
+    Client_Applications --&gt;|HTTPS / WSS| Gateway
+    Gateway --&gt; Microservices
+    Microservices --&gt; Redis
+    Microservices --&gt; MySQL
+    Microservices --&gt; WeatherAPI &amp; SMTP &amp; LPR
+</code></pre>
+<h2>2.3. Sơ đồ Use Case tổng thể (Use Case Diagram)</h2>
+<pre><code class="language-mermaid">flowchart TD
+    actor Visitor as Khách tham quan
+    actor Operator as Nhân viên vận hành
+    actor Tech as Kỹ thuật viên bảo trì
+    actor Exec as Giám đốc điều hành
+
+    subgraph Guest_Services
+        UC1(Đăng ký Membership)
+        UC2(Đặt vé &amp; F&amp;B Combo)
+        UC3(Thuê tủ Locker)
+        UC4(Gửi phản hồi khiếu nại)
+    end
+
+    subgraph Park_Operations
+        UC5(Quản lý lịch vận hành trò chơi)
+        UC6(Kiểm soát đỗ xe thông minh)
+        UC7(Bán hàng F&amp;B &amp; Quầy lưu niệm)
+        UC8(Xử lý sự cố an ninh)
+    end
+
+    subgraph Maintenance_Services
+        UC9(Kiểm tra kỹ thuật định kỳ)
+        UC10(Sửa chữa &amp; Thay thế thiết bị)
+    end
+
+    subgraph BI_Business_Intelligence
+        UC11(Xem báo cáo doanh thu tài chính Looker Studio)
+        UC12(Cấu hình giá vé động AI)
+        UC13(Tra cứu dự báo lượng khách)
+    end
+
+    Visitor --&gt; UC1 &amp; UC2 &amp; UC3 &amp; UC4
+    Operator --&gt; UC5 &amp; UC6 &amp; UC7 &amp; UC8
+    Tech --&gt; UC9 &amp; UC10
+    Exec --&gt; UC11 &amp; UC12 &amp; UC13
+</code></pre>
+<h2>2.4. Sơ đồ thành phần hệ thống (Component Diagram)</h2>
+<pre><code class="language-mermaid">graph TD
+    subgraph User_Interface
+        UI[ReactJS Portal &amp; Looker Studio]
+    end
+
+    subgraph API_Management
+        Proxy[Nginx Load Balancer]
+    end
+
+    subgraph Microservices_Core
+        CoreSvc[Operational Microservice - Spring Boot 3]
+        NotifSvc[Notification Microservice]
+        AISvc[FastAPI AI Engine]
+    end
+
+    subgraph Data_Storage_OLTP
+        MySQL[(MySQL DB)]
+        Redis[(Redis Session Store)]
+    end
+
+    subgraph CDC_Pipeline
+        Debezium[Debezium CDC Connector]
+        Kafka[Kafka Broker]
+    end
+
+    subgraph Data_Storage_OLAP
+        ETL[Spark ETL Runner]
+        BigQuery[(Google BigQuery)]
+    end
+
+    UI --&gt; Proxy
+    Proxy --&gt; CoreSvc &amp; NotifSvc &amp; AISvc
+    CoreSvc --&gt; MySQL &amp; Redis
+    MySQL --&gt; Debezium
+    Debezium --&gt; Kafka
+    Kafka --&gt; ETL
+    ETL --&gt; BigQuery
+    BigQuery --&gt; UI
+</code></pre>
+<h2>2.5. Sơ đồ triển khai vật lý (Deployment Diagram)</h2>
+<pre><code class="language-mermaid">graph TD
+    subgraph Client_Zone
+        ClientDev[Web Browser / Mobile App]
+    end
+
+    subgraph DMZ_Kubernetes_Cluster
+        ProxyNode[Ingress Controller - Nginx]
+    end
+
+    subgraph Private_Worker_Nodes
+        SpringPod1[Spring Boot 3 App Pod 1]
+        SpringPod2[Spring Boot 3 App Pod 2]
+        PythonPod[FastAPI AI Pod]
+    end
+
+    subgraph Cache_And_Message_Broker
+        RedisNodes[Redis Sentinel Cluster]
+        KafkaNodes[Kafka Cluster - 3 Brokers]
+    end
+
+    subgraph Databases_Zone
+        MySQLReplica[MySQL Master/Slave DB Cluster]
+        DebeziumConnector[Debezium CDC Pod]
+        SparkCluster[Apache Spark Streaming Pods]
+    end
+
+    subgraph Google_Cloud_Platform
+        BigQuery[Google BigQuery Cloud DWH]
+        Looker[Google Looker Studio]
+    end
+
+    ClientDev --&gt;|TLS 1.3| ProxyNode
+    ProxyNode --&gt; SpringPod1 &amp; SpringPod2
+    SpringPod1 &amp; SpringPod2 --&gt; RedisNodes
+    SpringPod1 &amp; SpringPod2 --&gt; MySQLReplica
+    SpringPod1 &amp; SpringPod2 --&gt;|REST API| PythonPod
+    
+    MySQLReplica --&gt;|Binlog Read| DebeziumConnector
+    DebeziumConnector --&gt;|Publish Event| KafkaNodes
+    KafkaNodes --&gt;|Stream Ingestion| SparkCluster
+    SparkCluster --&gt;|Batch Load| BigQuery
+    BigQuery --&gt; Looker
+    Looker --&gt; ClientDev
+</code></pre>
+<h2>2.6. Sơ đồ cấu trúc Package (Package Diagram)</h2>
+<pre><code class="language-mermaid">graph TD
+    subgraph com.smartpark.platform
+        subgraph config
+            SecConfig[SecurityConfiguration]
+            JPAConfig[JPAConfiguration]
+        end
+        subgraph domain
+            subgraph user_context
+                UserEntity[User]
+                RoleEntity[Role]
+            end
+            subgraph ride_context
+                RideEntity[Ride]
+                MaintEntity[RideMaintenance]
+            end
+            subgraph sales_context
+                OrderEntity[Order]
+                PaymentEntity[Payment]
+            end
+        end
+        subgraph repository
+            UserRepo[UserRepository]
+            RideRepo[RideRepository]
+            OrderRepo[OrderRepository]
+        end
+        subgraph service
+            UserService[UserServiceImpl]
+            RideService[RideServiceImpl]
+            OrderService[OrderServiceImpl]
+        end
+    end
+</code></pre>
+<h2>2.7. Sơ đồ tuần tự hành trình khách hàng (Sequence Diagram)</h2>
+<pre><code class="language-mermaid">sequenceDiagram
+    autonumber
+    actor Guest as Khách hàng
+    participant Parking as Barie Bãi Xe (IoT)
+    participant POS as Cổng mua vé (POS/Web)
+    participant Turnstile as Cổng soát vé (IoT)
+    participant FoodStall as Quầy F&amp;B POS
+    participant System as Spring Boot 3 Backend
+    participant MySQL as MySQL Database
+    participant Debezium as Debezium CDC
+    participant Kafka as Kafka Topic
+    participant Spark as Spark Engine
+    participant BigQuery as Google BigQuery
+
+    Guest-&gt;&gt;Parking: Đi xe vào làn bãi đỗ xe
+    Parking-&gt;&gt;System: Gửi hình chụp biển số &amp; thời gian vào
+    System--&gt;&gt;Parking: Ghi nhận đỗ xe thành công, mở Barie
+    
+    Guest-&gt;&gt;POS: Đặt vé trực tuyến và thanh toán qua thẻ ngân hàng
+    POS-&gt;&gt;System: Xử lý giao dịch thanh toán thành công
+    System-&gt;&gt;MySQL: Ghi nhận đơn hàng &amp; hóa đơn thanh toán
+    MySQL-&gt;&gt;Debezium: Ghi nhận log binlog thay đổi
+    Debezium-&gt;&gt;Kafka: Đẩy sự kiện thanh toán hóa đơn (payment-events)
+    Kafka-&gt;&gt;Spark: Đọc sự kiện thời gian thực
+    Spark-&gt;&gt;BigQuery: Nạp dữ liệu vào bảng FactRevenue
+    System--&gt;&gt;Guest: Trả về mã vé QR và hóa đơn qua email
+    
+    Guest-&gt;&gt;Turnstile: Quét mã vé QR tại cổng chính
+    Turnstile-&gt;&gt;System: Xác thực hiệu lực mã QR vé
+    System--&gt;&gt;Turnstile: Phản hồi hợp lệ, mở cổng Turnstile quay
+    
+    Guest-&gt;&gt;FoodStall: Order đồ ăn nhanh tại quầy F&amp;B
+    FoodStall-&gt;&gt;System: Thanh toán hóa đơn bằng ví điện tử
+    System-&gt;&gt;MySQL: Lưu thông tin hóa đơn bán lẻ F&amp;B
+    MySQL-&gt;&gt;Debezium: CDC thay đổi dữ liệu
+    Debezium-&gt;&gt;Kafka: Đẩy sự kiện doanh số F&amp;B (food-events)
+    Kafka-&gt;&gt;Spark: Spark SQL tổng hợp số liệu
+    Spark-&gt;&gt;BigQuery: Cập nhật bảng FactFoodSales
+    System--&gt;&gt;FoodStall: Xuất hóa đơn ẩm thực và in phiếu bếp
+</code></pre>
+<h2>2.8. Sơ đồ hoạt động cấu hình giá vé động (Activity Diagram)</h2>
+<pre><code class="language-mermaid">flowchart TD
+    Start([Bắt đầu tiến trình cập nhật giá động]) --&gt; ReadOccupancy[Đọc lượng khách hiện tại trong công viên từ Redis]
+    ReadOccupancy --&gt; ReadWeather[Gọi API lấy thông tin thời tiết trong ngày]
+    ReadWeather --&gt; CallAI[Gửi dữ liệu sang Python FastAPI AI Engine REST API]
+    
+    CallAI --&gt; ForecastDemand{FastAPI AI dự báo mức độ nhu cầu khách trong 4 giờ tới}
+    ForecastDemand -- Lượng khách dự báo cực cao (Peak Day) --&gt; IncreasePrice[Tăng giá vé thêm 15% so với giá tiêu chuẩn]
+    ForecastDemand -- Lượng khách dự báo cực thấp (Rainy/Off-peak) --&gt; DecreasePrice[Áp dụng chiết khấu giảm giá vé 10%]
+    ForecastDemand -- Bình thường --&gt; KeepStandard[Giữ nguyên mức giá vé tiêu chuẩn]
+
+    IncreasePrice &amp; DecreasePrice &amp; KeepStandard --&gt; WriteDB[Spring Boot 3 ghi nhận bảng giá mới vào MySQL TICKET_PRICINGS]
+    WriteDB --&gt; FlushRedis[Cập nhật giá vé mới vào Redis cache]
+    FlushRedis --&gt; NotifyWeb[Đẩy giá mới lên giao diện ReactJS bán vé trực tuyến]
+    NotifyWeb --&gt; End([Kết thúc tiến trình])
+</code></pre>
+<h2>2.9. Sơ đồ trạng thái thiết bị trò chơi (State Diagram)</h2>
+<pre><code class="language-mermaid">stateDiagram-v2
+    [*] --&gt; Scheduled: Tạo mới lịch vận hành trò chơi
+    Scheduled --&gt; Operational: Kỹ sư kiểm tra an toàn đạt chuẩn (Inspection PASS)
+    Scheduled --&gt; OutOfOrder: Phát hiện sự cố kỹ thuật trước khi chạy (Inspection FAIL)
+    
+    Operational --&gt; UnderMaintenance: Phát hiện lỗi kỹ thuật / AI dự báo nguy cơ hỏng hóc cao
+    Operational --&gt; EmergencyStop: Kích hoạt nút dừng khẩn cấp (Sự cố an toàn)
+    
+    EmergencyStop --&gt; UnderMaintenance: Đội ngũ cứu hộ giải tỏa, chuyển kỹ thuật sửa chữa
+    UnderMaintenance --&gt; Operational: Kỹ sư hoàn thành sửa chữa &amp; kiểm tra an toàn lại đạt yêu cầu
+    
+    Operational --&gt; [*]: Kết thúc ngày hoạt động
+</code></pre>
+<h2>2.10. Sơ đồ lớp miền cốt lõi trò chơi &amp; bảo trì (Class Diagram)</h2>
+<pre><code class="language-mermaid">classDiagram
+    class Park {
+        +Long id
+        +String name
+        +String address
+        +List~Zone~ zones
+        +createZone()
+    }
+    class Zone {
+        +Long id
+        +String name
+        +String code
+        +Integer maxCapacity
+        +List~Ride~ rides
+    }
+    class Ride {
+        +Long id
+        +String name
+        +String code
+        +Integer capacity
+        +Double minHeight
+        +String status
+        +startOperation()
+        +stopOperation()
+    }
+    class RideMaintenance {
+        +Long id
+        +Date scheduledDate
+        +Date completionDate
+        +BigDecimal cost
+        +String status
+        +assignTechnician()
+        +completeMaintenance()
+    }
+    class RideInspection {
+        +Long id
+        +Date inspectionDate
+        +String result
+        +String details
+        +performCheck()
+    }
+
+    Park &quot;1&quot; *-- &quot;many&quot; Zone
+    Zone &quot;1&quot; *-- &quot;many&quot; Ride
+    Ride &quot;1&quot; &lt;-- &quot;many&quot; RideMaintenance
+    Ride &quot;1&quot; &lt;-- &quot;many&quot; RideInspection
+</code></pre>
+<h2>2.11. Kiến trúc phân tích dữ liệu (BI Pipeline Diagram)</h2>
+<pre><code class="language-mermaid">flowchart LR
+    subgraph Data_Sources
+        MySQL_DB[(MySQL Operational DB)]
+    end
+
+    subgraph Ingestion_Layer
+        Debezium[Debezium CDC Connector]
+        Kafka_Broker[Apache Kafka Broker]
+        MySQL_DB --&gt; Debezium
+        Debezium --&gt; Kafka_Broker
+    end
+
+    subgraph Process_Transform
+        Spark_Stream[Apache Spark Engine]
+        Kafka_Broker --&gt; Spark_Stream
+    end
+
+    subgraph Storage_Cloud_OLAP
+        BigQuery[(Google BigQuery Cloud DWH)]
+        Spark_Stream --&gt;|ETL &amp; Aggregation Load| BigQuery
+    end
+
+    subgraph Presentation_BI
+        Looker[Google Looker Studio]
+        BigQuery --&gt; Looker
+    end
+</code></pre>
+<h2>2.12. Sơ đồ dòng dữ liệu ETL (ETL Flow Diagram)</h2>
+<pre><code class="language-mermaid">flowchart TD
+    ReadSource[Đọc dữ liệu thô từ Kafka Topics] --&gt; CleanNulls[Lọc bỏ các giá trị rỗng/lỗi cú pháp JSON]
+    CleanNulls --&gt; MaskData[Mã hóa thông tin cá nhân khách hàng - PII Masking]
+    MaskData --&gt; DateExtract[Phân tích trường ngày tháng thành: Ngày, Tháng, Năm, Quý, Thứ]
+    DateExtract --&gt; DimLookup[Tra cứu kho khóa Dimension Keys]
+    
+    DimLookup --&gt; FactJoin{Tìm thấy Dim Key tương ứng?}
+    FactJoin -- Yes --&gt; WriteFact[Nạp bản ghi vào Google BigQuery Fact Table]
+    FactJoin -- No --&gt; GenerateDim[Tạo mới bản ghi trong BigQuery Dimension table trước]
+    GenerateDim --&gt; WriteFact
+    
+    WriteFact --&gt; PreCompute[Tính toán trước các chỉ số tổng hợp trong BigQuery]
+    PreCompute --&gt; Finish[Kết thúc luồng ETL]
+</code></pre>
+<h2>2.13. Sơ đồ dòng chảy dữ liệu phân tích (Analytics Flow Diagram)</h2>
+<pre><code class="language-mermaid">flowchart TD
+    BigQuery[(Google BigQuery DWH)] --&gt;|Truy vấn định kỳ| AggJobs[Tác vụ tổng hợp dữ liệu - Spark SQL / BigQuery Scheduled Queries]
+    AggJobs --&gt;|Tính doanh số F&amp;B theo phân khu| BigQueryAgg[(Bảng tổng hợp BigQuery)]
+    AggJobs --&gt;|Tính số lượt chơi trung bình| BigQueryAgg
+    BigQueryAgg --&gt;|Truy xuất trực tiếp| Looker[Google Looker Studio]
+</code></pre>
+<h2>2.14. Quy trình xử lý Dashboard Giám đốc (Executive Dashboard Flow Diagram)</h2>
+<pre><code class="language-mermaid">sequenceDiagram
+    autonumber
+    actor Exec as Giám đốc điều hành
+    participant Looker as Google Looker Studio
+    participant BigQuery as Google BigQuery Cloud DWH
+
+    Exec-&gt;&gt;Looker: Yêu cầu tải trang Executive Dashboard
+    Looker-&gt;&gt;BigQuery: Gửi truy vấn SQL tổng hợp chỉ số (Doanh thu, Lượt khách)
+    BigQuery--&gt;&gt;Looker: Trả về tập dữ liệu đã gom nhóm tối ưu
+    Looker--&gt;&gt;Exec: Hiển thị biểu đồ báo cáo tài chính trực quan
+</code></pre>
+<h2>2.15. Sơ đồ kiến trúc Event Streaming (Event Streaming Architecture)</h2>
+<pre><code class="language-mermaid">graph TD
+    subgraph Producer
+        Debezium[Debezium CDC]
+    end
+
+    subgraph Kafka_Event_Bus
+        topic1[booking-events]
+        topic2[payment-events]
+        topic3[ticket-events]
+        topic4[ride-events]
+        topic5[food-events]
+        topic6[parking-events]
+        topic7[membership-events]
+        topic8[feedback-events]
+    end
+
+    subgraph Consumers
+        Spark[Apache Spark Streaming App]
+    end
+
+    Debezium --&gt; topic1 &amp; topic2 &amp; topic3 &amp; topic4 &amp; topic5 &amp; topic6 &amp; topic7 &amp; topic8
+    topic1 &amp; topic2 &amp; topic3 &amp; topic4 &amp; topic5 &amp; topic6 &amp; topic7 &amp; topic8 --&gt; Spark
+</code></pre>
+<h2>2.16. Sơ đồ kiến trúc AI (AI Architecture Diagram)</h2>
+<pre><code class="language-mermaid">graph TD
+    subgraph Client
+        React[ReactJS Frontend]
+    end
+
+    subgraph Backend_App
+        Spring[Spring Boot 3 Backend]
+        MySQL[(MySQL OLTP)]
+    end
+
+    subgraph AI_Inference_Service
+        FastAPI[FastAPI AI Microservice]
+        Models[scikit-learn / XGBoost / Prophet Models]
+    end
+
+    React --&gt;|Request Action| Spring
+    Spring --&gt; MySQL
+    Spring --&gt;|HTTP REST Client Call| FastAPI
+    FastAPI --&gt; Models
+    Models --&gt;|Return Inference JSON| FastAPI
+    FastAPI --&gt;|REST API Response| Spring
+    Spring --&gt;|JSON Result| React
+</code></pre>
+<h2>2.17. Sơ đồ công nghệ tổng thể (Technology Stack Diagram)</h2>
+<pre><code>+-------------------------------------------------------------------------------+
+| PRESENTATION LAYER: ReactJS, TypeScript, Material UI, Redux Toolkit, Axios    |
++-------------------------------------------------------------------------------+
+| BUSINESS LAYER (CRUD): Spring Boot 3, Spring Security, JWT, Spring Data JPA   |
++-------------------------------------------------------------------------------+
+| OPERATIONAL DB: MySQL                   | CACHE: Redis                        |
++-------------------------------------------------------------------------------+
+| CHANGE DATA CAPTURE: Debezium CDC                                             |
++-------------------------------------------------------------------------------+
+| EVENT STREAMING: Apache Kafka                                                 |
++-------------------------------------------------------------------------------+
+| DATA ENGINEERING: Apache Spark (Spark SQL, ETL, Data Aggregation)             |
++-------------------------------------------------------------------------------+
+| CLOUD DATA WAREHOUSE: Google BigQuery                                         |
++-------------------------------------------------------------------------------+
+| BUSINESS INTELLIGENCE: Google Looker Studio                                   |
++-------------------------------------------------------------------------------+
+| AI INFERENCE MICROSERVICE: FastAPI (scikit-learn, Prophet, XGBoost)           |
++-------------------------------------------------------------------------------+
+| DEPLOYMENT: Docker, Docker Compose                                           |
++-------------------------------------------------------------------------------+
+</code></pre>
+<hr>
+<h1>SECTION 3: DETAILED FUNCTIONAL SPECIFICATIONS (ĐẶC TẢ CHI TIẾT CHỨC NĂNG - 35 MODULES)</h1>
+<h2>MIỀN 1: SECURITY &amp; SYSTEM ADMINISTRATION (BẢO MẬT &amp; QUẢN TRỊ HỆ THỐNG)</h2>
+<h3>MODULE 1: AUTHENTICATION (XÁC THỰC NGƯỜI DÙNG)</h3>
+<ul>
+<li><strong>Objective:</strong> Đảm bảo quyền truy cập an toàn cho toàn bộ nhân viên và khách hàng thông qua cơ chế JWT (JSON Web Token) kết hợp xác thực 2 yếu tố (2FA).</li>
+<li><strong>Business Rules:</strong><ul>
+<li><strong>BR-AUTH-01:</strong> Mật khẩu lưu trữ trong bảng <code>users</code> bắt buộc phải được mã hóa một chiều bằng thuật toán <code>BCrypt</code> (Strength parameter = 12).</li>
+<li><strong>BR-AUTH-02:</strong> Sau 5 lần đăng nhập thất bại liên tiếp trong 10 phút, tài khoản bị khóa tạm thời trong 30 phút.</li>
+</ul>
+</li>
+<li><strong>Use Case Flows:</strong> Người dùng gửi thông tin đăng nhập -&gt; Hệ thống đối chiếu -&gt; Sinh cặp Access Token (JWT - hạn dùng 30 phút) và Refresh Token (hạn dùng 7 ngày).</li>
+<li><strong>Validation &amp; Errors:</strong> Trả về mã lỗi <code>ERR-AUTH-001</code> nếu thông tin đăng nhập sai lệch, <code>ERR-AUTH-002</code> nếu tài khoản đang trong trạng thái khóa.</li>
+<li><strong>Access Control:</strong> Cho phép truy cập không định danh.</li>
+<li><strong>UI Description:</strong> Giao diện đăng nhập hiện đại sử dụng Material UI, hỗ trợ đăng nhập bằng Google/Facebook OAuth2.</li>
+<li><strong>Database Mapping:</strong> Bảng <code>users</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>POST /api/v1/auth/login</code> (Body: <code>{username, password}</code>)</li>
+<li><code>POST /api/v1/auth/mfa/verify</code> (Body: <code>{otpToken}</code>)</li>
+</ul>
+</li>
+</ul>
+<h3>MODULE 2: AUTHORIZATION (ỦY QUYỀN TRUY CẬP)</h3>
+<ul>
+<li><strong>Objective:</strong> Kiểm tra quyền hạn truy cập của người dùng tại API Gateway trước khi định tuyến luồng xử lý đến các microservices nghiệp vụ.</li>
+<li><strong>Business Rules:</strong><ul>
+<li><strong>BR-AUTHZ-01:</strong> Phải phân tách rõ quyền kiểm tra dữ liệu nhạy cảm (như lương nhân viên, dữ liệu tài chính thô) khỏi quyền xem báo cáo Looker Studio.</li>
+</ul>
+</li>
+<li><strong>Use Case Flows:</strong> Người dùng gửi yêu cầu kèm JWT -&gt; Gateway giải mã JWT lấy thông tin vai trò -&gt; Đối chiếu bảng quyền -&gt; Chấp nhận/Từ chối.</li>
+<li><strong>Validation &amp; Errors:</strong> Lỗi <code>ERR-AUTHZ-403</code> (Quyền truy cập bị từ chối) hiển thị khi vai trò người dùng không có quyền hạn tương thích.</li>
+<li><strong>Access Control:</strong> Tự động áp dụng ở tầng lọc API Gateway.</li>
+<li><strong>Database Mapping:</strong> Bảng <code>user_roles</code>, <code>role_permissions</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>GET /api/v1/authz/check-permission</code> (Headers: Authorization token)</li>
+</ul>
+</li>
+</ul>
+<h3>MODULE 3: ROLE &amp; PERMISSION (VAI TRÒ &amp; PHÂN QUYỀN)</h3>
+<ul>
+<li><strong>Objective:</strong> Cho phép System Admin cấu hình vai trò, gán danh sách các quyền tương ứng và áp dụng động vào hệ thống.</li>
+<li><strong>Business Rules:</strong><ul>
+<li><strong>BR-ROLE-01:</strong> Không cho phép xóa các vai trò quản trị hệ thống cốt lõi (<code>SYSTEM_ADMIN</code>, <code>PARK_MANAGER</code>).</li>
+</ul>
+</li>
+<li><strong>Use Case Flows:</strong> Admin chọn một vai trò -&gt; Tích chọn danh sách các quyền hạn trên ma trận phân quyền -&gt; Lưu thông tin.</li>
+<li><strong>Validation &amp; Errors:</strong> Gửi yêu cầu xóa vai trò hệ thống trả về lỗi <code>ERR-ROLE-001</code>.</li>
+<li><strong>Access Control:</strong> Chỉ dành riêng cho <code>System Admin</code>.</li>
+<li><strong>UI Description:</strong> Giao diện lưới (Grid) hiển thị danh sách quyền và vai trò dạng checklist trực quan bằng Material UI.</li>
+<li><strong>Database Mapping:</strong> Bảng <code>roles</code>, <code>permissions</code>, <code>role_permissions</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>POST /api/v1/admin/roles</code> (Body: <code>{name, description}</code>)</li>
+<li><code>PUT /api/v1/admin/roles/{id}/permissions</code> (Body: <code>[permissionIds]</code>)</li>
+</ul>
+</li>
+</ul>
+<h3>MODULE 4: USER MANAGEMENT (QUẢN LÝ TÀI KHOẢN)</h3>
+<ul>
+<li><strong>Objective:</strong> Tạo lập, cập nhật thông tin và quản trị trạng thái hoạt động của tài khoản người dùng trong hệ thống.</li>
+<li><strong>Business Rules:</strong><ul>
+<li><strong>BR-USER-01:</strong> Không thực hiện xóa vật lý (Physical Delete) tài khoản người dùng, chỉ chuyển đổi trạng thái sang <code>DISABLED</code> để bảo toàn lịch sử giao dịch.</li>
+</ul>
+</li>
+<li><strong>Use Case Flows:</strong> Admin truy vấn tài khoản -&gt; Thay đổi thông tin cá nhân hoặc chuyển trạng thái hoạt động tài khoản -&gt; Lưu thay đổi.</li>
+<li><strong>Validation &amp; Errors:</strong> Địa chỉ email khi đăng ký mới không được trùng lặp với bất kỳ tài khoản nào đã tồn tại trong DB.</li>
+<li><strong>Access Control:</strong> <code>System Admin</code>.</li>
+<li><strong>UI Description:</strong> Giao diện quản trị dạng bảng có tính năng tìm kiếm, phân trang và lọc tài khoản theo trạng thái.</li>
+<li><strong>Database Mapping:</strong> Bảng <code>users</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>GET /api/v1/admin/users</code> (Query: <code>page</code>, <code>size</code>, <code>status</code>)</li>
+<li><code>PUT /api/v1/admin/users/{id}/status</code> (Body: <code>{status}</code>)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2>MIỀN 2: HUMAN RESOURCES &amp; ORGANIZATIONAL DESIGN (NHÂN SỰ &amp; PHÒNG BAN)</h2>
+<h3>MODULE 5: CUSTOMER MANAGEMENT (QUẢN LÝ KHÁCH HÀNG)</h3>
+<ul>
+<li><strong>Objective:</strong> Lưu trữ hồ sơ, lịch sử giao dịch, lịch sử tham quan và phân loại hành vi tiêu dùng của khách hàng.</li>
+<li><strong>Business Rules:</strong><ul>
+<li><strong>BR-CUST-01:</strong> Toàn bộ thông tin định danh cá nhân (PII) như Email, Số điện thoại phải được che giấu một phần (masking) trên màn hình hiển thị của nhân viên không có thẩm quyền.</li>
+</ul>
+</li>
+<li><strong>Use Case Flows:</strong> Nhân viên CSKH tra cứu thông tin khách hàng qua số điện thoại để hỗ trợ đổi vé hoặc nâng hạng thành viên.</li>
+<li><strong>Validation &amp; Errors:</strong> Số điện thoại nhập vào bắt buộc có độ dài 10 chữ số, bắt đầu bằng chữ số 0.</li>
+<li><strong>Access Control:</strong> <code>Park Manager</code>, <code>Operations Staff</code>.</li>
+<li><strong>UI Description:</strong> Giao diện hồ sơ khách hàng dạng thẻ (Profile Card) hiển thị thông tin cơ bản, lịch sử mua vé và số điểm tích lũy thành viên sử dụng Material UI.</li>
+<li><strong>Database Mapping:</strong> Bảng <code>customers</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>GET /api/v1/customers</code> (Query: <code>phone</code>, <code>email</code>)</li>
+<li><code>PUT /api/v1/customers/{id}</code> (Body: <code>{fullName, phone, address}</code>)</li>
+</ul>
+</li>
+</ul>
+<h3>MODULE 6: EMPLOYEE MANAGEMENT (QUẢN LÝ NHÂN VIÊN)</h3>
+<ul>
+<li><strong>Objective:</strong> Quản lý thông tin hồ sơ nhân sự, chức vụ, mức lương, và lịch làm việc của nhân viên tại khu vui chơi.</li>
+<li><strong>Business Rules:</strong><ul>
+<li><strong>BR-EMP-01:</strong> Nhân viên mới bắt buộc phải được gắn trực tiếp vào một phòng ban (Department) đang hoạt động.</li>
+</ul>
+</li>
+<li><strong>Use Case Flows:</strong> Nhân viên nhân sự nhập thông tin nhân viên mới -&gt; Hệ thống tự động tạo tài khoản đăng nhập tương thích và gửi email kích hoạt.</li>
+<li><strong>Validation &amp; Errors:</strong> Trùng mã nhân viên (Employee Code) trả về mã lỗi <code>ERR-EMP-001</code>.</li>
+<li><strong>Access Control:</strong> <code>System Admin</code>, <code>Park Manager</code>.</li>
+<li><strong>UI Description:</strong> Giao diện danh sách nhân sự hỗ trợ bộ lọc nhanh theo phòng ban, trạng thái làm việc và thanh tìm kiếm nhanh.</li>
+<li><strong>Database Mapping:</strong> Bảng <code>employees</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>POST /api/v1/employees</code> (Body: <code>{fullName, email, salary, departmentId}</code>)</li>
+<li><code>GET /api/v1/employees/{id}</code></li>
+</ul>
+</li>
+</ul>
+<h3>MODULE 7: DEPARTMENT MANAGEMENT (QUẢN LÝ PHÒNG BAN)</h3>
+<ul>
+<li><strong>Objective:</strong> Thiết lập cơ cấu tổ chức quản lý trong khu vui chơi, định nghĩa danh sách phòng ban và chỉ định trưởng bộ phận quản lý.</li>
+<li><strong>Business Rules:</strong><ul>
+<li><strong>BR-DEPT-01:</strong> Mỗi phòng ban tại một thời điểm chỉ có duy nhất một Trưởng bộ phận (Manager ID).</li>
+</ul>
+</li>
+<li><strong>Use Case Flows:</strong> Admin tạo phòng ban mới -&gt; Chọn nhân sự làm quản lý phòng ban -&gt; Lưu thông tin cấu trúc tổ chức.</li>
+<li><strong>Validation &amp; Errors:</strong> Không được phép xóa phòng ban nếu phòng ban đó đang chứa nhân sự hoạt động.</li>
+<li><strong>Access Control:</strong> <code>System Admin</code>.</li>
+<li><strong>UI Description:</strong> Sơ đồ tổ chức dạng cây phân cấp (Organizational Tree View) dễ sử dụng bằng thư viện Material UI Tree.</li>
+<li><strong>Database Mapping:</strong> Bảng <code>departments</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>POST /api/v1/departments</code> (Body: <code>{name, code, managerId}</code>)</li>
+<li><code>GET /api/v1/departments</code></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2>MIỀN 3: PARK &amp; ATTRACTION MANAGEMENT (QUẢN LÝ KHU VUI CHƠI &amp; PHÂN KHU)</h2>
+<h3>MODULE 8: PARK MANAGEMENT (QUẢN LÝ CÔNG VIÊN)</h3>
+<ul>
+<li><strong>Objective:</strong> Cấu hình và quản lý thông tin các công viên thành viên trong chuỗi dự án giải trí (ví dụ: Công viên nước, Công viên chủ đề).</li>
+<li><strong>Business Rules:</strong><ul>
+<li><strong>BR-PARK-01:</strong> Mỗi công viên phải được định nghĩa thời gian mở cửa, đóng cửa và sức chứa an toàn tối đa.</li>
+</ul>
+</li>
+<li><strong>Use Case Flows:</strong> Ban giám đốc thay đổi giờ mở cửa của công viên chủ đề -&gt; Hệ thống cập nhật lên cổng thông tin trực tuyến và đồng bộ tới hệ thống soát vé.</li>
+<li><strong>Validation &amp; Errors:</strong> Sức chứa tối đa của công viên phải lớn hơn tổng sức chứa thiết kế của toàn bộ các phân khu (Zones) bên trong cộng lại.</li>
+<li><strong>Access Control:</strong> <code>System Admin</code>.</li>
+<li><strong>UI Description:</strong> Dashboard quản lý danh sách công viên thành viên dạng thẻ lưới kèm hình ảnh đại diện và trạng thái hoạt động thực tế.</li>
+<li><strong>Database Mapping:</strong> Bảng <code>parks</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>POST /api/v1/parks</code> (Body: <code>{name, code, maxCapacity, openTime, closeTime}</code>)</li>
+<li><code>PUT /api/v1/parks/{id}</code></li>
+</ul>
+</li>
+</ul>
+<h3>MODULE 9: ZONE MANAGEMENT (QUẢN LÝ PHÂN KHU)</h3>
+<ul>
+<li><strong>Objective:</strong> Chia nhỏ công viên thành các khu vực địa lý chức năng để dễ dàng theo dõi mật độ khách hàng và hiệu năng trò chơi.</li>
+<li><strong>Business Rules:</strong><ul>
+<li><strong>BR-ZONE-01:</strong> Một phân khu bắt buộc phải trực thuộc một công viên cụ thể.</li>
+</ul>
+</li>
+<li><strong>Use Case Flows:</strong> Quản lý cấu hình sức chứa tối đa của phân khu trò chơi cảm giác mạnh -&gt; Hệ thống áp dụng để cảnh báo mật độ khách trên Dashboard.</li>
+<li><strong>Access Control:</strong> <code>Park Manager</code>.</li>
+<li><strong>Database Mapping:</strong> Bảng <code>zones</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>POST /api/v1/parks/{parkId}/zones</code> (Body: <code>{name, code, maxCapacity}</code>)</li>
+<li><code>GET /api/v1/zones</code> (Query: <code>parkId</code>)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2>MIỀN 4: RIDE OPERATIONS &amp; SAFETY (VẬN HÀNH TRÒ CHƠI &amp; AN TOÀN)</h2>
+<h3>MODULE 10: RIDE MANAGEMENT (QUẢN LÝ TRÒ CHƠI)</h3>
+<ul>
+<li><strong>Objective:</strong> Quản lý danh mục trò chơi, thông số giới hạn an toàn (chiều cao, cân nặng) và trạng thái sẵn sàng của trò chơi.</li>
+<li><strong>Business Rules:</strong><ul>
+<li><strong>BR-RIDE-01:</strong> Trò chơi chỉ được vận hành khi trạng thái an toàn được kiểm tra thông qua Module Ride Inspection đầu ngày.</li>
+</ul>
+</li>
+<li><strong>Use Case Flows:</strong> Nhân viên vận hành trò chơi cập nhật trạng thái trò chơi khi bắt đầu mở cửa hoặc đóng cửa tạm thời.</li>
+<li><strong>Validation &amp; Errors:</strong> Giới hạn chiều cao tối thiểu (<code>min_height</code>) phải là số dương lớn hơn 0 và không vượt quá 250 cm.</li>
+<li><strong>Access Control:</strong> <code>Park Manager</code>, <code>Operations Staff</code>.</li>
+<li><strong>UI Description:</strong> Thẻ thông tin trò chơi hiển thị trực quan thông số an toàn, công suất và trạng thái hoạt động (Màu xanh: Đang chạy, Đỏ: Bảo trì).</li>
+<li><strong>Database Mapping:</strong> Bảng <code>rides</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>GET /api/v1/rides</code> (Query: <code>zoneId</code>, <code>status</code>)</li>
+<li><code>PUT /api/v1/rides/{id}/status</code> (Body: <code>{status}</code>)</li>
+</ul>
+</li>
+</ul>
+<h3>MODULE 11: RIDE CATEGORY MANAGEMENT (QUẢN LÝ DANH MỤC TRÒ CHƠI)</h3>
+<ul>
+<li><strong>Objective:</strong> Phân loại các trò chơi theo nhóm (Cảm giác mạnh, Gia đình, Trẻ em, Trình diễn nghệ thuật) để hỗ trợ phân tích hành vi và báo cáo.</li>
+<li><strong>Database Mapping:</strong> Bảng <code>ride_categories</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>POST /api/v1/ride-categories</code> (Body: <code>{name, description}</code>)</li>
+</ul>
+</li>
+</ul>
+<h3>MODULE 12: RIDE SCHEDULE (LỊCH TRÌNH VẬN HÀNH)</h3>
+<ul>
+<li><strong>Objective:</strong> Phân công nhân sự trực và lên lịch khung giờ hoạt động của từng trò chơi trong ngày.</li>
+<li><strong>Business Rules:</strong><ul>
+<li><strong>BR-SCHED-01:</strong> Nhân viên được phân công vận hành trò chơi phải có chứng chỉ kỹ thuật tương thích với loại trò chơi đó.</li>
+</ul>
+</li>
+<li><strong>Use Case Flows:</strong> Quản lý lên lịch trực ca cho nhân viên tại trò chơi tàu lượn siêu tốc -&gt; Hệ thống kiểm tra điều kiện an toàn và chứng chỉ nhân sự -&gt; Xác nhận lưu lịch trực.</li>
+<li><strong>Database Mapping:</strong> Bảng <code>ride_schedules</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>POST /api/v1/rides/{rideId}/schedules</code> (Body: <code>{employeeId, shiftDate, startTime, endTime}</code>)</li>
+</ul>
+</li>
+</ul>
+<h3>MODULE 13: RIDE CAPACITY (QUẢN LÝ SỨC CHỨA &amp; HÀNG ĐỢI)</h3>
+<ul>
+<li><strong>Objective:</strong> Theo dõi số lượng khách đang xếp hàng chờ và tỷ lệ lấp đầy của từng lượt chơi thực tế.</li>
+<li><strong>Business Rules:</strong><ul>
+<li><strong>BR-CAP-01:</strong> Khi số lượng khách xếp hàng thực tế vượt quá 150% sức chứa thiết kế của khu vực hàng đợi, hệ thống phải phát tín hiệu cảnh báo ùn tắc.</li>
+</ul>
+</li>
+<li><strong>Database Mapping:</strong> Bảng <code>ride_capacities</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>GET /api/v1/rides/{rideId}/capacity-status</code> -&gt; Trả về số lượng khách đang xếp hàng và công suất lượt chơi hiện tại.</li>
+</ul>
+</li>
+</ul>
+<h3>MODULE 14: RIDE MAINTENANCE (BẢO TRÌ TRÒ CHƠI)</h3>
+<ul>
+<li><strong>Objective:</strong> Quản lý lịch bảo trì định kỳ, đột xuất, theo dõi chi phí sửa chữa và linh kiện thay thế của từng trò chơi.</li>
+<li><strong>Business Rules:</strong><ul>
+<li><strong>BR-MAINT-01:</strong> Trò chơi có phiếu bảo trì chưa hoàn thành (trạng thái <code>IN_PROGRESS</code>) bắt buộc phải bị khóa quyền soát vé check-in tại cổng trò chơi.</li>
+</ul>
+</li>
+<li><strong>Use Case Flows:</strong> Kỹ sư hoàn tất sửa chữa thiết bị -&gt; Nhập mô tả linh kiện thay thế và chi phí thực tế -&gt; Ký xác nhận đóng phiếu bảo trì.</li>
+<li><strong>Validation &amp; Errors:</strong> Chi phí bảo trì không được nhỏ hơn 0.</li>
+<li><strong>Access Control:</strong> <code>Maintenance Tech</code>, <code>Park Manager</code>.</li>
+<li><strong>UI Description:</strong> Biểu đồ Kanban quản trị tiến trình bảo trì (Lên lịch, Đang sửa, Chờ kiểm tra, Hoàn thành).</li>
+<li><strong>Database Mapping:</strong> Bảng <code>ride_maintenances</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>POST /api/v1/maintenance/tickets</code> (Body: <code>{rideId, description, scheduledDate}</code>)</li>
+<li><code>PUT /api/v1/maintenance/tickets/{id}/complete</code> (Body: <code>{cost, notes}</code>)</li>
+</ul>
+</li>
+</ul>
+<h3>MODULE 15: RIDE INSPECTION (KIỂM TRA AN TOÀN TRÒ CHƠI)</h3>
+<ul>
+<li><strong>Objective:</strong> Ghi nhận kết quả kiểm tra kỹ thuật an toàn bắt buộc trước khi mở cửa đón khách hằng ngày của từng trò chơi.</li>
+<li><strong>Business Rules:</strong><ul>
+<li><strong>BR-INSP-01:</strong> Báo cáo kiểm tra an toàn phải được nộp trước 07:30 sáng hằng ngày. Nếu không có báo cáo kiểm tra đạt yêu cầu (<code>PASS</code>), trò chơi sẽ không được mở trạng thái hoạt động trên cổng thông tin.</li>
+</ul>
+</li>
+<li><strong>Database Mapping:</strong> Bảng <code>ride_inspections</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>POST /api/v1/inspections</code> (Body: <code>{rideId, inspectorId, result, details}</code>)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2>MIỀN 5: TICKETING, BOOKING &amp; ORDERS (VÉ &amp; ĐƠN HÀNG)</h2>
+<h3>MODULE 16: TICKET MANAGEMENT (QUẢN LÝ VÉ)</h3>
+<ul>
+<li><strong>Objective:</strong> Định nghĩa các loại vé (Vé thường, Vé VIP, Vé gia đình, Vé năm) và quản lý vòng đời vé điện tử QR Code.</li>
+<li><strong>Business Rules:</strong><ul>
+<li><strong>BR-TKT-01:</strong> Mỗi mã vé QR Code được sinh ra phải là duy nhất, mã hóa bằng thuật toán AES-256 để tránh làm giả.</li>
+</ul>
+</li>
+<li><strong>Use Case Flows:</strong> Khách quét vé QR tại cổng chính -&gt; Hệ thống ghi nhận trạng thái từ <code>UNUSED</code> sang <code>USED</code>.</li>
+<li><strong>Database Mapping:</strong> Bảng <code>tickets</code>, <code>ticket_types</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>GET /api/v1/tickets/{code}</code> -&gt; Kiểm tra thông tin vé.</li>
+</ul>
+</li>
+</ul>
+<h3>MODULE 17: TICKET PRICING (CẤU HÌNH GIÁ VÉ &amp; GIÁ ĐỘNG)</h3>
+<ul>
+<li><strong>Objective:</strong> Cấu hình bảng giá vé tiêu chuẩn và gọi FastAPI AI Engine dự báo để cập nhật giá vé động.</li>
+<li><strong>Business Rules:</strong><ul>
+<li><strong>BR-PRICE-01:</strong> Biên độ điều chỉnh giá vé động của AI không được vượt quá khoảng giới hạn tối thiểu (<code>min_price</code>) và tối đa (<code>max_price</code>) do Admin thiết lập tĩnh cho từng loại vé trong Spring Boot.</li>
+</ul>
+</li>
+<li><strong>Use Case Flows:</strong> Spring Boot gửi HTTP request sang FastAPI để lấy giá vé đề xuất -&gt; Cập nhật bảng giá trong MySQL -&gt; Đồng bộ lên giao diện ReactJS.</li>
+<li><strong>Database Mapping:</strong> Bảng <code>ticket_pricings</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>POST /api/v1/ticket-types/{id}/prices/dynamic</code> -&gt; Spring Boot gọi FastAPI và cập nhật giá vé động.</li>
+</ul>
+</li>
+</ul>
+<h3>MODULE 18: BOOKING (ĐẶT VÉ TRỰC TUYẾN)</h3>
+<ul>
+<li><strong>Objective:</strong> Cung cấp giao diện đặt vé trực tuyến cho khách hàng sử dụng ReactJS và Axios, cho phép chọn ngày đi, loại vé, số lượng và dịch vụ gia tăng.</li>
+<li><strong>Business Rules:</strong><ul>
+<li><strong>BR-BOOK-01:</strong> Hệ thống giữ chỗ vé đặt mua trong vòng tối đa 15 phút. Nếu không nhận được xác nhận thanh toán thành công, đặt chỗ tự động bị hủy.</li>
+</ul>
+</li>
+<li><strong>Database Mapping:</strong> Bảng <code>bookings</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>POST /api/v1/bookings</code> (Body: <code>{customerName, email, date, ticketTypeId, quantity}</code>)</li>
+</ul>
+</li>
+</ul>
+<h3>MODULE 19: ORDER MANAGEMENT (QUẢN LÝ ĐƠN HÀNG)</h3>
+<ul>
+<li><strong>Objective:</strong> Quản lý tập trung toàn bộ các đơn hàng đặt vé, đơn hàng ẩm thực F&amp;B, mua sắm đồ lưu niệm trong công viên.</li>
+<li><strong>Business Rules:</strong><ul>
+<li><strong>BR-ORD-01:</strong> Mọi thay đổi dữ liệu đơn hàng thành công trong MySQL được Debezium CDC bắt lại và đẩy tự động sang Kafka topic <code>order-events</code> theo mô hình Event-Driven.</li>
+</ul>
+</li>
+<li><strong>Database Mapping:</strong> Bảng <code>orders</code>, <code>order_items</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>GET /api/v1/orders/{orderCode}</code></li>
+</ul>
+</li>
+</ul>
+<h3>MODULE 20: PAYMENT (THANH TOÁN)</h3>
+<ul>
+<li><strong>Objective:</strong> Tích hợp với các cổng thanh toán số (VNPay, MoMo) để hoàn tất giao dịch tự động của khách hàng.</li>
+<li><strong>Business Rules:</strong><ul>
+<li><strong>BR-PAY-01:</strong> Mọi phản hồi Webhook từ cổng thanh toán phải được kiểm tra chữ ký bảo mật checksum trước khi cập nhật trạng thái hóa đơn thành công.</li>
+</ul>
+</li>
+<li><strong>Database Mapping:</strong> Bảng <code>payments</code>, <code>payment_methods</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>POST /api/v1/payments/webhook/vnpay</code></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2>MIỀN 6: GUEST SERVICES &amp; LOYALTY (DỊCH VỤ KHÁCH HÀNG &amp; THÀNH VIÊN)</h2>
+<h3>MODULE 21: MEMBERSHIP (THÀNH VIÊN &amp; TÍCH ĐIỂM)</h3>
+<ul>
+<li><strong>Objective:</strong> Quản lý hạng thẻ VIP, tích lũy điểm thưởng khi chi tiêu và quy đổi điểm thưởng sang mã giảm giá.</li>
+<li><strong>Business Rules:</strong><ul>
+<li><strong>BR-MEM-01:</strong> Hạng thành viên được cập nhật tức thời khi tổng chi tiêu tích lũy vượt ngưỡng quy định của hạng thẻ cao hơn.</li>
+</ul>
+</li>
+<li><strong>Database Mapping:</strong> Bảng <code>memberships</code>, <code>membership_tiers</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>GET /api/v1/memberships/{code}</code></li>
+</ul>
+</li>
+</ul>
+<h3>MODULE 22: PROMOTION (CHƯƠNG TRÌNH KHUYẾN MÃI)</h3>
+<ul>
+<li><strong>Objective:</strong> Thiết kế chiến dịch marketing, giảm giá trực tiếp theo khung giờ hoặc đối tượng khách hàng cụ thể.</li>
+<li><strong>Database Mapping:</strong> Bảng <code>promotions</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>POST /api/v1/promotions</code> (Body: <code>{name, discountType, value, startDate, endDate}</code>)</li>
+</ul>
+</li>
+</ul>
+<h3>MODULE 23: COUPON (MÃ GIẢM GIÁ)</h3>
+<ul>
+<li><strong>Objective:</strong> Phát hành mã coupon áp dụng giảm giá trực tiếp trên tổng giá trị đơn hàng đặt mua trực tuyến hoặc tại quầy.</li>
+<li><strong>Database Mapping:</strong> Bảng <code>coupons</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>POST /api/v1/coupons</code> (Body: <code>{code, promotionId, maxUses}</code>)</li>
+</ul>
+</li>
+</ul>
+<h3>MODULE 24: FOOD COURT MANAGEMENT (QUẢN LÝ KHU ẨM THỰC)</h3>
+<ul>
+<li><strong>Objective:</strong> Quản lý menu món ăn, sơ đồ quầy ẩm thực (Food Stalls) và xử lý gọi món qua hệ thống POS di động.</li>
+<li><strong>Business Rules:</strong><ul>
+<li><strong>BR-FC-01:</strong> Các giao dịch mua bán đồ ăn tại khu ẩm thực phải lưu trữ mã quầy hàng để phục vụ Spark phân tích dữ liệu DWH.</li>
+</ul>
+</li>
+<li><strong>Database Mapping:</strong> Bảng <code>food_courts</code>, <code>food_stalls</code>, <code>food_items</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>GET /api/v1/food-courts/{id}/stalls</code></li>
+<li><code>POST /api/v1/food-courts/orders</code> (Body: <code>{stallId, items: [{itemId, quantity}]}</code>)</li>
+</ul>
+</li>
+</ul>
+<h3>MODULE 25: RETAIL SHOP MANAGEMENT (QUẢN LÝ CỬA HÀNG BÁN LẺ)</h3>
+<ul>
+<li><strong>Objective:</strong> Quản lý hàng tồn kho đồ lưu niệm, mã vạch sản phẩm (SKU) và xử lý quét mã vạch thanh toán tại quầy thu ngân cửa hàng.</li>
+<li><strong>Database Mapping:</strong> Bảng <code>retail_shops</code>, <code>retail_items</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>GET /api/v1/retail/items</code></li>
+<li><code>POST /api/v1/retail/transactions</code> (Body: <code>{shopId, items: [{sku, quantity}]}</code>)</li>
+</ul>
+</li>
+</ul>
+<h3>MODULE 26: PARKING MANAGEMENT (QUẢN LÝ BÃI ĐỖ XE THÔNG MINH)</h3>
+<ul>
+<li><strong>Objective:</strong> Kết nối camera LPR tự động mở barie khi xe vào/ra, tính phí gửi xe dựa trên loại phương tiện.</li>
+<li><strong>Business Rules:</strong><ul>
+<li><strong>BR-PARK-01:</strong> Hệ thống phải lưu trữ ảnh chụp biển số xe và trả về tín hiệu mở barie trong vòng dưới 1 giây sau khi xe dừng tại vạch quét.</li>
+</ul>
+</li>
+<li><strong>Database Mapping:</strong> Bảng <code>parking_lots</code>, <code>parking_transactions</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>POST /api/v1/parking/gate/entry</code> (Body: <code>{plateNumber, rawImage}</code>)</li>
+<li><code>POST /api/v1/parking/gate/exit</code> (Body: <code>{plateNumber}</code>)</li>
+</ul>
+</li>
+</ul>
+<h3>MODULE 27: LOCKER MANAGEMENT (QUẢN LÝ TỦ ĐỒ THÔNG MINH)</h3>
+<ul>
+<li><strong>Objective:</strong> Hỗ trợ khách hàng thuê tủ đồ thông minh lưu trữ hành lý cá nhân thông qua mã QR được cấp trên thiết bị di động.</li>
+<li><strong>Database Mapping:</strong> Bảng <code>lockers</code>, <code>locker_transactions</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>POST /api/v1/lockers/rent</code> (Body: <code>{lockerId, customerId, durationHours}</code>)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2>MIỀN 7: FEEDBACK, NOTIFICATION &amp; INCIDENTS (PHẢN HỒI, THÔNG BÁO &amp; SỰ CỐ)</h2>
+<h3>MODULE 28: FEEDBACK MANAGEMENT (QUẢN LÝ PHẢN HỒI KHIẾU NẠI)</h3>
+<ul>
+<li><strong>Objective:</strong> Tiếp nhận ý kiến đóng góp, đánh giá chất lượng dịch vụ của khách hàng để gửi cho bộ phận CSKH xử lý.</li>
+<li><strong>Database Mapping:</strong> Bảng <code>feedbacks</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>POST /api/v1/feedbacks</code> (Body: <code>{customerId, rating, content}</code>)</li>
+</ul>
+</li>
+</ul>
+<h3>MODULE 29: NOTIFICATION MANAGEMENT (QUẢN LÝ THÔNG BÁO)</h3>
+<ul>
+<li><strong>Objective:</strong> Gửi thông báo tự động (OTP, hóa đơn, cảnh báo bảo trì khẩn cấp) qua Email, SMS và Firebase Push.</li>
+<li><strong>Database Mapping:</strong> Bảng <code>notifications</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>POST /api/v1/notifications/send</code> (Body: <code>{userId, title, content, type}</code>)</li>
+</ul>
+</li>
+</ul>
+<h3>MODULE 30: INCIDENT MANAGEMENT (QUẢN LÝ SỰ CỐ AN NINH VÀ AN TOÀN)</h3>
+<ul>
+<li><strong>Objective:</strong> Ghi nhận khẩn cấp các sự cố xảy ra tại khu vui chơi (Tai nạn, trộm cắp, lỗi kỹ thuật trò chơi đột xuất) để điều động đội phản ứng nhanh.</li>
+<li><strong>Business Rules:</strong><ul>
+<li><strong>BR-INC-01:</strong> Cảnh báo mức độ nghiêm trọng <code>CRITICAL</code> phải tự động kích hoạt còi báo động tại phòng điều khiển và gửi SMS đến toàn bộ ban quản lý công viên.</li>
+</ul>
+</li>
+<li><strong>Database Mapping:</strong> Bảng <code>incidents</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>POST /api/v1/incidents</code> (Body: <code>{zoneId, severity, description}</code>)</li>
+</ul>
+</li>
+</ul>
+<h3>MODULE 31: AUDIT LOG (NHẬT KÝ HỆ THỐNG BẤT BIẾN)</h3>
+<ul>
+<li><strong>Objective:</strong> Lưu vết toàn bộ các hành động thêm, sửa, xóa dữ liệu trên MySQL phục vụ công tác thanh tra kiểm toán bảo mật.</li>
+<li><strong>Business Rules:</strong><ul>
+<li><strong>BR-AUD-01:</strong> Bảng dữ liệu log audit chỉ được phép ghi dữ liệu, không cấp quyền sửa hoặc xóa bản ghi log cho bất kỳ vai trò nào ở tầng cơ sở dữ liệu.</li>
+</ul>
+</li>
+<li><strong>Database Mapping:</strong> Bảng <code>audit_logs</code>.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>GET /api/v1/admin/audit-logs</code> (Query: <code>startDate</code>, <code>endDate</code>, <code>userId</code>)</li>
+</ul>
+</li>
+</ul>
+<hr>
+<h2>MIỀN 8: BUSINESS INTELLIGENCE &amp; ANALYTICS (TRÍ TUỆ KINH DOANH &amp; PHÂN TÍCH DOANH NGHIỆP)</h2>
+<h3>MODULE 32: BUSINESS INTELLIGENCE (HỆ THỐNG BI &amp; PIPELINE)</h3>
+<ul>
+<li><strong>Objective:</strong> Định cấu hình hệ thống đường ống ETL Debezium CDC -&gt; Kafka -&gt; Spark để nạp dữ liệu thô từ MySQL đẩy vào Google BigQuery DWH.</li>
+<li><strong>Business Rules:</strong><ul>
+<li><strong>BR-BI-01:</strong> Quá trình đồng bộ dữ liệu giao dịch sang BigQuery phải đạt tính toàn vẹn 100%, không được mất mát dữ liệu tài chính trong quá trình trích xuất và nạp.</li>
+</ul>
+</li>
+<li><strong>Database Mapping:</strong> Toàn bộ cấu trúc Star Schema BigQuery.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>GET /api/v1/bi/pipeline-status</code> -&gt; Trả về tình trạng hoạt động của luồng Spark Streaming &amp; Kafka.</li>
+</ul>
+</li>
+</ul>
+<h3>MODULE 33: ANALYTICS (PHÂN TÍCH CHỈ SỐ DOANH NGHIỆP)</h3>
+<ul>
+<li><strong>Objective:</strong> Thiết lập các tác vụ định kỳ của Spark SQL tính toán chỉ số hiệu suất doanh nghiệp (KPIs) và lưu trữ trong BigQuery.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>GET /api/v1/analytics/kpi/revenue-summary</code></li>
+</ul>
+</li>
+</ul>
+<h3>MODULE 34: FORECASTING (DỰ BÁO XU HƯỚNG AI)</h3>
+<ul>
+<li><strong>Objective:</strong> Spring Boot gọi REST API của FastAPI AI Service để nhận kết quả phân tích dự báo lượng khách và doanh thu tuần tới dựa trên mô hình học máy.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>GET /api/v1/ai/forecast/visitors</code> -&gt; Spring Boot gọi FastAPI <code>POST /forecast/visitor</code> và trả về kết quả dự báo cho ReactJS.</li>
+</ul>
+</li>
+</ul>
+<h3>MODULE 35: EXECUTIVE DASHBOARD (BẢNG ĐIỀU KHIỂN TỔNG GIÁM ĐỐC)</h3>
+<ul>
+<li><strong>Objective:</strong> Giao diện Google Looker Studio truy vấn dữ liệu từ BigQuery, trực quan hóa chỉ số tài chính, vận hành thời gian thực để Ban Giám đốc quản lý toàn bộ hệ thống Smart Park.</li>
+<li><strong>UI Description:</strong> Looker Studio Dashboards được tích hợp trực tiếp (Embedded iframe) vào giao diện ReactJS.</li>
+<li><strong>API Endpoints:</strong><ul>
+<li><code>GET /api/v1/bi/dashboards/looker-share-url</code></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1>SECTION 4: BUSINESS INTELLIGENCE PLATFORM &amp; DASHBOARDS (LOOKER STUDIO &amp; BIGQUERY)</h1>
+<p>Nền tảng phân tích thông minh được xây dựng trên kho dữ liệu đám mây Google BigQuery (OLAP DWH) kết nối trực tiếp với Google Looker Studio để cung cấp 12 Dashboard phân tích chuyên sâu sau:</p>
+<h3>4.1. Executive Dashboard (Dashboard Tổng Giám Đốc)</h3>
+<ul>
+<li><strong>KPIs:</strong> Tổng doanh thu (Doanh thu vé + F&amp;B + Retail + Gửi xe), tổng lượt khách tham quan, chỉ số hài lòng khách hàng (CSAT), hiệu suất vận hành trò chơi trung bình.</li>
+<li><strong>Visualizations:</strong> Biểu đồ đường xu hướng doanh thu tích lũy tháng, bản đồ nhiệt mật độ khách hàng hiện tại trong công viên.</li>
+</ul>
+<h3>4.2. Financial Dashboard (Dashboard Tài Chính)</h3>
+<ul>
+<li><strong>KPIs:</strong> Lợi nhuận trước thuế (EBITDA), Biên lợi nhuận gộp, Dòng tiền tự do, Tỷ lệ chi phí vận hành trên tổng doanh thu.</li>
+<li><strong>Visualizations:</strong> Biểu đồ miền thể hiện biến động chi phí và doanh thu theo quý, bảng đối soát dòng tiền.</li>
+</ul>
+<h3>4.3. Revenue Dashboard (Dashboard Doanh Thu)</h3>
+<ul>
+<li><strong>KPIs:</strong> Doanh thu gộp hằng ngày, Doanh số trung bình trên mỗi khách hàng (ARPU), Doanh số F&amp;B lũy kế.</li>
+<li><strong>Visualizations:</strong> Biểu đồ tròn cơ cấu doanh thu từ các nguồn dịch vụ khác nhau trong công viên.</li>
+</ul>
+<h3>4.4. Profit Dashboard (Dashboard Lợi Nhuận)</h3>
+<ul>
+<li><strong>KPIs:</strong> Lợi nhuận ròng, Lợi nhuận từ hoạt động F&amp;B, Lợi nhuận từ hoạt động bán lẻ đồ lưu niệm.</li>
+<li><strong>Visualizations:</strong> Biểu đồ cột chồng biểu diễn lợi nhuận của từng chi nhánh công viên thành viên.</li>
+</ul>
+<h3>4.5. Customer Dashboard (Dashboard Khách Hàng)</h3>
+<ul>
+<li><strong>KPIs:</strong> Số lượt đăng ký tài khoản khách hàng mới, cơ cấu phân nhóm độ tuổi khách hàng, tỷ lệ khách hàng quay lại.</li>
+<li><strong>Visualizations:</strong> Biểu đồ Scatter Plot phân nhóm khách hàng theo mô hình RFM (Recency, Frequency, Monetary).</li>
+</ul>
+<h3>4.6. Membership Dashboard (Dashboard Thành Viên)</h3>
+<ul>
+<li><strong>KPIs:</strong> Tổng số thẻ VIP đang hoạt động, tỷ lệ nâng hạng thành viên, điểm thưởng quy đổi tích lũy.</li>
+<li><strong>Visualizations:</strong> Biểu đồ cột chồng số lượng thành viên phân loại theo thứ hạng Gold, Silver, Platinum.</li>
+</ul>
+<h3>4.7. Ride Performance Dashboard (Dashboard Hiệu Suất Trò Chơi)</h3>
+<ul>
+<li><strong>KPIs:</strong> Tổng số lượt chạy của các trò chơi trong ngày, tỷ lệ hoạt động đúng giờ của lịch trình.</li>
+<li><strong>Visualizations:</strong> Biểu đồ cột ngang xếp hạng Top 10 trò chơi chạy nhiều lượt nhất.</li>
+</ul>
+<h3>4.8. Ride Utilization Dashboard (Dashboard Tỷ Lệ Sử Dụng Trò Chơi)</h3>
+<ul>
+<li><strong>KPIs:</strong> Tỷ lệ lấp đầy ghế ngồi trung bình mỗi lượt chạy, số lượt khách chơi trên 1 giờ của từng trò chơi.</li>
+<li><strong>Visualizations:</strong> Biểu đồ đường thể hiện xu hướng sử dụng trò chơi theo các khung giờ trong ngày.</li>
+</ul>
+<h3>4.9. Ride Downtime Dashboard (Dashboard Thời Gian Ngưng Hoạt Động Trò Chơi)</h3>
+<ul>
+<li><strong>KPIs:</strong> Tổng số giờ ngưng hoạt động do lỗi (Downtime), tỷ lệ hỏng hóc kỹ thuật trung bình của trò chơi.</li>
+<li><strong>Visualizations:</strong> Biểu đồ cột biểu thị thời gian dừng chạy do lỗi kỹ thuật của từng trò chơi.</li>
+</ul>
+<h3>4.10. Maintenance Dashboard (Dashboard Bảo Trì Thiết Bị)</h3>
+<ul>
+<li><strong>KPIs:</strong> Tổng chi phí bảo trì tích lũy, thời gian trung bình để sửa chữa xong một lỗi kỹ thuật (MTTR), số lượng linh kiện đã thay thế.</li>
+<li><strong>Visualizations:</strong> Biểu đồ đường chi phí bảo trì biến động qua các tháng.</li>
+</ul>
+<h3>4.11. Employee Dashboard (Dashboard Nhân Sự)</h3>
+<ul>
+<li><strong>KPIs:</strong> Tỷ lệ hoàn thành công việc của nhân viên, số ca trực bị trống nhân sự, đánh giá chất lượng phục vụ của nhân viên tại quầy.</li>
+<li><strong>Visualizations:</strong> Bảng xếp hạng năng suất của nhân viên soát vé và nhân viên quầy POS.</li>
+</ul>
+<h3>4.12. Department Dashboard (Dashboard Phòng Ban)</h3>
+<ul>
+<li><strong>KPIs:</strong> Chi phí vận hành của từng phòng ban, tổng số nhân sự hoạt động trong phòng ban.</li>
+<li><strong>Visualizations:</strong> Sơ đồ tổ chức phân bổ ngân sách vận hành của các bộ phận chức năng.</li>
+</ul>
+<h3>4.13. Promotion Dashboard (Dashboard Chiến Dịch Ưu Đãi)</h3>
+<ul>
+<li><strong>KPIs:</strong> Doanh thu tăng trưởng do chương trình ưu đãi mang lại, tỷ lệ khách hàng áp dụng mã giảm giá.</li>
+<li><strong>Visualizations:</strong> Biểu đồ cột so sánh doanh thu các chiến dịch khuyến mãi.</li>
+</ul>
+<h3>4.14. Peak Hour Dashboard (Dashboard Khung Giờ Cao Điểm)</h3>
+<ul>
+<li><strong>KPIs:</strong> Khung giờ có lượng khách check-in đông nhất, thời gian tắc nghẽn trung bình tại bãi đỗ xe và cổng chính.</li>
+<li><strong>Visualizations:</strong> Biểu đồ nhiệt (Heatmap Grid) biểu thị lượng khách theo giờ và ngày trong tuần.</li>
+</ul>
+<h3>4.15. Visitor Flow Dashboard (Dashboard Dòng Chảy Khách Tham Quan)</h3>
+<ul>
+<li><strong>KPIs:</strong> Tốc độ di chuyển của khách từ cổng chính vào các phân khu trò chơi, lượng khách ra/vào mỗi phân khu.</li>
+<li><strong>Visualizations:</strong> Sơ đồ dòng chảy Sankey (Sankey Diagram) mô tả luồng di chuyển thực tế của khách hàng.</li>
+</ul>
+<h3>4.16. Zone Heatmap Dashboard (Dashboard Bản Đồ Nhiệt Phân Khu)</h3>
+<ul>
+<li><strong>KPIs:</strong> Số lượng khách hiện tại có trong từng phân khu, mức độ quá tải so với sức chứa tối đa.</li>
+<li><strong>Visualizations:</strong> Bản đồ địa lý công viên (Park Map Visual) có các vùng màu chuyển sắc tương ứng với mật độ khách thực tế.</li>
+</ul>
+<h3>4.17. Food Sales Dashboard (Dashboard Doanh Số Ẩm Thực F&amp;B)</h3>
+<ul>
+<li><strong>KPIs:</strong> Tổng doanh số khu ẩm thực, Top món ăn bán chạy nhất, doanh thu trung bình của từng quầy ẩm thực.</li>
+<li><strong>Visualizations:</strong> Biểu đồ tròn cơ cấu doanh thu món ăn và đồ uống.</li>
+</ul>
+<h3>4.18. Retail Sales Dashboard (Dashboard Doanh Số Bán Lẻ)</h3>
+<ul>
+<li><strong>KPIs:</strong> Doanh thu quầy quà lưu niệm, tốc độ luân chuyển hàng tồn kho SKU, số lượng hàng hóa bán ra.</li>
+<li><strong>Visualizations:</strong> Biểu đồ cột ngang thể hiện doanh thu của 10 sản phẩm lưu niệm bán chạy nhất.</li>
+</ul>
+<h3>4.19. Parking Dashboard (Dashboard Bãi Đỗ Xe)</h3>
+<ul>
+<li><strong>KPIs:</strong> Tỷ lệ trống chỗ bãi đỗ xe, doanh thu dịch vụ đỗ xe, tỷ lệ phân bổ phương tiện xe máy và ô tô.</li>
+<li><strong>Visualizations:</strong> Biểu đồ tròn biểu thị tỷ lệ lấp đầy chỗ đỗ xe thời gian thực.</li>
+</ul>
+<h3>4.20. Forecast Dashboard (Dashboard Dự Báo Vận Hành &amp; Tài Chính)</h3>
+<ul>
+<li><strong>KPIs:</strong> Dự báo tổng doanh thu tháng tới, dự báo lượng khách tham quan trong ngày lễ kỷ niệm tiếp theo.</li>
+<li><strong>Visualizations:</strong> Biểu đồ đường nét đứt dự báo (Confidence interval bands) thể hiện kết quả dự đoán của AI.</li>
+</ul>
+<hr>
+<h1>SECTION 5: ENTERPRISE AI ENGINE (FASTAPI MICROSERVICE)</h1>
+<p>Hệ thống tích hợp Python FastAPI AI Microservice chạy độc lập, giao tiếp với Spring Boot 3 qua HTTP REST APIs để cung cấp kết quả dự báo (Inference Only). Không thực hiện thao tác CRUD dữ liệu.</p>
+<ol>
+<li><strong>Visitor Forecast (Dự báo lượng khách):</strong> <ul>
+<li><strong>Endpoint:</strong> <code>POST /forecast/visitor</code> (Body: <code>{startDate, endDate}</code>) -&gt; Trả về danh sách dự báo số lượng khách hằng ngày sử dụng mô hình Prophet.</li>
+</ul>
+</li>
+<li><strong>Revenue Forecast (Dự báo doanh thu):</strong> <ul>
+<li><strong>Endpoint:</strong> <code>POST /forecast/revenue</code> (Body: <code>{monthsAhead}</code>) -&gt; Trả về doanh thu dự báo sử dụng XGBoost.</li>
+</ul>
+</li>
+<li><strong>Ride Demand Prediction (Dự đoán nhu cầu trò chơi):</strong> <ul>
+<li><strong>Endpoint:</strong> <code>POST /forecast/ride-demand</code> (Body: <code>{rideId, targetDate}</code>) -&gt; Dự báo số lượng lượt khách xếp hàng tại trò chơi theo giờ.</li>
+</ul>
+</li>
+<li><strong>Maintenance Prediction (Dự báo bảo trì thiết bị):</strong> <ul>
+<li><strong>Endpoint:</strong> <code>POST /forecast/maintenance-prediction</code> (Body: <code>{rideId, runCycles, wearScore}</code>) -&gt; Dự đoán rủi ro hỏng hóc cơ học.</li>
+</ul>
+</li>
+<li><strong>Customer Segmentation (Phân cụm khách hàng):</strong> <ul>
+<li><strong>Endpoint:</strong> <code>POST /customer-segmentation</code> (Body: <code>{rfmScoreMatrix}</code>) -&gt; Trả về phân nhóm cụm khách hàng VIP/vãng lai sử dụng scikit-learn K-Means.</li>
+</ul>
+</li>
+<li><strong>Recommendation Engine (Gợi ý dịch vụ):</strong> <ul>
+<li><strong>Endpoint:</strong> <code>POST /recommendation/combo</code> (Body: <code>{customerId, purchaseHistory}</code>) -&gt; Đề xuất gói combo vé tối ưu.</li>
+</ul>
+</li>
+<li><strong>Dynamic Pricing (Định giá vé động):</strong> <ul>
+<li><strong>Endpoint:</strong> <code>POST /dynamic-pricing</code> (Body: <code>{ticketTypeId, weather, currentOccupancy}</code>) -&gt; Tính toán giá vé tối ưu trong biên độ cho phép.</li>
+</ul>
+</li>
+<li><strong>Peak Hour Prediction (Dự đoán giờ cao điểm):</strong> <ul>
+<li><strong>Endpoint:</strong> <code>POST /forecast/peak-hour</code> (Body: <code>{date}</code>) -&gt; Dự đoán khung giờ ùn tắc tại cổng soát vé.</li>
+</ul>
+</li>
+<li><strong>Risk Detection (Phát hiện rủi ro an ninh):</strong> <ul>
+<li><strong>Endpoint:</strong> <code>POST /risk/anomaly-detection</code> (Body: <code>{transactionStream}</code>) -&gt; Phát hiện giao dịch gian lận.</li>
+</ul>
+</li>
+<li><strong>Operational Optimization (Tối ưu hóa vận hành):</strong> <ul>
+<li><strong>Endpoint:</strong> <code>POST /optimize/schedule</code> (Body: <code>{ridesLoad, staffAvailability}</code>) -&gt; Đề xuất sơ đồ trực ca tối ưu.</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h1>SECTION 6: DATABASE DESIGN (OPERATIONAL &amp; ANALYTICAL)</h1>
+<h2>6.1. Cơ sở dữ liệu giao dịch (MySQL Operational Schema)</h2>
+<p>MySQL lưu trữ dữ liệu vận hành trực tuyến hằng ngày, gồm 43 bảng chuẩn hóa 3NF:</p>
+<ol>
+<li><strong><code>users</code></strong> (id, username, password_hash, email, status, created_at, updated_at)</li>
+<li><strong><code>roles</code></strong> (id, name, code, description, created_at)</li>
+<li><strong><code>permissions</code></strong> (id, name, code, description, created_at)</li>
+<li><strong><code>user_roles</code></strong> (user_id, role_id)</li>
+<li><strong><code>role_permissions</code></strong> (role_id, permission_id)</li>
+<li><strong><code>customers</code></strong> (id, user_id, full_name, phone, birth_date, gender, address, status, created_at)</li>
+<li><strong><code>employees</code></strong> (id, user_id, full_name, phone, salary, hire_date, status, created_at)</li>
+<li><strong><code>departments</code></strong> (id, name, code, description, manager_id, created_at)</li>
+<li><strong><code>employee_departments</code></strong> (employee_id, department_id, start_date, end_date)</li>
+<li><strong><code>parks</code></strong> (id, name, code, address, description, status, created_at)</li>
+<li><strong><code>zones</code></strong> (id, park_id, name, code, description, status, created_at)</li>
+<li><strong><code>rides</code></strong> (id, zone_id, name, code, description, ride_category_id, capacity, min_height, max_height, duration_seconds, status, created_at)</li>
+<li><strong><code>ride_categories</code></strong> (id, name, description, created_at)</li>
+<li><strong><code>ride_schedules</code></strong> (id, ride_id, employee_id, shift_date, start_time, end_time, status)</li>
+<li><strong><code>ride_capacities</code></strong> (id, ride_id, time_slot, max_capacity, booked_count, current_waiting_count)</li>
+<li><strong><code>ride_maintenances</code></strong> (id, ride_id, scheduled_date, completion_date, cost, technician_id, status, notes)</li>
+<li><strong><code>ride_inspections</code></strong> (id, ride_id, inspector_id, inspection_date, status, result_details)</li>
+<li><strong><code>ticket_types</code></strong> (id, park_id, name, description, standard_price, min_price, max_price, type, status)</li>
+<li><strong><code>ticket_pricings</code></strong> (id, ticket_type_id, date, dynamic_price, override_reason, created_at)</li>
+<li><strong><code>bookings</code></strong> (id, customer_id, booking_code, total_amount, payment_status, status, created_at)</li>
+<li><strong><code>orders</code></strong> (id, booking_id, customer_id, order_code, subtotal, discount_amount, tax_amount, total_amount, status, created_at)</li>
+<li><strong><code>order_items</code></strong> (id, order_id, item_type, reference_id, quantity, unit_price, total_price)</li>
+<li><strong><code>tickets</code></strong> (id, order_item_id, ticket_type_id, customer_id, ticket_code, status, valid_date)</li>
+<li><strong><code>check_ins</code></strong> (id, ticket_id, zone_id, scanner_id, check_time)</li>
+<li><strong><code>payments</code></strong> (id, order_id, payment_method_id, transaction_reference, amount, status, payment_time)</li>
+<li><strong><code>payment_methods</code></strong> (id, name, code, provider, status)</li>
+<li><strong><code>memberships</code></strong> (id, customer_id, tier_id, membership_code, points, join_date, expiration_date, status)</li>
+<li><strong><code>membership_tiers</code></strong> (id, name, code, discount_percentage, points_multiplier, min_spend)</li>
+<li><strong><code>promotions</code></strong> (id, name, description, start_date, end_date, discount_type, value, status)</li>
+<li><strong><code>coupons</code></strong> (id, promotion_id, code, max_uses, current_uses, discount_amount, status)</li>
+<li><strong><code>food_courts</code></strong> (id, park_id, name, code, status)</li>
+<li><strong><code>food_stalls</code></strong> (id, food_court_id, name, code, status)</li>
+<li><strong><code>food_items</code></strong> (id, food_stall_id, name, price, status)</li>
+<li><strong><code>retail_shops</code></strong> (id, park_id, name, code, status)</li>
+<li><strong><code>retail_items</code></strong> (id, retail_shop_id, name, sku, price, stock_quantity, status)</li>
+<li><strong><code>parking_lots</code></strong> (id, park_id, name, total_spaces, occupied_spaces, status)</li>
+<li><strong><code>parking_transactions</code></strong> (id, parking_lot_id, vehicle_plate, vehicle_type, entry_time, exit_time, amount_paid, status)</li>
+<li><strong><code>lockers</code></strong> (id, zone_id, locker_code, size, status)</li>
+<li><strong><code>locker_transactions</code></strong> (id, locker_id, customer_id, start_time, end_time, amount_paid, status)</li>
+<li><strong><code>feedbacks</code></strong> (id, customer_id, category, content, rating, assigned_employee_id, status, created_at)</li>
+<li><strong><code>notifications</code></strong> (id, user_id, title, content, type, status, created_at)</li>
+<li><strong><code>incidents</code></strong> (id, zone_id, reporter_id, description, severity, status, resolution_details, created_at)</li>
+<li><strong><code>audit_logs</code></strong> (id, user_id, action, target_table, record_id, old_values, new_values, ip_address, created_at)</li>
+</ol>
+<h2>6.2. Cơ sở dữ liệu phân tích (Analytical DWH - Google BigQuery Schema)</h2>
+<p>Dữ liệu trong Google BigQuery được thiết kế theo mô hình Star Schema tối ưu hóa cho công cụ Google Looker Studio truy vấn báo cáo:</p>
+<h3>6.2.1. Các bảng sự kiện (Fact Tables)</h3>
+<ul>
+<li><strong><code>FactTicketSales</code></strong> (id STRING, time_key INT64, customer_key INT64, ticket_key INT64, promotion_key INT64, quantity INT64, amount NUMERIC)</li>
+<li><strong><code>FactRevenue</code></strong> (id STRING, time_key INT64, customer_key INT64, promotion_key INT64, payment_method_key INT64, source_type STRING, amount NUMERIC)</li>
+<li><strong><code>FactRideUsage</code></strong> (id STRING, time_key INT64, customer_key INT64, ride_key INT64, employee_key INT64, wait_time_minutes INT64, duration_seconds INT64, usage_count INT64)</li>
+<li><strong><code>FactMaintenance</code></strong> (id STRING, time_key INT64, ride_key INT64, employee_key INT64, maintenance_cost NUMERIC, downtime_minutes INT64, fix_count INT64)</li>
+<li><strong><code>FactParking</code></strong> (id STRING, time_key INT64, parking_lot_key INT64, entry_count INT64, exit_count INT64, revenue NUMERIC)</li>
+<li><strong><code>FactFoodSales</code></strong> (id STRING, time_key INT64, customer_key INT64, food_item_key INT64, quantity INT64, amount NUMERIC)</li>
+<li><strong><code>FactRetailSales</code></strong> (id STRING, time_key INT64, customer_key INT64, retail_item_key INT64, quantity INT64, amount NUMERIC)</li>
+<li><strong><code>FactVisitorFlow</code></strong> (id STRING, time_key INT64, zone_key INT64, park_key INT64, entry_count INT64, exit_count INT64, current_occupancy INT64)</li>
+<li><strong><code>FactMembership</code></strong> (id STRING, time_key INT64, customer_key INT64, membership_key INT64, points_earned INT64, points_redeemed INT64, tier_change_flag INT64)</li>
+</ul>
+<h3>6.2.2. Các bảng chiều (Dimension Tables)</h3>
+<ul>
+<li><strong><code>DimDate</code></strong> (time_key INT64, date DATE, day INT64, month INT64, quarter INT64, year INT64, day_of_week STRING, is_holiday BOOL)</li>
+<li><strong><code>DimCustomer</code></strong> (customer_key INT64, original_id INT64, full_name STRING, age_group STRING, gender STRING, city STRING, status STRING)</li>
+<li><strong><code>DimRide</code></strong> (ride_key INT64, original_id INT64, name STRING, category STRING, capacity INT64, zone_name STRING)</li>
+<li><strong><code>DimZone</code></strong> (zone_key INT64, original_id INT64, name STRING, code STRING, park_name STRING)</li>
+<li><strong><code>DimEmployee</code></strong> (employee_key INT64, original_id INT64, full_name STRING, department_name STRING, job_title STRING)</li>
+<li><strong><code>DimDepartment</code></strong> (department_key INT64, original_id INT64, name STRING, code STRING, manager_name STRING)</li>
+<li><strong><code>DimPromotion</code></strong> (promotion_key INT64, original_id INT64, name STRING, discount_type STRING, value NUMERIC)</li>
+<li><strong><code>DimTicket</code></strong> (ticket_key INT64, original_id INT64, code STRING, type STRING, status STRING)</li>
+<li><strong><code>DimMembership</code></strong> (membership_key INT64, original_id INT64, code STRING, tier_name STRING, status STRING)</li>
+<li><strong><code>DimWeather</code></strong> (weather_key INT64, date DATE, temp_celsius NUMERIC, humidity NUMERIC, condition STRING)</li>
+</ul>
+<hr>
+<h1>SECTION 7: REST API DESIGN (RESTFUL WEB SERVICES)</h1>
+<h2>7.1. Spring Boot 3 REST APIs (Operational &amp; Business Logic)</h2>
+<p>Toàn bộ các API được thiết kế hướng tài nguyên (Resource-oriented REST APIs) phân nhóm theo miền nghiệp vụ:</p>
+<h3>7.1.1. Customer Domain API</h3>
+<ul>
+<li><code>POST /api/v1/customers</code> -&gt; Đăng ký khách hàng mới.</li>
+<li><code>GET /api/v1/customers/{id}</code> -&gt; Lấy hồ sơ chi tiết.</li>
+<li><code>PUT /api/v1/customers/{id}</code> -&gt; Cập nhật hồ sơ.</li>
+</ul>
+<h3>7.1.2. Ride Domain API</h3>
+<ul>
+<li><code>GET /api/v1/rides</code> -&gt; Danh sách trò chơi.</li>
+<li><code>PUT /api/v1/rides/{id}/status</code> -&gt; Cập nhật trạng thái trò chơi.</li>
+<li><code>POST /api/v1/rides/{id}/inspections</code> -&gt; Ghi nhận kết quả kiểm tra kỹ thuật.</li>
+</ul>
+<h3>7.1.3. Maintenance Domain API</h3>
+<ul>
+<li><code>POST /api/v1/maintenance/tickets</code> -&gt; Tạo phiếu yêu cầu bảo trì thiết bị.</li>
+<li><code>GET /api/v1/maintenance/tickets/{id}</code> -&gt; Xem chi tiết phiếu bảo trì.</li>
+<li><code>PUT /api/v1/maintenance/tickets/{id}/complete</code> -&gt; Nghiệm thu hoàn thành bảo trì.</li>
+</ul>
+<h3>7.1.4. Ticket &amp; Booking Domain API</h3>
+<ul>
+<li><code>GET /api/v1/ticket-types</code> -&gt; Danh sách các loại vé.</li>
+<li><code>POST /api/v1/bookings</code> -&gt; Tạo giao dịch đặt vé trực tuyến giữ chỗ.</li>
+<li><code>POST /api/v1/bookings/{id}/pay</code> -&gt; Thực hiện thanh toán giao dịch đặt vé.</li>
+</ul>
+<h3>7.1.5. Parking Domain API</h3>
+<ul>
+<li><code>POST /api/v1/parking/transactions/entry</code> -&gt; Ghi nhận xe vào bãi xe (quét LPR).</li>
+<li><code>POST /api/v1/parking/transactions/exit</code> -&gt; Quét xe ra và tính phí đỗ xe.</li>
+</ul>
+<h3>7.1.6. Food &amp; Beverage Domain API</h3>
+<ul>
+<li><code>GET /api/v1/food-courts/{id}/stalls</code> -&gt; Sơ đồ quầy của khu ẩm thực.</li>
+<li><code>POST /api/v1/food-courts/orders</code> -&gt; Khởi tạo đơn hàng gọi món ăn tại quầy.</li>
+</ul>
+<h3>7.1.7. BI &amp; Analytics Domain API</h3>
+<ul>
+<li><code>GET /api/v1/bi/dashboards/looker-share-url</code> -&gt; Lấy URL chia sẻ Google Looker Studio Dashboard tương ứng.</li>
+<li><code>GET /api/v1/bi/pipeline-status</code> -&gt; Trả về trạng thái hoạt động của Kafka và Debezium CDC.</li>
+</ul>
+<h2>7.2. FastAPI AI REST APIs (Inference &amp; Predictions)</h2>
+<p>FastAPI chỉ thực hiện các tác vụ tính toán dự đoán và trả kết quả về cho Spring Boot 3:</p>
+<ul>
+<li><code>POST /forecast/visitor</code> (Body: <code>{startDate, endDate}</code>) -&gt; Trả về lượng khách dự báo.</li>
+<li><code>POST /forecast/revenue</code> (Body: <code>{monthsAhead}</code>) -&gt; Trả về doanh thu dự báo.</li>
+<li><code>POST /forecast/ride-demand</code> (Body: <code>{rideId, targetDate}</code>) -&gt; Dự báo nhu cầu trò chơi.</li>
+<li><code>POST /dynamic-pricing</code> (Body: <code>{ticketTypeId, weather, currentOccupancy}</code>) -&gt; Tính toán giá vé tối ưu.</li>
+<li><code>POST /customer-segmentation</code> (Body: <code>{rfmScoreMatrix}</code>) -&gt; Phân cụm RFM khách hàng.</li>
+<li><code>POST /maintenance-prediction</code> (Body: <code>{rideId, runCycles, wearScore}</code>) -&gt; Dự đoán rủi ro hỏng hóc trò chơi.</li>
+</ul>
+<hr>
+<h1>SECTION 8: NON-FUNCTIONAL REQUIREMENTS (YÊU CẦU PHI CHỨC NĂNG)</h1>
+<h2>8.1. Performance (Hiệu năng)</h2>
+<ul>
+<li><strong>NFR-PERF-01:</strong> Thời gian xử lý ghi nhận dữ liệu check-in vé qua cổng Turnstile phải đạt dưới <strong>150ms</strong> đối với Redis cache và không quá <strong>500ms</strong> khi đồng bộ ngược về cơ sở dữ liệu MySQL chính.</li>
+<li><strong>NFR-PERF-02:</strong> Thời gian tải và hiển thị các biểu đồ Google Looker Studio Dashboard không được vượt quá <strong>3 giây</strong> nhờ áp dụng cơ chế BigQuery Cache và Spark Aggregations tiền xử lý.</li>
+</ul>
+<h2>8.2. Scalability (Khả năng mở rộng)</h2>
+<ul>
+<li><strong>NFR-SCALE-01:</strong> Kiến trúc Microservices chạy trên Docker Container phải hỗ trợ tự động mở rộng theo cả chiều ngang (HPA) dựa trên tải trọng tài nguyên CPU sử dụng thực tế.</li>
+<li><strong>NFR-SCALE-02:</strong> Kho dữ liệu đám mây Google BigQuery tự động mở rộng quy mô lưu trữ và tính toán theo nhu cầu mà không cần cấu hình cụ thể tài nguyên vật lý.</li>
+</ul>
+<h2>8.3. Availability (Độ khả dụng)</h2>
+<ul>
+<li><strong>NFR-AVAIL-01:</strong> Hệ thống Smart Park đảm bảo đạt độ khả dụng an toàn là <strong>99.95%</strong> thời gian hoạt động hằng năm (uptime).</li>
+<li><strong>NFR-AVAIL-02:</strong> Hệ thống lưu trữ Kafka và Spark phải có khả năng tự phục hồi dữ liệu khi một node trong cụm xảy ra sự cố phần cứng.</li>
+</ul>
+<h2>8.4. Security (Bảo mật an toàn thông tin)</h2>
+<ul>
+<li><strong>NFR-SEC-01:</strong> Dữ liệu tài chính giao dịch bắt buộc phải được mã hóa ở trạng thái lưu trữ (Encryption at rest) bằng thuật toán AES-256 tầng database và mã hóa lớp truyền tải TLS 1.3.</li>
+<li><strong>NFR-SEC-02:</strong> Áp dụng hệ thống phân quyền chặt chẽ dựa trên vai trò (RBAC) kết hợp bảo mật Spring Security và lọc JWT Token.</li>
+</ul>
+<h2>8.5. Observability &amp; Monitoring (Giám sát &amp; Quan sát)</h2>
+<ul>
+<li><strong>NFR-OB-01:</strong> Toàn bộ trạng thái hoạt động của hệ thống phải được giám sát tập trung thông qua bộ công cụ Prometheus, Grafana và hệ thống theo dõi lỗi Sentry.</li>
+</ul>
+<h2>8.6. Backup &amp; Disaster Recovery (Sao lưu &amp; Khôi phục thảm họa)</h2>
+<ul>
+<li><strong>NFR-DR-01:</strong> Thực hiện sao lưu gia tăng (Incremental Backup) cơ sở dữ liệu MySQL mỗi 4 giờ và sao lưu toàn bộ (Full Backup) mỗi 24 giờ. Google BigQuery tự động lưu lịch sử dữ liệu (Time Travel) trong 7 ngày phục vụ khôi phục nhanh.</li>
+</ul>
+<hr>
+<h1>SECTION 9: REQUIREMENT TRACEABILITY MATRIX &amp; RISKS (QUẢN LÝ DỰ ÁN)</h1>
+<h2>9.1. Ma trận truy vết yêu cầu phần mềm (RTM)</h2>
+<table>
+<thead>
+<tr>
+<th align="left">Mã Yêu Cầu Nghiệp Vụ</th>
+<th align="left">Mô Tả Yêu Cầu Chức Năng</th>
+<th align="left">API REST liên quan</th>
+<th align="left">Bảng DB Giao Dịch (MySQL)</th>
+<th align="left">Bảng DB BigQuery DWH (OLAP)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>BR-AUTH-01</strong></td>
+<td align="left">Băm mật khẩu người dùng</td>
+<td align="left"><code>POST /api/v1/auth/login</code></td>
+<td align="left"><code>users</code></td>
+<td align="left">-</td>
+</tr>
+<tr>
+<td align="left"><strong>BR-INSP-01</strong></td>
+<td align="left">Bắt buộc kiểm tra an toàn trò chơi</td>
+<td align="left"><code>POST /api/v1/rides/{id}/inspections</code></td>
+<td align="left"><code>ride_inspections</code>, <code>rides</code></td>
+<td align="left"><code>FactMaintenance</code>, <code>DimRide</code></td>
+</tr>
+<tr>
+<td align="left"><strong>BR-TKT-01</strong></td>
+<td align="left">Mã hóa vé QR tránh làm giả</td>
+<td align="left"><code>GET /api/v1/tickets/{code}</code></td>
+<td align="left"><code>tickets</code></td>
+<td align="left"><code>FactTicketSales</code>, <code>DimTicket</code></td>
+</tr>
+<tr>
+<td align="left"><strong>BR-PRICE-01</strong></td>
+<td align="left">Áp dụng biên độ giá động AI</td>
+<td align="left"><code>POST /api/v1/ticket-types/{id}/prices/dynamic</code></td>
+<td align="left"><code>ticket_pricings</code></td>
+<td align="left"><code>FactTicketSales</code></td>
+</tr>
+<tr>
+<td align="left"><strong>BR-PARK-01</strong></td>
+<td align="left">Mở barie bãi xe bằng LPR</td>
+<td align="left"><code>POST /api/v1/parking/gate/entry</code></td>
+<td align="left"><code>parking_transactions</code></td>
+<td align="left"><code>FactParking</code></td>
+</tr>
+<tr>
+<td align="left"><strong>BR-INC-01</strong></td>
+<td align="left">Báo động đỏ sự cố an ninh khẩn</td>
+<td align="left"><code>POST /api/v1/incidents</code></td>
+<td align="left"><code>incidents</code></td>
+<td align="left">-</td>
+</tr>
+<tr>
+<td align="left"><strong>BR-BI-01</strong></td>
+<td align="left">CDC đồng bộ Kafka không mất mát</td>
+<td align="left">Hệ thống chạy ngầm Debezium</td>
+<td align="left">Toàn bộ các bảng</td>
+<td align="left">Toàn bộ các bảng Fact &amp; Dim</td>
+</tr>
+</tbody></table>
+<h2>9.2. Đánh giá rủi ro dự án (Risk Assessment)</h2>
+<ul>
+<li><strong>Rủi ro 1: Lỗi gián đoạn truyền tin giữa IoT Turnstile thực địa và server.</strong><ul>
+<li><em>Mức độ:</em> Cao.</li>
+<li><em>Giải pháp:</em> Sử dụng mô hình kiểm soát Offline dự phòng tại máy chủ cục bộ (Edge Server) đặt ngay tại cổng soát vé của công viên để thực hiện đối chiếu tạm thời và đồng bộ lại khi mạng phục hồi.</li>
+</ul>
+</li>
+<li><strong>Rủi ro 2: Chi phí truy vấn dữ liệu thô trên Google BigQuery vượt hạn mức.</strong><ul>
+<li><em>Mức độ:</em> Trung bình.</li>
+<li><em>Giải pháp:</em> Thiết lập các tác vụ định kỳ của Apache Spark để tính toán và lưu trữ các bảng tổng hợp (Aggregated Tables), hạn chế Google Looker Studio thực hiện quét toàn bộ bảng Fact thô trong BigQuery.</li>
+</ul>
+</li>
+<li><strong>Rủi ro 3: Trễ truyền thông tin giữa Spring Boot và FastAPI khi tính toán dự báo.</strong><ul>
+<li><em>Mức độ:</em> Trung bình.</li>
+<li><em>Giải pháp:</em> Đặt thời gian timeout cho HTTP REST client và áp dụng cơ chế dự phòng trả về kết quả dự toán từ cache gần nhất nếu FastAPI không phản hồi trong 2 giây.</li>
+</ul>
+</li>
+</ul>
+
+</body>
+</html>
