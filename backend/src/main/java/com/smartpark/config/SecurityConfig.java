@@ -15,6 +15,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -29,10 +31,16 @@ import java.util.List;
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthFilter;
+    private final com.smartpark.security.RateLimitFilter rateLimitFilter;
+
+    @org.springframework.beans.factory.annotation.Value("${app.cors.allowed-origins:http://localhost:3000}")
+    private List<String> allowedOrigins;
 
     private static final String[] PUBLIC_PATHS = {
             // Auth
-            "/api/v1/auth/**",
+            "/api/v1/auth/login",
+            "/api/v1/auth/register",
+            "/api/v1/auth/refresh",
             // Payment webhooks
             "/api/v1/payments/vnpay-ipn",
             "/api/v1/payments/vnpay-return",
@@ -46,11 +54,18 @@ public class SecurityConfig {
             "/api/v1/rides/{id}",
             "/api/v1/ticket-types",
             "/api/v1/ticket-types/{id}",
+            // New public API endpoints for Customer Portal
+            "/api/v1/venues",
+            "/api/v1/venues/**",
+            "/api/v1/promotions",
+            "/api/v1/feedbacks",
+            "/api/v1/ai/recommendation/**",
             // Swagger & Actuator
             "/swagger-ui/**",
             "/swagger-ui.html",
             "/api-docs/**",
-            "/actuator/health"
+            "/actuator/health",
+            "/actuator/metrics"
     };
 
     @Bean
@@ -59,33 +74,15 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .exceptionHandling(e -> e.authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(PUBLIC_PATHS).permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/rides/**").permitAll()
-
-                        // SYSTEM_ADMIN only
-                        .requestMatchers("/api/v1/admin/**").hasRole("SYSTEM_ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/v1/parks/**").hasRole("SYSTEM_ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/v1/departments").hasRole("SYSTEM_ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/v1/employees").hasAnyRole("SYSTEM_ADMIN", "PARK_MANAGER")
-
-                        // PARK_MANAGER
-                        .requestMatchers("/api/v1/employees/**").hasAnyRole("SYSTEM_ADMIN", "PARK_MANAGER")
-                        .requestMatchers("/api/v1/maintenance/**").hasAnyRole("SYSTEM_ADMIN", "PARK_MANAGER", "MAINTENANCE_TECH")
-                        .requestMatchers("/api/v1/inspections/**").hasAnyRole("SYSTEM_ADMIN", "PARK_MANAGER", "MAINTENANCE_TECH")
-
-                        // Operational Staff
-                        .requestMatchers("/api/v1/incidents").hasAnyRole("SYSTEM_ADMIN", "PARK_MANAGER", "OPERATIONS_STAFF")
-                        .requestMatchers("/api/v1/parking/**").hasAnyRole("SYSTEM_ADMIN", "PARK_MANAGER", "OPERATIONS_STAFF")
-
-                        // BI / Analytics
-                        .requestMatchers("/api/v1/bi/**").hasAnyRole("SYSTEM_ADMIN", "PARK_MANAGER")
-                        .requestMatchers("/api/v1/analytics/**").hasAnyRole("SYSTEM_ADMIN", "PARK_MANAGER")
-
-                        // Any authenticated user for the rest
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                // Add rate limit filter first, then JWT filter
+                .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthFilter, com.smartpark.security.RateLimitFilter.class)
                 .build();
     }
 
@@ -102,7 +99,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(List.of("*"));
+        config.setAllowedOrigins(allowedOrigins);
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

@@ -1,5 +1,6 @@
 package com.smartpark.domain.ticket.entity;
 
+import com.smartpark.domain.booking.entity.Booking;
 import com.smartpark.domain.customer.entity.Customer;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,6 +24,10 @@ public class Ticket {
     private Long orderItemId;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "booking_id")
+    private Booking booking;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ticket_type_id", nullable = false)
     private TicketType ticketType;
 
@@ -37,7 +42,7 @@ public class Ticket {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @Builder.Default
-    private TicketStatus status = TicketStatus.UNUSED;
+    private TicketStatus status = TicketStatus.RESERVED;
 
     @Column(name = "valid_date", nullable = false)
     private LocalDate validDate;
@@ -46,5 +51,5 @@ public class Ticket {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    public enum TicketStatus { UNUSED, USED, EXPIRED, CANCELLED }
+    public enum TicketStatus { AVAILABLE, RESERVED, PAID, CHECKED_IN, USED, CANCELLED, EXPIRED, REFUNDED }
 }

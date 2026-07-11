@@ -53,7 +53,7 @@ public class Ride {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @Builder.Default
-    private RideStatus status = RideStatus.SCHEDULED;
+    private RideStatus status = RideStatus.CLOSED;
 
     @CreatedDate
     @Column(name = "created_at", updatable = false)
@@ -64,6 +64,6 @@ public class Ride {
     private LocalDateTime updatedAt;
 
     public enum RideStatus {
-        SCHEDULED, OPERATIONAL, UNDER_MAINTENANCE, OUT_OF_ORDER, EMERGENCY_STOP
+        ACTIVE, MAINTENANCE, CLOSED, TEMPORARY_STOP
     }
 }

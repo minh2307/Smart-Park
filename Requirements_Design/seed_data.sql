@@ -4,7 +4,7 @@
 -- Target Database: smartpark_db
 -- ============================================================================
 
-USE smartpark_db;
+USE ticketing_db;
 
 SET FOREIGN_KEY_CHECKS = 0;
 
@@ -151,18 +151,18 @@ INSERT INTO ride_capacities (id, ride_id, time_slot, max_capacity, booked_count,
 (2, 1, '10:00:00', 80, 75, 25);
 
 -- 16. SEED DATA FOR ride_maintenances
-INSERT INTO ride_maintenances (id, ride_id, technician_id, scheduled_date, status, description) VALUES
-(1, 2, 2, '2026-07-15', 'SCHEDULED', 'Bảo trì định kỳ máy tạo sóng và hệ thống lọc nước tuần hoàn');
+INSERT INTO ride_maintenances (id, ride_id, technician_id, scheduled_date, start_time, end_time, status, description) VALUES
+(1, 2, 2, '2026-07-15', '2026-07-15 08:00:00', '2026-07-15 12:00:00', 'SCHEDULED', 'Bảo trì định kỳ máy tạo sóng và hệ thống lọc nước tuần hoàn');
 
 -- 17. SEED DATA FOR ride_inspections
 INSERT INTO ride_inspections (id, ride_id, inspector_id, inspection_date, status, result_details) VALUES
 (1, 1, 2, '2026-07-08', 'PASS', 'Kiểm tra đường ray trượt nước phẳng, không trầy xước, phao trượt đạt chuẩn an toàn.');
 
 -- 18. SEED DATA FOR ticket_types
-INSERT INTO ticket_types (id, park_id, name, description, standard_price, min_price, max_price, type, status) VALUES
-(1, 1, 'Vé Trọn Gói Đầm Sen', 'Truy cập toàn bộ máng trượt và bể tạo sóng cả ngày', 250000.00, 200000.00, 350000.00, 'STANDARD', 'ACTIVE'),
-(2, 1, 'Vé VIP FastPass Đầm Sen', 'Không cần xếp hàng tại các máng trượt cảm giác mạnh', 450000.00, 380000.00, 600000.00, 'VIP', 'ACTIVE'),
-(3, 2, 'Vé Combo Fantasy', 'Trải nghiệm toàn bộ trò chơi trong nhà và arcade', 200000.00, 150000.00, 300000.00, 'STANDARD', 'ACTIVE');
+INSERT INTO ticket_types (id, park_id, name, description, standard_price, min_price, max_price, type, status, total_quantity, available_quantity) VALUES
+(1, 1, 'Vé Trọn Gói Đầm Sen', 'Truy cập toàn bộ máng trượt và bể tạo sóng cả ngày', 250000.00, 200000.00, 350000.00, 'ADULT', 'ACTIVE', 1000, 1000),
+(2, 1, 'Vé VIP FastPass Đầm Sen', 'Không cần xếp hàng tại các máng trượt cảm giác mạnh', 450000.00, 380000.00, 600000.00, 'VIP', 'ACTIVE', 500, 500),
+(3, 2, 'Vé Combo Fantasy', 'Trải nghiệm toàn bộ trò chơi trong nhà và arcade', 200000.00, 150000.00, 300000.00, 'ADULT', 'ACTIVE', 1000, 1000);
 
 -- 19. SEED DATA FOR ticket_pricings
 INSERT INTO ticket_pricings (id, ticket_type_id, date, dynamic_price) VALUES
@@ -172,12 +172,12 @@ INSERT INTO ticket_pricings (id, ticket_type_id, date, dynamic_price) VALUES
 
 -- 20. SEED DATA FOR bookings
 INSERT INTO bookings (id, customer_id, booking_code, total_amount, payment_status, status) VALUES
-(1, 1, 'B_BK009911', 700000.00, 'PAID', 'CONFIRMED'),
+(1, 1, 'B_BK009911', 700000.00, 'PAID', 'PAID'),
 (2, 2, 'B_BK009922', 200000.00, 'PENDING', 'PENDING');
 
 -- 21. SEED DATA FOR orders
 INSERT INTO orders (id, booking_id, customer_id, order_code, subtotal, discount_amount, tax_amount, total_amount, status) VALUES
-(1, 1, 1, 'ORD_998811', 700000.00, 0.00, 0.00, 700000.00, 'SUCCESS'),
+(1, 1, 1, 'ORD_998811', 700000.00, 0.00, 0.00, 700000.00, 'PAID'),
 (2, 2, 2, 'ORD_998822', 200000.00, 0.00, 0.00, 200000.00, 'PENDING');
 
 -- 22. SEED DATA FOR order_items
@@ -189,7 +189,7 @@ INSERT INTO order_items (id, order_id, item_type, reference_id, quantity, unit_p
 -- 23. SEED DATA FOR tickets
 INSERT INTO tickets (id, order_item_id, ticket_type_id, customer_id, ticket_code, status, valid_date) VALUES
 (1, 1, 1, 1, 'TK_DS_STANDARD_998811A', 'USED', '2026-07-09'),
-(2, 2, 2, 1, 'TK_DS_VIP_998811B', 'UNUSED', '2026-07-09');
+(2, 2, 2, 1, 'TK_DS_VIP_998811B', 'AVAILABLE', '2026-07-09');
 
 -- 24. SEED DATA FOR check_ins
 INSERT INTO check_ins (id, ticket_id, zone_id, scanner_id, check_time) VALUES
@@ -244,7 +244,7 @@ INSERT INTO retail_items (id, retail_shop_id, name, sku, price, stock_quantity, 
 
 -- 36. SEED DATA FOR parking_lots
 INSERT INTO parking_lots (id, park_id, name, total_spaces, occupied_spaces, status) VALUES
-(1, 1, 'Bãi xe cổng chính Đầm Sen', 'PL_MAIN_DAMSEN', 1000, 320, 'ACTIVE');
+(1, 1, 'Bãi xe cổng chính Đầm Sen', 1000, 320, 'ACTIVE');
 
 -- 37. SEED DATA FOR parking_transactions
 INSERT INTO parking_transactions (id, parking_lot_id, vehicle_plate, vehicle_type, entry_time, status) VALUES

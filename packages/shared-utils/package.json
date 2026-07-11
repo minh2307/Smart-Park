@@ -1,0 +1,11 @@
+{
+  "name": "@shared/utils",
+  "version": "1.0.0",
+  "private": true,
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "dependencies": {
+    "dayjs": "^1.11.13",
+    "lodash-es": "^4.17.21"
+  }
+}

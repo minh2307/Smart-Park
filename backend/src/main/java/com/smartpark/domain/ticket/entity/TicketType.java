@@ -39,6 +39,14 @@ public class TicketType {
     @Column(name = "max_price", precision = 15, scale = 2)
     private BigDecimal maxPrice;
 
+    @Column(name = "total_quantity", nullable = false)
+    @Builder.Default
+    private Integer totalQuantity = 0;
+
+    @Column(name = "available_quantity", nullable = false)
+    @Builder.Default
+    private Integer availableQuantity = 0;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TicketCategory type;
@@ -52,6 +60,6 @@ public class TicketType {
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    public enum TicketCategory { STANDARD, VIP, FAMILY, ANNUAL }
+    public enum TicketCategory { ADULT, CHILD, VIP, DAILY, MONTHLY }
     public enum TicketTypeStatus { ACTIVE, INACTIVE }
 }

@@ -46,5 +46,5 @@ public class Payment {
     @Column(name = "payment_time")
     private LocalDateTime paymentTime;
 
-    public enum PaymentStatus { PENDING, SUCCESS, FAILED, REFUNDED }
+    public enum PaymentStatus { PENDING, SUCCESS, FAILED, CANCELLED, REFUNDED }
 }

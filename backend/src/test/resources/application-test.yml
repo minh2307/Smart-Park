@@ -1,0 +1,47 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    url: jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;MODE=MySQL
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.H2Dialect
+        format_sql: true
+
+  # Mock Redis logic since we don't want to rely on real redis in unit tests
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+app:
+  cors:
+    allowed-origins: http://localhost:3000
+  jwt:
+    secret: Test-Secret-Key-Test-Secret-Key-Test-Secret-Key-Test-Secret-Key
+    access-token-expiration: 900000
+    refresh-token-expiration: 604800000
+
+  vnpay:
+    tmn-code: DEMO1234
+    hash-secret: DEMO_SECRET_KEY_VNPAY
+    pay-url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
+    return-url: http://localhost:8080/api/v1/payments/vnpay-return
+    ipn-url: http://localhost:8080/api/v1/payments/vnpay-ipn
+
+  ai:
+    base-url: http://localhost:8000
+    timeout-seconds: 5
+
+  bigquery:
+    enabled: false
+    project-id: test-project
+    dataset-id: test-dataset

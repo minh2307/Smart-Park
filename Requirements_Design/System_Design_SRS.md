@@ -544,6 +544,7 @@ graph TD
 | PRESENTATION LAYER: ReactJS, TypeScript, Material UI, Redux Toolkit, Axios    |
 +-------------------------------------------------------------------------------+
 | BUSINESS LAYER (CRUD): Spring Boot 3, Spring Security, JWT, Spring Data JPA   |
+| SCHEDULING & DB MIGRATION: ShedLock (Redis/JDBC), Flyway Migration            |
 +-------------------------------------------------------------------------------+
 | OPERATIONAL DB: MySQL                   | CACHE: Redis                        |
 +-------------------------------------------------------------------------------+
@@ -559,7 +560,7 @@ graph TD
 +-------------------------------------------------------------------------------+
 | AI INFERENCE MICROSERVICE: FastAPI (scikit-learn, Prophet, XGBoost)           |
 +-------------------------------------------------------------------------------+
-| DEPLOYMENT: Docker, Docker Compose                                           |
+| DEPLOYMENT & CI/CD: Docker, Docker Compose, GitHub Actions, Docker Hub        |
 +-------------------------------------------------------------------------------+
 ```
 
@@ -893,9 +894,12 @@ graph TD
 * **Objective:** Định cấu hình hệ thống đường ống ETL Debezium CDC -> Kafka -> Spark để nạp dữ liệu thô từ MySQL đẩy vào Google BigQuery DWH.
 * **Business Rules:**
   * **BR-BI-01:** Quá trình đồng bộ dữ liệu giao dịch sang BigQuery phải đạt tính toàn vẹn 100%, không được mất mát dữ liệu tài chính trong quá trình trích xuất và nạp.
-* **Database Mapping:** Toàn bộ cấu trúc Star Schema BigQuery.
+  * **BR-BI-02:** Áp dụng cơ chế Dead Letter Queue (DLQ) cho Analytics Outbox, các sự kiện quá 3 lần retry sẽ bị đẩy vào bảng Dead Letter để Admin quản lý và requeue.
+* **Database Mapping:** Toàn bộ cấu trúc Star Schema BigQuery, bảng `analytics_events` và `analytics_dead_letter` trên MySQL.
 * **API Endpoints:**
   * `GET /api/v1/bi/pipeline-status` -> Trả về tình trạng hoạt động của luồng Spark Streaming & Kafka.
+  * `GET /api/v1/admin/dlq` -> Truy vấn danh sách sự kiện gửi thất bại.
+  * `POST /api/v1/admin/dlq/{id}/requeue` -> Đẩy sự kiện trở lại hàng chờ.
 
 ### MODULE 33: ANALYTICS (PHÂN TÍCH CHỈ SỐ DOANH NGHIỆP)
 * **Objective:** Thiết lập các tác vụ định kỳ của Spark SQL tính toán chỉ số hiệu suất doanh nghiệp (KPIs) và lưu trữ trong BigQuery.
@@ -1076,6 +1080,9 @@ MySQL lưu trữ dữ liệu vận hành trực tuyến hằng ngày, gồm 43 b
 41. **`notifications`** (id, user_id, title, content, type, status, created_at)
 42. **`incidents`** (id, zone_id, reporter_id, description, severity, status, resolution_details, created_at)
 43. **`audit_logs`** (id, user_id, action, target_table, record_id, old_values, new_values, ip_address, created_at)
+44. **`analytics_events`** (event_id, event_type, user_id, reference_type, reference_id, payload, synced, retry_count, created_at)
+45. **`analytics_dead_letter`** (id, event_id, payload, error_message, retry_count, failed_at)
+46. **`flyway_schema_history`** (installed_rank, version, description, type, script, checksum, installed_by, installed_on, execution_time, success)
 
 ## 6.2. Cơ sở dữ liệu phân tích (Analytical DWH - Google BigQuery Schema)
 Dữ liệu trong Google BigQuery được thiết kế theo mô hình Star Schema tối ưu hóa cho công cụ Google Looker Studio truy vấn báo cáo:

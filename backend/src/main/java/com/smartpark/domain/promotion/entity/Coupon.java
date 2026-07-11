@@ -36,6 +36,10 @@ public class Coupon {
     @Column(name = "discount_amount", nullable = false, precision = 15, scale = 2)
     private BigDecimal discountAmount;
 
+    @Column(name = "min_order_value", precision = 15, scale = 2)
+    @Builder.Default
+    private BigDecimal minOrderValue = BigDecimal.ZERO;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @Builder.Default

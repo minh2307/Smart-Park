@@ -26,13 +26,15 @@ public class CheckIn {
     private Ticket ticket;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "zone_id", nullable = false)
+    @JoinColumn(name = "zone_id")
     private Zone zone;
 
     /** ID thiết bị quét (turnstile scanner device ID) */
     @Column(name = "scanner_id", length = 50)
     private String scannerId;
 
+    /** Thời điểm check-in (alias checkTime trong DB) */
     @Column(name = "check_time", nullable = false)
-    private LocalDateTime checkTime;
+    private LocalDateTime checkInTime;
 }
+

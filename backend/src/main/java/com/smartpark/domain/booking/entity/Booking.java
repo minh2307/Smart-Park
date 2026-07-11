@@ -30,6 +30,13 @@ public class Booking {
     @Column(name = "total_amount", precision = 15, scale = 2)
     private BigDecimal totalAmount;
 
+    @Column(name = "discount_amount", precision = 15, scale = 2)
+    @Builder.Default
+    private BigDecimal discountAmount = BigDecimal.ZERO;
+
+    @Column(name = "coupon_code", length = 50)
+    private String couponCode;
+
     /** BR-BOOK-01: booking expires in 15 minutes if not paid */
     @Column(name = "expires_at")
     private LocalDateTime expiresAt;
@@ -53,5 +60,5 @@ public class Booking {
     private LocalDateTime updatedAt;
 
     public enum PaymentStatus { PENDING, PAID, FAILED, REFUNDED }
-    public enum BookingStatus { PENDING, CONFIRMED, CANCELLED, EXPIRED }
+    public enum BookingStatus { PENDING, PAID, CHECKED_IN, COMPLETED, CANCELLED, EXPIRED }
 }

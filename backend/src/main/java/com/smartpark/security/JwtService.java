@@ -25,13 +25,13 @@ import java.util.function.Function;
 @Slf4j
 public class JwtService {
 
-    @Value("${smartpark.jwt.secret}")
+    @Value("${app.jwt.secret}")
     private String jwtSecret;
 
-    @Value("${smartpark.jwt.access-token-expiration-ms:1800000}")
-    private long accessTokenExpirationMs; // 30 min default
+    @Value("${app.jwt.access-token-expiration:900000}")
+    private long accessTokenExpirationMs; // 15 min default
 
-    @Value("${smartpark.jwt.refresh-token-expiration-ms:604800000}")
+    @Value("${app.jwt.refresh-token-expiration:604800000}")
     private long refreshTokenExpirationMs; // 7 days default
 
     private SecretKey getSigningKey() {
@@ -40,12 +40,19 @@ public class JwtService {
     }
 
     public String generateAccessToken(UserDetails userDetails) {
-        return generateToken(new HashMap<>(), userDetails, accessTokenExpirationMs);
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("authorities", userDetails.getAuthorities().stream()
+                .map(org.springframework.security.core.GrantedAuthority::getAuthority)
+                .toList());
+        return generateToken(claims, userDetails, accessTokenExpirationMs);
     }
 
     public String generateRefreshToken(UserDetails userDetails) {
         Map<String, Object> extraClaims = new HashMap<>();
         extraClaims.put("type", "refresh");
+        extraClaims.put("authorities", userDetails.getAuthorities().stream()
+                .map(org.springframework.security.core.GrantedAuthority::getAuthority)
+                .toList());
         return generateToken(extraClaims, userDetails, refreshTokenExpirationMs);
     }
 
@@ -79,6 +86,12 @@ public class JwtService {
 
     private Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
+    }
+
+    public long getRemainingTimeInSeconds(String token) {
+        Date expiration = extractExpiration(token);
+        long diff = expiration.getTime() - System.currentTimeMillis();
+        return diff > 0 ? diff / 1000 : 0;
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {

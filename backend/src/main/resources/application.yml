@@ -2,10 +2,14 @@ spring:
   application:
     name: smartpark-backend
 
+  flyway:
+    baseline-on-migrate: true
+    baseline-version: 0
+
   datasource:
-    url: jdbc:mysql://localhost:3306/smartpark_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=Asia/Ho_Chi_Minh&allowPublicKeyRetrieval=true&characterEncoding=UTF-8
-    username: root
-    password: smartpark_root_pass
+    url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/ticketing_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=Asia/Ho_Chi_Minh&allowPublicKeyRetrieval=true&characterEncoding=UTF-8}
+    username: ${SPRING_DATASOURCE_USERNAME:root}
+    password: ${SPRING_DATASOURCE_PASSWORD:123456}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 20
@@ -14,7 +18,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: true
     properties:
       hibernate:
@@ -24,9 +28,9 @@ spring:
 
   data:
     redis:
-      host: localhost
-      port: 6379
-      password:
+      host: ${SPRING_REDIS_HOST:localhost}
+      port: ${SPRING_REDIS_PORT:6379}
+      password: ${SPRING_REDIS_PASSWORD:}
       timeout: 3000ms
       lettuce:
         pool:
@@ -37,8 +41,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${MAIL_USERNAME:your-email@gmail.com}
-    password: ${MAIL_PASSWORD:your-app-password}
+    username: ${MAIL_USERNAME:workspacegateos@gmail.com}
+    password: ${MAIL_PASSWORD:ocitxfcpezgkcyvl}
     properties:
       mail:
         smtp:
@@ -63,15 +67,17 @@ server:
 
 # JWT Configuration
 app:
+  cors:
+    allowed-origins: ${FRONTEND_URL:http://localhost:3000}
   jwt:
-    secret: ${JWT_SECRET:SmartPark-Super-Secret-Key-2026-Min64Chars-ForHS512-Algorithm-Enterprise!!}
+    secret: ${JWT_SECRET:GateOS-Super-Secret-Key-2026-Min64Chars-ForHS512-Algorithm-Security!!}
     access-token-expiration: 900000       # 15 phút (ms)
     refresh-token-expiration: 604800000   # 7 ngày (ms)
 
-  # VNPay Configuration (Sandbox)
+  # VNPay Configuration
   vnpay:
-    tmn-code: ${VNPAY_TMN_CODE:DEMO1234}
-    hash-secret: ${VNPAY_HASH_SECRET:DEMO_SECRET_KEY_VNPAY}
+    tmn-code: ${VNPAY_TMN_CODE:1MPPQ86K}
+    hash-secret: ${VNPAY_HASH_SECRET:FQ6R7BDXUFZZS0YD5W5OU082BH7SUZ1V}
     pay-url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
     return-url: ${VNPAY_RETURN_URL:http://localhost:8080/api/v1/payments/vnpay-return}
     ipn-url: ${VNPAY_IPN_URL:http://localhost:8080/api/v1/payments/vnpay-ipn}
@@ -91,6 +97,12 @@ app:
     base-url: ${AI_SERVICE_URL:http://localhost:8000}
     timeout-seconds: 5
 
+  # Google BigQuery (BI Data Warehouse)
+  bigquery:
+    enabled: ${BIGQUERY_ENABLED:false}
+    project-id: ${GCP_PROJECT_ID:elegant-beach-502005-g8}
+    dataset-id: ${BIGQUERY_DATASET:ticketing}
+
 # Swagger / OpenAPI
 springdoc:
   api-docs:
@@ -109,3 +121,12 @@ logging:
     com.smartpark: DEBUG
     org.springframework.security: INFO
     org.hibernate.SQL: DEBUG
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,metrics
+  endpoint:
+    health:
+      show-details: always

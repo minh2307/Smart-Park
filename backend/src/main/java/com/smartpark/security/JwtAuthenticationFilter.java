@@ -29,6 +29,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
+    private final org.springframework.data.redis.core.StringRedisTemplate redisTemplate;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -42,6 +43,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         final String jwt = authHeader.substring(7);
+        
+        // Check if token is blacklisted (Logged out)
+        if (Boolean.TRUE.equals(redisTemplate.hasKey("BL:" + jwt))) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("{\"status\": 401, \"message\": \"Token has been revoked or logged out.\"}");
+            return;
+        }
+
         String username = null;
 
         try {
@@ -51,7 +60,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
+            // Read authorities directly from token to save DB trips
+            java.util.List<String> authorityStrings = jwtService.extractClaim(jwt, claims -> {
+                Object authoritiesObj = claims.get("authorities");
+                if (authoritiesObj instanceof java.util.List) {
+                    return (java.util.List<String>) authoritiesObj;
+                }
+                return java.util.Collections.emptyList();
+            });
+            
+            java.util.Collection<org.springframework.security.core.GrantedAuthority> authorities = authorityStrings.stream()
+                    .map(org.springframework.security.core.authority.SimpleGrantedAuthority::new)
+                    .collect(java.util.stream.Collectors.toList());
+
+            UserDetails userDetails = org.springframework.security.core.userdetails.User.withUsername(username)
+                    .password("") // Empty password since it's just for context
+                    .authorities(authorities)
+                    .build();
 
             if (jwtService.isTokenValid(jwt, userDetails)) {
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
