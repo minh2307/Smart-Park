@@ -109,10 +109,10 @@ export const RideDetails: React.FC<RideDetailsProps> = ({ ride }) => {
       {/* Tabs */}
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={tabValue} onChange={handleTabChange} aria-label="ride info tabs">
-          <Tab icon={<MdInfo />} iconPosition="start" label="Attraction Specs" />
-          <Tab icon={<MdShield />} iconPosition="start" label="Safety & Exclusions" />
-          <Tab icon={<MdImage />} iconPosition="start" label="Media Gallery" />
-          <Tab icon={<MdBuild />} iconPosition="start" label="Tech Logs & Staffing" />
+          <Tab icon={<MdInfo />} iconPosition="start" label="Thông số trò chơi" />
+          <Tab icon={<MdShield />} iconPosition="start" label="An toàn & Quy định" />
+          <Tab icon={<MdImage />} iconPosition="start" label="Thư viện ảnh" />
+          <Tab icon={<MdBuild />} iconPosition="start" label="Lịch trình & Kỹ thuật" />
         </Tabs>
       </Box>
 
@@ -123,24 +123,24 @@ export const RideDetails: React.FC<RideDetailsProps> = ({ ride }) => {
             <Card variant="outlined" sx={{ borderRadius: 3, height: '100%' }}>
               <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <Typography variant="subtitle2" fontWeight="bold">
-                  Attraction Overview & Description
+                  Tổng quan & Mô tả trò chơi
                 </Typography>
                 <Divider />
                 <Typography variant="body2" color="text.primary" sx={{ mt: 1, lineHeight: 1.6 }}>
-                  {ride.description || 'No description written for this attraction.'}
+                  {ride.description || 'Không có mô tả cho trò chơi này.'}
                 </Typography>
 
                 <Box sx={{ mt: 3, display: 'flex', gap: 3 }}>
                   <Box>
-                    <Typography variant="caption" color="text.secondary">HOURLY CAPACITY</Typography>
+                    <Typography variant="caption" color="text.secondary">CÔNG SUẤT HÀNG GIỜ</Typography>
                     <Typography variant="body1" fontWeight="bold">
-                      {ride.capacity.toLocaleString()} guests/hr
+                      {ride.capacity.toLocaleString()} khách/giờ
                     </Typography>
                   </Box>
                   <Box>
-                    <Typography variant="caption" color="text.secondary">CYCLE DURATION</Typography>
+                    <Typography variant="caption" color="text.secondary">THỜI GIAN CHU KỲ</Typography>
                     <Typography variant="body1" fontWeight="bold">
-                      {ride.durationSeconds ? `${Math.floor(ride.durationSeconds / 60)}m ${ride.durationSeconds % 60}s` : 'N/A'}
+                      {ride.durationSeconds ? `${Math.floor(ride.durationSeconds / 60)} phút ${ride.durationSeconds % 60} giây` : 'Không xác định'}
                     </Typography>
                   </Box>
                 </Box>
@@ -152,13 +152,13 @@ export const RideDetails: React.FC<RideDetailsProps> = ({ ride }) => {
             <Card variant="outlined" sx={{ borderRadius: 3, height: '100%' }}>
               <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <Typography variant="subtitle2" fontWeight="bold">
-                  Operational Details
+                  Thông tin vận hành
                 </Typography>
                 <Divider />
                 <List sx={{ p: 0 }}>
                   <ListItem sx={{ px: 0, py: 1 }}>
                     <ListItemText
-                      primary="Operating Hours"
+                      primary="Giờ hoạt động"
                       secondary={`${ride.operatingHours.open} - ${ride.operatingHours.close}`}
                     />
                     <MdAccessTime size={20} color="action" />
@@ -166,7 +166,7 @@ export const RideDetails: React.FC<RideDetailsProps> = ({ ride }) => {
                   <Divider />
                   <ListItem sx={{ px: 0, py: 1 }}>
                     <ListItemText
-                      primary="Popularity Rating"
+                      primary="Độ phổ biến"
                       secondary={`${ride.popularityScore} / 100`}
                     />
                     <MdStar size={20} color="#ffb300" />
@@ -175,8 +175,8 @@ export const RideDetails: React.FC<RideDetailsProps> = ({ ride }) => {
                   {ride.revenueContribution && (
                     <ListItem sx={{ px: 0, py: 1 }}>
                       <ListItemText
-                        primary="Monthly Revenue Contribution"
-                        secondary={`$${ride.revenueContribution.toLocaleString()}`}
+                        primary="Đóng góp doanh thu hàng tháng"
+                        secondary={`${(ride.revenueContribution * 25000).toLocaleString('vi-VN')} ₫`}
                       />
                     </ListItem>
                   )}
@@ -204,7 +204,7 @@ export const RideDetails: React.FC<RideDetailsProps> = ({ ride }) => {
             <Card variant="outlined" sx={{ borderRadius: 3, height: '100%' }}>
               <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <Typography variant="subtitle2" fontWeight="bold" display="flex" alignItems="center" gap={1}>
-                  <MdBuild color="primary" /> Maintenance logs & inspection history
+                  <MdBuild color="primary" /> Nhật ký bảo trì & lịch sử kiểm tra
                 </Typography>
                 <Divider />
                 <Box sx={{ mt: 1 }}>
@@ -218,7 +218,7 @@ export const RideDetails: React.FC<RideDetailsProps> = ({ ride }) => {
             <Card variant="outlined" sx={{ borderRadius: 3, height: '100%' }}>
               <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <Typography variant="subtitle2" fontWeight="bold" display="flex" alignItems="center" gap={1}>
-                  <MdCalendarToday color="primary" /> Operator Shifts & Schedules
+                  <MdCalendarToday color="primary" /> Ca làm việc & Lịch trình nhân viên
                 </Typography>
                 <Divider />
                 <List sx={{ p: 0 }}>
@@ -227,11 +227,11 @@ export const RideDetails: React.FC<RideDetailsProps> = ({ ride }) => {
                       <ListItem sx={{ px: 0, py: 1.5 }}>
                         <ListItemText
                           primary={sch.operatorName}
-                          secondary={`Date: ${sch.shiftDate} | Shift: ${sch.startTime} - ${sch.endTime}`}
+                          secondary={`Ngày: ${sch.shiftDate} | Ca trực: ${sch.startTime} - ${sch.endTime}`}
                           primaryTypographyProps={{ variant: 'body2', fontWeight: 'bold' }}
                         />
                         <Chip
-                          label={sch.status}
+                          label={sch.status === 'ACTIVE' ? 'Đang trực' : 'Ngưng trực'}
                           size="small"
                           color={sch.status === 'ACTIVE' ? 'success' : 'default'}
                           sx={{ fontSize: '0.65rem', fontWeight: 'bold' }}
@@ -242,7 +242,7 @@ export const RideDetails: React.FC<RideDetailsProps> = ({ ride }) => {
                   ))}
                   {schedules.length === 0 && (
                     <Typography variant="body2" color="text.secondary" sx={{ py: 2 }}>
-                      No staff shifts scheduled for today.
+                      Không có ca trực nào được lên lịch cho hôm nay.
                     </Typography>
                   )}
                 </List>

@@ -28,7 +28,7 @@ export const UserDetails: React.FC<UserDetailsProps> = ({ user }) => {
       <Grid item xs={12} md={8}>
         <Paper variant="outlined" sx={{ p: 3, borderRadius: 2 }}>
           <Typography variant="h6" fontWeight="bold" gutterBottom>
-            Account Details
+            Thông tin tài khoản
           </Typography>
           <Divider sx={{ mb: 2 }} />
           <Grid container spacing={2}>
@@ -42,7 +42,7 @@ export const UserDetails: React.FC<UserDetailsProps> = ({ user }) => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <Typography variant="caption" color="text.secondary" display="block">
-                Phone Number
+                Số điện thoại
               </Typography>
               <Typography variant="body1" fontWeight={500}>
                 {user.phone}
@@ -50,25 +50,25 @@ export const UserDetails: React.FC<UserDetailsProps> = ({ user }) => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <Typography variant="caption" color="text.secondary" display="block">
-                Role
+                Vai trò
               </Typography>
               <Typography variant="body1" fontWeight={500}>
-                {user.role}
+                {user.role === 'ADMIN' ? 'Quản trị viên' : user.role === 'NHAN_VIEN' ? 'Nhân viên' : user.role}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
               <Typography variant="caption" color="text.secondary" display="block">
-                Created Date
+                Ngày tạo
               </Typography>
               <Typography variant="body1" fontWeight={500}>
-                {new Date(user.createdDate).toLocaleString()}
+                {new Date(user.createdDate).toLocaleString('vi-VN')}
               </Typography>
             </Grid>
           </Grid>
           
           <Box mt={4}>
             <Typography variant="h6" fontWeight="bold" gutterBottom>
-              Permissions
+              Quyền hạn
             </Typography>
             <Divider sx={{ mb: 2 }} />
             <Box display="flex" gap={1} flexWrap="wrap">
@@ -80,7 +80,7 @@ export const UserDetails: React.FC<UserDetailsProps> = ({ user }) => {
                 ))
               ) : (
                 <Typography variant="body2" color="text.secondary">
-                  No explicit permissions assigned. Inherited from role {user.role}.
+                  Chưa được gán quyền cụ thể nào. Thừa hưởng từ vai trò {user.role === 'ADMIN' ? 'Quản trị viên' : user.role === 'NHAN_VIEN' ? 'Nhân viên' : user.role}.
                 </Typography>
               )}
             </Box>
@@ -88,20 +88,20 @@ export const UserDetails: React.FC<UserDetailsProps> = ({ user }) => {
 
           <Box mt={4}>
             <Typography variant="h6" fontWeight="bold" gutterBottom>
-              Recent Activity & Login History
+              Hoạt động gần đây & Lịch sử đăng nhập
             </Typography>
             <Divider sx={{ mb: 2 }} />
             <List dense>
               <ListItem disableGutters>
                 <ListItemText
-                  primary="Successful Login"
-                  secondary="Browser: Chrome (Linux) | IP: 192.168.1.15 | Time: Just now"
+                  primary="Đăng nhập thành công"
+                  secondary="Trình duyệt: Chrome (Linux) | IP: 192.168.1.15 | Thời gian: Vừa xong"
                 />
               </ListItem>
               <ListItem disableGutters>
                 <ListItemText
-                  primary="Profile Updated"
-                  secondary="Updated profile photo | Time: 2 hours ago"
+                  primary="Cập nhật hồ sơ"
+                  secondary="Đã cập nhật ảnh đại diện | Thời gian: 2 giờ trước"
                 />
               </ListItem>
             </List>

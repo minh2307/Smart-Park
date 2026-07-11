@@ -11,7 +11,7 @@ interface RememberMeCheckboxProps {
 export const RememberMeCheckbox: React.FC<RememberMeCheckboxProps> = ({
   checked,
   onChange,
-  label = 'Remember Me',
+  label = 'Duy trì đăng nhập',
   disabled = false,
 }) => {
   return (

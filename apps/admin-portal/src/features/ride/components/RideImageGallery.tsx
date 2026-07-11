@@ -69,7 +69,7 @@ export const RideImageGallery: React.FC<RideImageGalleryProps> = ({
                       size="small"
                       sx={{ color: 'white' }}
                       onClick={() => onSetCover(img)}
-                      title="Set as Cover"
+                      title="Đặt làm ảnh bìa"
                     >
                       <MdStar size={20} />
                     </IconButton>
@@ -80,7 +80,7 @@ export const RideImageGallery: React.FC<RideImageGalleryProps> = ({
                       size="small"
                       sx={{ color: 'error.main' }}
                       onClick={() => onDeleteImage(img)}
-                      title="Delete Image"
+                      title="Xóa hình ảnh"
                     >
                       <MdDelete size={20} />
                     </IconButton>
@@ -103,7 +103,7 @@ export const RideImageGallery: React.FC<RideImageGalleryProps> = ({
                       boxShadow: 2,
                     }}
                   >
-                    COVER
+                    BÌA
                   </Box>
                 )}
               </Card>
@@ -134,7 +134,7 @@ export const RideImageGallery: React.FC<RideImageGalleryProps> = ({
             >
               <MdPhotoCamera size={26} color="primary" />
               <Typography variant="caption" sx={{ mt: 1, fontWeight: 'medium' }}>
-                Upload Image
+                Tải ảnh lên
               </Typography>
             </Box>
           </Grid>
@@ -142,7 +142,7 @@ export const RideImageGallery: React.FC<RideImageGalleryProps> = ({
       </Grid>
 
       {/* Image Preview Zoom modal */}
-      <Modal open={!!zoomUrl} onClose={() => setZoomUrl(null)} title="Image Preview" maxWidth="md">
+      <Modal open={!!zoomUrl} onClose={() => setZoomUrl(null)} title="Xem trước hình ảnh" maxWidth="md">
         {zoomUrl && (
           <Box display="flex" justifyContent="center">
             <img

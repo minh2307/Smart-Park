@@ -45,6 +45,13 @@ public class AuthController {
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
+    @PutMapping("/profile")
+    public ResponseEntity<ApiResponse<AuthDto.UserResponse>> updateProfile(
+            @AuthenticationPrincipal UserDetails userDetails,
+            @Valid @RequestBody AuthDto.UpdateProfileRequest request) {
+        return ResponseEntity.ok(ApiResponse.success(authService.updateProfile(userDetails.getUsername(), request)));
+    }
+
     @PostMapping("/logout")
     public ResponseEntity<ApiResponse<Void>> logout(
             @AuthenticationPrincipal UserDetails userDetails,

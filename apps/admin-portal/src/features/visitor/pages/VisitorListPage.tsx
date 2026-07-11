@@ -205,7 +205,7 @@ export const VisitorListPage: React.FC = () => {
 
   return (
     <PageContainer
-      title="Visitor Profile Directory"
+      title="Danh bạ hồ sơ khách tham quan"
       toolbar={
         <Box display="flex" gap={1.5}>
           <Button
@@ -213,7 +213,7 @@ export const VisitorListPage: React.FC = () => {
             startIcon={<MdAssignmentInd />}
             onClick={() => setAssignOpen(true)}
           >
-            Assign Booking
+            Gán lịch đặt vé
           </Button>
           <PermissionWrapper requiredPermission="write:visitors">
             <Button
@@ -224,7 +224,7 @@ export const VisitorListPage: React.FC = () => {
                 setFormOpen(true);
               }}
             >
-              Add Visitor Profile
+              Thêm hồ sơ khách tham quan
             </Button>
           </PermissionWrapper>
         </Box>
@@ -240,7 +240,7 @@ export const VisitorListPage: React.FC = () => {
                   <MdPeople size={26} />
                 </Box>
                 <Box>
-                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Total Visitors</Typography>
+                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Tổng khách tham quan</Typography>
                   <Typography variant="h5" fontWeight="bold">{displayTotal}</Typography>
                 </Box>
               </CardContent>
@@ -253,7 +253,7 @@ export const VisitorListPage: React.FC = () => {
                   <MdEscalatorWarning size={26} />
                 </Box>
                 <Box>
-                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Child Admissions (Page)</Typography>
+                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Vé trẻ em (Trang)</Typography>
                   <Typography variant="h5" fontWeight="bold">{childCount}</Typography>
                 </Box>
               </CardContent>
@@ -266,7 +266,7 @@ export const VisitorListPage: React.FC = () => {
                   <MdHealing size={26} />
                 </Box>
                 <Box>
-                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Medical Notes Alerts</Typography>
+                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Cảnh báo lưu ý y tế</Typography>
                   <Typography variant="h5" fontWeight="bold">{medicalCount}</Typography>
                 </Box>
               </CardContent>
@@ -281,47 +281,47 @@ export const VisitorListPage: React.FC = () => {
               <TextField
                 fullWidth
                 size="small"
-                label="Search Visitors"
-                placeholder="Name, ID Card, Nationality..."
+                label="Tìm kiếm khách tham quan"
+                placeholder="Họ tên, giấy tờ tùy thân, quốc tịch..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <FormControl fullWidth size="small">
-                <InputLabel>Relationship</InputLabel>
+                <InputLabel>Mối quan hệ</InputLabel>
                 <Select
                   value={relationship}
-                  label="Relationship"
+                  label="Mối quan hệ"
                   onChange={(e) => setRelationship(e.target.value)}
                 >
-                  <MenuItem value=""><em>All Relationships</em></MenuItem>
-                  <MenuItem value="SELF">Self</MenuItem>
-                  <MenuItem value="SPOUSE">Spouse</MenuItem>
-                  <MenuItem value="CHILD">Child</MenuItem>
-                  <MenuItem value="PARENT">Parent</MenuItem>
-                  <MenuItem value="FRIEND">Friend</MenuItem>
-                  <MenuItem value="OTHER">Other</MenuItem>
+                  <MenuItem value=""><em>Tất cả mối quan hệ</em></MenuItem>
+                  <MenuItem value="SELF">Bản thân</MenuItem>
+                  <MenuItem value="SPOUSE">Vợ/Chồng</MenuItem>
+                  <MenuItem value="CHILD">Con cái</MenuItem>
+                  <MenuItem value="PARENT">Cha mẹ</MenuItem>
+                  <MenuItem value="FRIEND">Bạn bè</MenuItem>
+                  <MenuItem value="OTHER">Khác</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <FormControl fullWidth size="small">
-                <InputLabel>Status</InputLabel>
+                <InputLabel>Trạng thái</InputLabel>
                 <Select
                   value={status}
-                  label="Status"
+                  label="Trạng thái"
                   onChange={(e) => setStatus(e.target.value)}
                 >
-                  <MenuItem value=""><em>All Statuses</em></MenuItem>
-                  <MenuItem value="ACTIVE">Active</MenuItem>
-                  <MenuItem value="INACTIVE">Inactive</MenuItem>
+                  <MenuItem value=""><em>Tất cả trạng thái</em></MenuItem>
+                  <MenuItem value="ACTIVE">Hoạt động</MenuItem>
+                  <MenuItem value="INACTIVE">Ngưng hoạt động</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
             <Grid item xs={12} md={2} display="flex" gap={1}>
               <Button fullWidth variant="outlined" onClick={handleResetFilters}>
-                Reset
+                Đặt lại
               </Button>
             </Grid>
           </Grid>
@@ -329,7 +329,7 @@ export const VisitorListPage: React.FC = () => {
 
         {isError && (
           <Alert severity="warning" sx={{ borderRadius: 3 }}>
-            Failed to connect to visitor backend endpoints. Switched to offline database sync.
+            Không thể kết nối đến máy chủ khách tham quan. Đã chuyển sang chế độ đồng bộ ngoại tuyến.
           </Alert>
         )}
 
@@ -360,7 +360,7 @@ export const VisitorListPage: React.FC = () => {
         <Modal
           open={detailsOpen}
           onClose={() => setSelectedVisitor(null)}
-          title="Visitor Profile Card"
+          title="Thẻ hồ sơ khách tham quan"
           maxWidth="md"
         >
           {selectedVisitor && <VisitorDetails visitor={selectedVisitor} />}
@@ -370,7 +370,7 @@ export const VisitorListPage: React.FC = () => {
         <Modal
           open={formOpen}
           onClose={() => setFormOpen(false)}
-          title={editingVisitor ? 'Update Visitor Profile' : 'Register New Visitor'}
+          title={editingVisitor ? 'Cập nhật hồ sơ khách tham quan' : 'Đăng ký khách tham quan mới'}
           maxWidth="md"
         >
           <VisitorForm
@@ -384,7 +384,7 @@ export const VisitorListPage: React.FC = () => {
         <Modal
           open={assignOpen}
           onClose={() => setAssignOpen(false)}
-          title="Assign Visitors to Ticket Booking"
+          title="Gán khách tham quan vào lịch đặt vé"
           maxWidth="sm"
         >
           <VisitorAssignment
@@ -398,10 +398,10 @@ export const VisitorListPage: React.FC = () => {
           open={deleteConfirmOpen}
           onClose={() => setDeleteConfirmOpen(false)}
           type="error"
-          title="Remove Visitor Profile"
-          message={`Are you sure you want to remove the visitor profile for ${deleteTarget?.fullName}? This will unassign this visitor from any active tickets.`}
+          title="Xóa hồ sơ khách tham quan"
+          message={`Bạn có chắc chắn muốn xóa hồ sơ khách tham quan "${deleteTarget?.fullName}"? Hành động này sẽ hủy gán khách tham quan này khỏi các vé đang hoạt động.`}
           onConfirm={handleDeleteConfirm}
-          confirmText="Yes, Remove Profile"
+          confirmText="Có, xóa hồ sơ"
         />
       </Box>
     </PageContainer>

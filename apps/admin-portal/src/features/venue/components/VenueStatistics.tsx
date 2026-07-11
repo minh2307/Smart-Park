@@ -30,7 +30,7 @@ export const VenueStatistics: React.FC = () => {
     <Grid container spacing={2.5}>
       <Grid item xs={12} sm={6} md={3}>
         <StatCard
-          title="Total Attractions"
+          title="Tổng số trò chơi"
           value={48}
           icon={<MdLocalActivity size={24} />}
           color="#3f51b5"
@@ -38,7 +38,7 @@ export const VenueStatistics: React.FC = () => {
       </Grid>
       <Grid item xs={12} sm={6} md={3}>
         <StatCard
-          title="Ticket Types"
+          title="Loại vé"
           value={12}
           icon={<MdConfirmationNumber size={24} />}
           color="#4caf50"
@@ -46,16 +46,16 @@ export const VenueStatistics: React.FC = () => {
       </Grid>
       <Grid item xs={12} sm={6} md={3}>
         <StatCard
-          title="Monthly Visitors"
-          value="14,820"
+          title="Khách tham quan hàng tháng"
+          value="14.820"
           icon={<MdPeople size={24} />}
           color="#ff9800"
         />
       </Grid>
       <Grid item xs={12} sm={6} md={3}>
         <StatCard
-          title="Monthly Revenue"
-          value="$128,450"
+          title="Doanh thu hàng tháng"
+          value="3.211.250.000 ₫"
           icon={<MdTrendingUp size={24} />}
           color="#e91e63"
         />

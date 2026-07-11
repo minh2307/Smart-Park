@@ -47,6 +47,16 @@ public class AuthDto {
     }
 
     @Data
+    public static class UpdateProfileRequest {
+        @NotBlank
+        private String fullName;
+        @NotBlank @jakarta.validation.constraints.Email
+        private String email;
+        private String phone;
+        private String avatarUrl;
+    }
+
+    @Data
     public static class TokenResponse {
         private String accessToken;
         private String refreshToken;
@@ -72,6 +82,7 @@ public class AuthDto {
         private String status;
         private String role;
         private String fullName;
+        private String avatarUrl;
         private java.util.List<String> permissions;
     }
 }

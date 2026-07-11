@@ -73,6 +73,20 @@ export const authApi = createApi({
     getCurrentUser: builder.query<User, void>({
       query: () => '/auth/me',
     }),
+    changePassword: builder.mutation<void, any>({
+      query: (body) => ({
+        url: '/auth/change-password',
+        method: 'POST',
+        body,
+      }),
+    }),
+    updateProfile: builder.mutation<User, any>({
+      query: (body) => ({
+        url: '/auth/profile',
+        method: 'PUT',
+        body,
+      }),
+    }),
   }),
 });
 
@@ -82,4 +96,6 @@ export const {
   useRefreshTokenMutation,
   useGetCurrentUserQuery,
   useLazyGetCurrentUserQuery,
+  useChangePasswordMutation,
+  useUpdateProfileMutation,
 } = authApi;

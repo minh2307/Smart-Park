@@ -85,7 +85,7 @@ export const BusinessIntelligencePage: React.FC = () => {
       return buildLineChartOption(
         mode,
         categories,
-        [{ name: valueMetric === 'value' ? 'Sum Value (₫)' : 'Share (%)', data: dataValues }],
+        [{ name: valueMetric === 'value' ? 'Tổng giá trị (₫)' : 'Tỷ lệ (%)', data: dataValues }],
         valueMetric === 'value' ? 'currency' : 'percentage'
       );
     }
@@ -93,7 +93,7 @@ export const BusinessIntelligencePage: React.FC = () => {
     return buildBarChartOption(
       mode,
       categories,
-      [{ name: valueMetric === 'value' ? 'Sum Value (₫)' : 'Share (%)', data: dataValues, color: '#6366f1' }],
+      [{ name: valueMetric === 'value' ? 'Tổng giá trị (₫)' : 'Tỷ lệ (%)', data: dataValues, color: '#6366f1' }],
       false,
       valueMetric === 'value' ? 'currency' : 'percentage'
     );
@@ -107,10 +107,10 @@ export const BusinessIntelligencePage: React.FC = () => {
       <Box sx={{ p: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '50vh' }}>
         <MdLock size={48} color={theme.palette.error.main} style={{ marginBottom: 16 }} />
         <Typography variant="h5" sx={{ fontWeight: 700, mb: 1 }}>
-          Sensitive Report Restricted
+          Báo cáo nhạy cảm bị hạn chế
         </Typography>
         <Typography variant="body2" color="text.secondary" align="center" sx={{ maxWidth: 400 }}>
-          Your user profile role does not possess permissions to audit multidimensional Business Intelligence analytics. Please request access from system security administrator.
+          Vai trò người dùng của bạn không có quyền kiểm toán phân tích Trí tuệ doanh nghiệp (BI) đa chiều. Vui lòng yêu cầu quyền truy cập từ quản trị viên bảo mật hệ thống.
         </Typography>
       </Box>
     );
@@ -121,71 +121,71 @@ export const BusinessIntelligencePage: React.FC = () => {
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
         <Box>
           <Typography variant="h4" sx={{ fontWeight: 800, letterSpacing: '-0.02em' }}>
-            Business Intelligence Analyzer
+            Phân tích Trí tuệ doanh nghiệp (BI)
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Advanced multidimensional BI workspace, pivot builders, aggregations, and drill-down metrics
+            Không gian làm việc BI đa chiều nâng cao, bộ tạo bảng tổng hợp, tổng hợp và các chỉ số chuyên sâu
           </Typography>
         </Box>
       </Box>
 
       {/* Role and Data alert */}
       <Alert severity="info" sx={{ mb: 3, borderRadius: 2 }}>
-        Authorized User: <strong>{currentUser?.fullName} ({currentUser?.role})</strong>. Sensitivity level: <strong>Level 3 Restricted</strong>. Audit logs are actively tracked.
+        Người dùng được ủy quyền: <strong>{currentUser?.fullName} ({currentUser?.role})</strong>. Mức độ nhạy cảm: <strong>Hạn chế cấp độ 3</strong>. Nhật ký kiểm toán đang được chủ động theo dõi.
       </Alert>
 
       {/* Pivot builder controls */}
       <Card variant="outlined" sx={{ borderRadius: 3, mb: 3 }}>
         <CardContent sx={{ py: 2 }}>
           <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
-            <MdSettings size={18} /> Pivot & Multi-Dimensional Analyzer Controls
+            <MdSettings size={18} /> Bảng điều khiển phân tích đa chiều & tổng hợp
           </Typography>
           <Grid container spacing={2} alignItems="center">
             <Grid item xs={12} sm={3}>
               <FormControl fullWidth size="small">
-                <InputLabel id="dimension-label">Row Dimension</InputLabel>
+                <InputLabel id="dimension-label">Chiều dòng</InputLabel>
                 <Select
                   labelId="dimension-label"
                   value={rowDimension}
-                  label="Row Dimension"
+                  label="Chiều dòng"
                   onChange={(e) => setRowDimension(e.target.value as Dimension)}
                 >
-                  <MenuItem value="venue">Venue Location</MenuItem>
-                  <MenuItem value="ticketType">Ticket Product Type</MenuItem>
-                  <MenuItem value="paymentMethod">Payment Method</MenuItem>
-                  <MenuItem value="restaurant">Restaurant Sales</MenuItem>
-                  <MenuItem value="retailShop">Retail Sales</MenuItem>
+                  <MenuItem value="venue">Vị trí khu vui chơi</MenuItem>
+                  <MenuItem value="ticketType">Loại sản phẩm vé</MenuItem>
+                  <MenuItem value="paymentMethod">Phương thức thanh toán</MenuItem>
+                  <MenuItem value="restaurant">Doanh số nhà hàng</MenuItem>
+                  <MenuItem value="retailShop">Doanh số bán lẻ</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
 
             <Grid item xs={12} sm={3}>
               <FormControl fullWidth size="small">
-                <InputLabel id="metric-label">Value Aggregation</InputLabel>
+                <InputLabel id="metric-label">Tổng hợp giá trị</InputLabel>
                 <Select
                   labelId="metric-label"
                   value={valueMetric}
-                  label="Value Aggregation"
+                  label="Tổng hợp giá trị"
                   onChange={(e) => setValueMetric(e.target.value as Metric)}
                 >
-                  <MenuItem value="value">Sum Revenue (₫)</MenuItem>
-                  <MenuItem value="percentage">Revenue Share (%)</MenuItem>
+                  <MenuItem value="value">Tổng doanh thu (₫)</MenuItem>
+                  <MenuItem value="percentage">Tỷ lệ doanh thu (%)</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
 
             <Grid item xs={12} sm={3}>
               <FormControl fullWidth size="small">
-                <InputLabel id="chart-type-label">Visualization Type</InputLabel>
+                <InputLabel id="chart-type-label">Loại biểu đồ</InputLabel>
                 <Select
                   labelId="chart-type-label"
                   value={chartType}
-                  label="Visualization Type"
+                  label="Loại biểu đồ"
                   onChange={(e) => setChartType(e.target.value as 'bar' | 'pie' | 'line')}
                 >
-                  <MenuItem value="bar">Bar Chart</MenuItem>
-                  <MenuItem value="pie">Donut Chart</MenuItem>
-                  <MenuItem value="line">Line Graph</MenuItem>
+                  <MenuItem value="bar">Biểu đồ cột</MenuItem>
+                  <MenuItem value="pie">Biểu đồ tròn (Donut)</MenuItem>
+                  <MenuItem value="line">Biểu đồ đường</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
@@ -200,7 +200,7 @@ export const BusinessIntelligencePage: React.FC = () => {
                   setChartType('bar');
                 }}
               >
-                Reset Pivot settings
+                Đặt lại thiết lập
               </Button>
             </Grid>
           </Grid>
@@ -210,22 +210,22 @@ export const BusinessIntelligencePage: React.FC = () => {
       {/* Visual Workspace */}
       <Grid container spacing={2.5}>
         <Grid item xs={12} lg={7}>
-          <DashboardCard title="BI Multi-Dimensional Visualization" subtitle={`Dynamically rendered graph displaying sum metrics aggregated by selected row dimension`}>
+          <DashboardCard title="Trực quan hóa đa chiều BI" subtitle={`Biểu đồ được kết xuất động hiển thị các chỉ số tổng hợp theo chiều dòng đã chọn`}>
             <ChartContainer option={biChartOption} height={350} loading={isLoading} />
           </DashboardCard>
         </Grid>
 
         <Grid item xs={12} lg={5}>
-          <DashboardCard title="Dynamic Pivot Grid" subtitle="Interactive spreadsheet layout representing computed sums, counts, and averages">
+          <DashboardCard title="Bảng tổng hợp động" subtitle="Bố cục bảng tính tương tác thể hiện tổng số, số lượng và số trung bình được tính toán">
             <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
               <Table size="small">
                 <TableHead sx={{ backgroundColor: 'action.hover' }}>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Dimension</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Transactions</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Sum Amount</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Avg / Split</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Share %</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Chiều</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Giao dịch</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Tổng số tiền</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Trung bình / Phân chia</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Tỷ lệ %</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

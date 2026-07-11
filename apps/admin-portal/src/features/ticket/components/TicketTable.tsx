@@ -6,6 +6,7 @@ import { Ticket } from '../types';
 import { StatusChip } from './StatusChip';
 import { PermissionWrapper } from '../../../shared/components/PermissionWrapper';
 import dayjs from 'dayjs';
+import { formatCurrency } from '../../analytics/utils/numberFormatters';
 
 interface TicketTableProps {
   data: Ticket[];
@@ -35,7 +36,7 @@ export const TicketTable: React.FC<TicketTableProps> = ({
   const columns = [
     {
       id: 'ticketCode' as any,
-      label: 'Ticket Number',
+      label: 'Số vé',
       sortable: true,
       render: (row: Ticket) => (
         <Typography variant="body2" fontWeight={600} fontFamily="monospace">
@@ -45,34 +46,34 @@ export const TicketTable: React.FC<TicketTableProps> = ({
     },
     {
       id: 'ticketType' as any,
-      label: 'Ticket Type',
+      label: 'Loại vé',
       render: (row: Ticket) => (
         <Box>
           <Typography variant="body2" fontWeight={500}>
-            {row.ticketType?.name || 'Standard Admission'}
+            {row.ticketType?.name || 'Vé vào cổng thường'}
           </Typography>
           <Typography variant="caption" color="text.secondary">
-            ${row.ticketType?.price?.toFixed(2) || '0.00'}
+            {formatCurrency((row.ticketType?.price || 0) * 25000)}
           </Typography>
         </Box>
       ),
     },
     {
       id: 'venue' as any,
-      label: 'Venue',
+      label: 'Địa điểm',
       render: (row: Ticket) => (
         <Typography variant="body2">
-          {row.venue?.name || 'All Parks'}
+          {row.venue?.name || 'Tất cả các khu'}
         </Typography>
       ),
     },
     {
       id: 'customer' as any,
-      label: 'Visitor',
+      label: 'Khách tham quan',
       render: (row: Ticket) => (
         <Box>
           <Typography variant="body2" fontWeight={500}>
-            {row.customer?.fullName || 'Walk-in Customer'}
+            {row.customer?.fullName || 'Khách vãng lai'}
           </Typography>
           <Typography variant="caption" color="text.secondary">
             {row.customer?.email || 'N/A'}
@@ -82,13 +83,13 @@ export const TicketTable: React.FC<TicketTableProps> = ({
     },
     {
       id: 'status' as any,
-      label: 'Status',
+      label: 'Trạng thái',
       sortable: true,
       render: (row: Ticket) => <StatusChip status={row.status} type="ticket" />,
     },
     {
       id: 'createdAt' as any,
-      label: 'Issue Date',
+      label: 'Ngày xuất vé',
       sortable: true,
       render: (row: Ticket) => (
         <Typography variant="body2">
@@ -98,7 +99,7 @@ export const TicketTable: React.FC<TicketTableProps> = ({
     },
     {
       id: 'validDate' as any,
-      label: 'Expiration',
+      label: 'Ngày hết hạn',
       sortable: true,
       render: (row: Ticket) => {
         const isExpired = dayjs(row.validDate).isBefore(dayjs(), 'day') && row.status !== 'USED';
@@ -115,7 +116,7 @@ export const TicketTable: React.FC<TicketTableProps> = ({
     },
     {
       id: 'usage' as any,
-      label: 'Usage (Rem / Max)',
+      label: 'Sử dụng (Còn lại / Tối đa)',
       render: (row: Ticket) => (
         <Box display="flex" alignItems="center" gap={1}>
           <Typography variant="body2" fontWeight={600}>
@@ -132,17 +133,17 @@ export const TicketTable: React.FC<TicketTableProps> = ({
     },
     {
       id: 'actions' as any,
-      label: 'Actions',
+      label: 'Hành động',
       render: (row: Ticket) => (
         <Box display="flex" gap={0.5}>
-          <Tooltip title="View Details">
+          <Tooltip title="Xem chi tiết">
             <IconButton onClick={() => onViewDetails(row)} color="info" size="small">
               <MdVisibility size={18} />
             </IconButton>
           </Tooltip>
 
           <PermissionWrapper requiredPermission="validate:tickets">
-            <Tooltip title="Validate / Scan Ticket">
+            <Tooltip title="Kiểm tra / Quét vé">
               <IconButton
                 onClick={() => onValidate(row)}
                 color="success"
@@ -155,7 +156,7 @@ export const TicketTable: React.FC<TicketTableProps> = ({
           </PermissionWrapper>
 
           <PermissionWrapper requiredPermission="write:tickets">
-            <Tooltip title="Edit Status">
+            <Tooltip title="Chỉnh sửa trạng thái">
               <IconButton onClick={() => onEditStatus(row)} color="primary" size="small">
                 <MdEdit size={18} />
               </IconButton>

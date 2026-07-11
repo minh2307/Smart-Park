@@ -27,13 +27,13 @@ export const PointTransactionTable: React.FC<PointTransactionTableProps> = ({ da
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Customer / Card</TableCell>
-              <TableCell>Type</TableCell>
-              <TableCell>Points Changed</TableCell>
-              <TableCell>Source Channel</TableCell>
-              <TableCell>Reference Code</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell>Date</TableCell>
+              <TableCell>Khách hàng / Thẻ</TableCell>
+              <TableCell>Loại</TableCell>
+              <TableCell>Điểm thay đổi</TableCell>
+              <TableCell>Kênh nguồn</TableCell>
+              <TableCell>Mã tham chiếu</TableCell>
+              <TableCell>Trạng thái</TableCell>
+              <TableCell>Ngày giao dịch</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -58,7 +58,7 @@ export const PointTransactionTable: React.FC<PointTransactionTableProps> = ({ da
     return (
       <Paper variant="outlined" sx={{ p: 4, textAlign: 'center', borderRadius: 3 }}>
         <Typography variant="body1" color="text.secondary">
-          No loyalty point transactions found.
+          Không tìm thấy giao dịch điểm tích lũy nào.
         </Typography>
       </Paper>
     );
@@ -78,18 +78,28 @@ export const PointTransactionTable: React.FC<PointTransactionTableProps> = ({ da
     }
   };
 
+  const translateType = (type: string) => {
+    switch (type) {
+      case 'EARNED': return 'Tích lũy';
+      case 'REDEEMED': return 'Quy đổi';
+      case 'EXPIRED': return 'Hết hạn';
+      case 'ADJUSTED': return 'Điều chỉnh';
+      default: return type;
+    }
+  };
+
   return (
     <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 3 }}>
       <Table>
         <TableHead>
           <TableRow sx={{ bgcolor: 'action.hover' }}>
-            <TableCell>Customer / Card</TableCell>
-            <TableCell>Type</TableCell>
-            <TableCell>Points Changed</TableCell>
-            <TableCell>Source Channel</TableCell>
-            <TableCell>Reference Code</TableCell>
-            <TableCell>Status</TableCell>
-            <TableCell>Date</TableCell>
+            <TableCell>Khách hàng / Thẻ</TableCell>
+            <TableCell>Loại</TableCell>
+            <TableCell>Điểm thay đổi</TableCell>
+            <TableCell>Kênh nguồn</TableCell>
+            <TableCell>Mã tham chiếu</TableCell>
+            <TableCell>Trạng thái</TableCell>
+            <TableCell>Ngày giao dịch</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -109,7 +119,7 @@ export const PointTransactionTable: React.FC<PointTransactionTableProps> = ({ da
                 <Box display="flex" alignItems="center" gap={1}>
                   {getTypeIcon(tx.type, tx.points)}
                   <Typography variant="body2" fontWeight="bold">
-                    {tx.type}
+                    {translateType(tx.type)}
                   </Typography>
                 </Box>
               </TableCell>

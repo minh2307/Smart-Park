@@ -54,7 +54,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, error, loading }
             required
             fullWidth
             id="username"
-            label="Username"
+            label="Tên đăng nhập"
             autoComplete="username"
             autoFocus
             disabled={loading}
@@ -74,7 +74,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, error, loading }
             required
             fullWidth
             name="password"
-            label="Password"
+            label="Mật khẩu"
             id="password"
             autoComplete="current-password"
             disabled={loading}
@@ -103,7 +103,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, error, loading }
           )}
         />
         <Link href="#" variant="body2" color="primary" sx={{ textDecoration: 'none' }}>
-          Forgot password?
+          Quên mật khẩu?
         </Link>
       </Box>
 
@@ -119,7 +119,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onSubmit, error, loading }
           fontWeight: 'bold',
         }}
       >
-        {loading ? 'Signing in...' : 'Sign In'}
+        {loading ? 'Đang đăng nhập...' : 'Đăng nhập'}
       </Button>
     </Box>
   );

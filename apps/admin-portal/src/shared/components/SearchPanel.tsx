@@ -13,7 +13,7 @@ interface SearchPanelProps {
 export const SearchPanel: React.FC<SearchPanelProps> = ({
   search,
   onSearchChange,
-  placeholder = 'Search...',
+  placeholder = 'Tìm kiếm...',
   onClear,
   children,
 }) => {

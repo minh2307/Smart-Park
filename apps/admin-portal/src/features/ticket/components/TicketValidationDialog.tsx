@@ -50,11 +50,11 @@ export const TicketValidationDialog: React.FC<TicketValidationDialogProps> = ({
   const handleScan = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!ticketCode.trim()) {
-      setErrorMsg('Please input a valid ticket number or scan a QR code.');
+      setErrorMsg('Vui lòng nhập mã vé hợp lệ hoặc quét mã QR.');
       return;
     }
     if (!attractionId) {
-      setErrorMsg('Please select an attraction for check-in.');
+      setErrorMsg('Vui lòng chọn địa điểm/trò chơi để soát vé.');
       return;
     }
 
@@ -100,29 +100,29 @@ export const TicketValidationDialog: React.FC<TicketValidationDialogProps> = ({
     if (status === 'THANH_CONG') {
       return {
         severity: 'success' as const,
-        title: 'VALID TICKET - ENTRY GRANTED',
-        message: 'The turnstile scanner has opened. Ticket was successfully validated.',
+        title: 'VÉ HỢP LỆ - CHO PHÉP VÀO CỔNG',
+        message: 'Cổng soát vé tự động đã mở. Vé đã được xác minh thành công.',
         icon: <MdCheckCircle size={32} color="#2e7d32" />,
       };
     } else if (status === 'VE_HET_HAN') {
       return {
         severity: 'error' as const,
-        title: 'INVALID TICKET - TICKET EXPIRED',
-        message: 'Entry denied. The ticket validity period has expired.',
+        title: 'VÉ KHÔNG HỢP LỆ - VÉ ĐÃ HẾT HẠN',
+        message: 'Từ chối vào cổng. Thời gian hiệu lực của vé đã hết hạn.',
         icon: <MdError size={32} color="#d32f2f" />,
       };
     } else if (status === 'SAI_DIA_DIEM') {
       return {
         severity: 'warning' as const,
-        title: 'INVALID VENUE - WRONG ATTRACTION/PARK',
-        message: 'Entry denied. This ticket is not valid for this specific attraction or venue.',
+        title: 'SAI ĐỊA ĐIỂM - SAI TRÒ CHƠI/PHÂN KHU',
+        message: 'Từ chối vào cổng. Vé này không có hiệu lực cho trò chơi hoặc phân khu này.',
         icon: <MdError size={32} color="#ed6c02" />,
       };
     } else {
       return {
         severity: 'error' as const,
-        title: 'VALIDATION FAILED',
-        message: `Reason: ${status || 'System error validating ticket'}`,
+        title: 'XÁC MINH THẤT BẠI',
+        message: `Lý do: ${status || 'Lỗi hệ thống khi xác minh vé'}`,
         icon: <MdHelpOutline size={32} color="#d32f2f" />,
       };
     }
@@ -133,7 +133,7 @@ export const TicketValidationDialog: React.FC<TicketValidationDialogProps> = ({
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle sx={{ fontWeight: 'bold', display: 'flex', alignItems: 'center', gap: 1 }}>
-        <MdQrCodeScanner size={24} /> Ticket Validation Gate
+        <MdQrCodeScanner size={24} /> Cổng soát vé & Kiểm tra vé
       </DialogTitle>
       
       <DialogContent dividers>
@@ -145,20 +145,20 @@ export const TicketValidationDialog: React.FC<TicketValidationDialogProps> = ({
               <TextField
                 fullWidth
                 size="small"
-                label="Ticket QR Code / Code Number"
-                placeholder="Scan or input code..."
+                label="Mã QR của vé / Số mã vé"
+                placeholder="Quét hoặc nhập mã vé..."
                 value={ticketCode}
                 onChange={(e) => setTicketCode(e.target.value)}
               />
             </Grid>
             <Grid item xs={12} sm={4}>
               <FormControl fullWidth size="small">
-                <InputLabel id="scan-attraction-label">Attraction</InputLabel>
+                <InputLabel id="scan-attraction-label">Địa điểm soát vé</InputLabel>
                 <Select
                   labelId="scan-attraction-label"
                   id="scan-attraction"
                   value={attractionId}
-                  label="Attraction"
+                  label="Địa điểm soát vé"
                   onChange={(e) => setAttractionId(e.target.value as number)}
                 >
                   {mockAttractions.map((a) => (
@@ -179,7 +179,7 @@ export const TicketValidationDialog: React.FC<TicketValidationDialogProps> = ({
             disabled={isLoading}
             startIcon={<MdQrCodeScanner />}
           >
-            {isLoading ? 'Scanning & Validating...' : 'Scan / Validate Ticket'}
+            {isLoading ? 'Đang soát vé & Kiểm tra...' : 'Soát vé / Kiểm tra vé'}
           </Button>
         </Box>
 
@@ -203,13 +203,13 @@ export const TicketValidationDialog: React.FC<TicketValidationDialogProps> = ({
 
               <Grid container spacing={2} sx={{ mt: 1, pt: 1, borderTop: '1px solid rgba(0,0,0,0.1)' }}>
                 <Grid item xs={6}>
-                  <Typography variant="caption" display="block">Scan Log ID</Typography>
+                  <Typography variant="caption" display="block">Mã nhật ký quét</Typography>
                   <Typography variant="body2" fontWeight="bold">#{scanResult.id}</Typography>
                 </Grid>
                 <Grid item xs={6}>
-                  <Typography variant="caption" display="block">Validation Time</Typography>
+                  <Typography variant="caption" display="block">Thời gian soát vé</Typography>
                   <Typography variant="body2" fontWeight="bold">
-                    {new Date(scanResult.checkInTime).toLocaleString()}
+                    {new Date(scanResult.checkInTime).toLocaleString('vi-VN')}
                   </Typography>
                 </Grid>
               </Grid>
@@ -218,7 +218,7 @@ export const TicketValidationDialog: React.FC<TicketValidationDialogProps> = ({
             {/* QR/Barcode Previews */}
             <Box mt={3} display="flex" flexDirection="column" gap={2}>
               <Typography variant="subtitle2" fontWeight="bold" align="center">
-                Visual Identification Previews
+                Hình ảnh nhận diện mã vé
               </Typography>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6}>
@@ -235,7 +235,7 @@ export const TicketValidationDialog: React.FC<TicketValidationDialogProps> = ({
       
       <DialogActions>
         <Button onClick={onClose} variant="outlined" color="inherit">
-          Close Validation Gate
+          Đóng cổng soát vé
         </Button>
       </DialogActions>
     </Dialog>

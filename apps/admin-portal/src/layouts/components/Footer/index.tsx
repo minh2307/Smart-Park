@@ -19,14 +19,14 @@ export const Footer: React.FC = () => {
       }}
     >
       <Typography variant="caption" color="text.secondary">
-        © {new Date().getFullYear()} Smart Park Platform. All rights reserved.
+        © {new Date().getFullYear()} Smart Park Platform. Bảo lưu mọi quyền.
       </Typography>
       <Box display="flex" gap={2}>
         <Link href="#" variant="caption" color="text.secondary" underline="hover">
-          Privacy policy
+          Chính sách bảo mật
         </Link>
         <Link href="#" variant="caption" color="text.secondary" underline="hover">
-          Terms of service
+          Điều khoản dịch vụ
         </Link>
       </Box>
     </Box>

@@ -32,19 +32,19 @@ export const ParkingAnalyticsPage: React.FC = () => {
   // 1. Gauge Chart: Current Occupancy percentage
   const occupancyGaugeOption = useMemo(() => {
     if (!parkingData?.parkingOccupancy) return null;
-    return buildGaugeOption(mode, parkingData.parkingOccupancy.occupancyPercent, 'Occupied', '#3b82f6');
+    return buildGaugeOption(mode, parkingData.parkingOccupancy.occupancyPercent, 'Đã đỗ', '#3b82f6');
   }, [parkingData, mode]);
 
   // 2. Line Chart: Daily Vehicle Count & Revenue Trend
   const dailyTrendOption = useMemo(() => {
     if (!parkingData?.dailyTrend.length) return null;
-    const categories = parkingData.dailyTrend.map((d) => new Date(d.date).toLocaleDateString());
+    const categories = parkingData.dailyTrend.map((d) => new Date(d.date).toLocaleDateString('vi-VN'));
     return buildLineChartOption(
       mode,
       categories,
       [
-        { name: 'Vehicles Count', data: parkingData.dailyTrend.map((d) => d.vehicles) },
-        { name: 'Revenue (₫)', data: parkingData.dailyTrend.map((d) => d.revenue / 100000), color: '#10b981' },
+        { name: 'Số lượng xe', data: parkingData.dailyTrend.map((d) => d.vehicles) },
+        { name: 'Doanh thu (₫)', data: parkingData.dailyTrend.map((d) => d.revenue / 100000), color: '#10b981' },
       ],
       'number'
     );
@@ -68,7 +68,7 @@ export const ParkingAnalyticsPage: React.FC = () => {
     return buildBarChartOption(
       mode,
       categories,
-      [{ name: 'Occupancy Rate (%)', data: values, color: '#f59e0b' }],
+      [{ name: 'Tỷ lệ lấp đầy (%)', data: values, color: '#f59e0b' }],
       false,
       'percentage'
     );
@@ -79,10 +79,10 @@ export const ParkingAnalyticsPage: React.FC = () => {
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
         <Box>
           <Typography variant="h4" sx={{ fontWeight: 800, letterSpacing: '-0.02em' }}>
-            Parking Analytics
+            Phân tích bãi đỗ xe
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Lot occupancy telemetry, hourly pricing yields, vehicle class splits, and zone utilizations
+            Trạng thái lấp đầy bãi xe, doanh thu biểu phí theo giờ, phân loại xe và hiệu suất các khu vực
           </Typography>
         </Box>
       </Box>
@@ -95,13 +95,13 @@ export const ParkingAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Total Capacity
+                Tổng sức chứa
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5 }}>
-                {parkingData?.parkingOccupancy.totalSpots || 0} slots
+                {parkingData?.parkingOccupancy.totalSpots || 0} chỗ
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                Allocated parking slots
+                Số chỗ đỗ xe được phân bổ
               </Typography>
             </CardContent>
           </Card>
@@ -110,13 +110,13 @@ export const ParkingAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Current Availability
+                Số chỗ trống hiện tại
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5, color: 'success.main' }}>
-                {parkingData?.parkingOccupancy.availableSpots || 0} free
+                {parkingData?.parkingOccupancy.availableSpots || 0} trống
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                Occupied: {parkingData?.parkingOccupancy.occupiedSpots || 0}
+                Đã đỗ: {parkingData?.parkingOccupancy.occupiedSpots || 0}
               </Typography>
             </CardContent>
           </Card>
@@ -125,13 +125,13 @@ export const ParkingAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Parking Revenue (Today)
+                Doanh thu bãi xe (Hôm nay)
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5, color: 'primary.main' }}>
                 {formatCurrency(parkingData?.parkingRevenue || 0)}
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                Avg park duration: {parkingData?.averageParkingDuration || 0}h
+                Thời gian đỗ TB: {parkingData?.averageParkingDuration || 0} giờ
               </Typography>
             </CardContent>
           </Card>
@@ -140,13 +140,13 @@ export const ParkingAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Overall Lot Utilization
+                Hiệu suất bãi xe chung
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5 }}>
                 {parkingData?.parkingUtilization || 0}%
               </Typography>
               <Typography variant="caption" color="success.main">
-                Optimal turnover rate
+                Tỷ lệ luân chuyển tối ưu
               </Typography>
             </CardContent>
           </Card>
@@ -159,47 +159,47 @@ export const ParkingAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ height: '100%', display: 'flex', flexDirection: 'column', borderRadius: 3 }}>
             <CardContent sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
               <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
-                Real-time Occupancy
+                Tỷ lệ lấp đầy thời gian thực
               </Typography>
               <ChartContainer option={occupancyGaugeOption} height={240} loading={isLoading} />
               <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 1 }}>
-                Currently {parkingData?.parkingOccupancy.occupiedSpots} of {parkingData?.parkingOccupancy.totalSpots} slots occupied
+                Hiện đang sử dụng {parkingData?.parkingOccupancy.occupiedSpots} trên tổng số {parkingData?.parkingOccupancy.totalSpots} chỗ
               </Typography>
             </CardContent>
           </Card>
         </Grid>
 
         <Grid item xs={12} md={8}>
-          <DashboardCard title="Daily Traffic & Revenue Trend" subtitle="Daily counts of parked vehicles vs yield revenues (₫ * 100k)">
+          <DashboardCard title="Xu hướng lưu lượng & doanh thu hàng ngày" subtitle="Số lượng xe đỗ hàng ngày so với doanh thu tạo ra (₫ * 100k)">
             <ChartContainer option={dailyTrendOption} height={280} loading={isLoading} />
           </DashboardCard>
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <DashboardCard title="Vehicle Class Distribution" subtitle="Class types of vehicles parked in lot">
+          <DashboardCard title="Phân bổ loại phương tiện" subtitle="Các loại phương tiện đỗ trong bãi">
             <ChartContainer option={vehicleTypeOption} height={300} loading={isLoading} />
           </DashboardCard>
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <DashboardCard title="Hourly Occupancy Peaks" subtitle="Average occupancy rate percentages across hours of day">
+          <DashboardCard title="Đỉnh lấp đầy hàng giờ" subtitle="Tỷ lệ lấp đầy trung bình theo các khung giờ trong ngày">
             <ChartContainer option={peakHoursOption} height={300} loading={isLoading} />
           </DashboardCard>
         </Grid>
 
         {/* Zone Utilization list */}
         <Grid item xs={12}>
-          <DashboardCard title="Parking Zone Performance" subtitle="Real-time capacity and occupancy metrics by zone block">
+          <DashboardCard title="Hiệu suất các khu vực đỗ xe" subtitle="Số liệu sức chứa và lấp đầy thời gian thực theo từng phân khu">
             <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
               <Table size="medium">
                 <TableHead sx={{ backgroundColor: 'action.hover' }}>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Zone ID</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Zone Block</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Total Capacity</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Occupied Slots</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Utilization Rate</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Mã phân khu</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Tên phân khu</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Tổng sức chứa</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Chỗ đã đỗ</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Tỷ lệ lấp đầy</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Trạng thái</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -212,7 +212,7 @@ export const ParkingAnalyticsPage: React.FC = () => {
                       <TableCell sx={{ fontWeight: 'bold' }}>{zone.utilization}%</TableCell>
                       <TableCell>
                         <StatusChip
-                          label={zone.utilization >= 80 ? 'Near Capacity' : 'Available'}
+                          label={zone.utilization >= 80 ? 'Sắp đầy' : 'Còn chỗ'}
                           status={zone.utilization >= 80 ? 'error' : 'active'}
                         />
                       </TableCell>

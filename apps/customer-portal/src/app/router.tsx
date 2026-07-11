@@ -15,9 +15,9 @@ const UnauthorizedPage= lazy(() => import('../pages/401').then((m) => ({ default
 const ForbiddenPage   = lazy(() => import('../pages/403').then((m) => ({ default: m.ForbiddenPage })));
 const ServerErrorPage = lazy(() => import('../pages/500').then((m) => ({ default: m.ServerErrorPage })));
 
-// Auth - inline placeholders until auth feature module is implemented
-const LoginPage    = () => <div>Login</div>;
-const RegisterPage = () => <div>Register</div>;
+// Auth
+const LoginPage    = lazy(() => import('../features/auth/pages/LoginPage').then((m) => ({ default: m.LoginPage })));
+const RegisterPage = lazy(() => import('../features/auth/pages/RegisterPage').then((m) => ({ default: m.RegisterPage })));
 
 // Features
 const BookingPage      = lazy(() => import('../features/booking').then((m) => ({ default: m.BookingPage })));

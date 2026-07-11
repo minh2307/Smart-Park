@@ -105,11 +105,11 @@ export const NotificationForm: React.FC<NotificationFormProps> = ({
               label="Kênh phân phối"
               onChange={(e) => setChannel(e.target.value as NotificationChannel)}
             >
-              <MenuItem value="IN_APP">In-App Notification</MenuItem>
+              <MenuItem value="IN_APP">Thông báo trong ứng dụng (In-App)</MenuItem>
               <MenuItem value="EMAIL">Email SMTP</MenuItem>
-              <MenuItem value="SMS">SMS Gateway</MenuItem>
-              <MenuItem value="PUSH">Push (Firebase FCM)</MenuItem>
-              <MenuItem value="WEB">Web Browser Push</MenuItem>
+              <MenuItem value="SMS">Cổng SMS (SMS Gateway)</MenuItem>
+              <MenuItem value="PUSH">Thông báo đẩy (Firebase FCM)</MenuItem>
+              <MenuItem value="WEB">Thông báo trình duyệt (Web Push)</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -122,11 +122,11 @@ export const NotificationForm: React.FC<NotificationFormProps> = ({
               label="Mức độ ưu tiên"
               onChange={(e) => setPriority(e.target.value as NotificationPriority)}
             >
-              <MenuItem value="LOW">Low (Thấp)</MenuItem>
-              <MenuItem value="NORMAL">Normal (Bình thường)</MenuItem>
-              <MenuItem value="HIGH">High (Cao)</MenuItem>
-              <MenuItem value="CRITICAL">Critical (Khẩn cấp)</MenuItem>
-              <MenuItem value="EMERGENCY">Emergency (Nhiệm vụ đặc biệt)</MenuItem>
+              <MenuItem value="LOW">Thấp (Low)</MenuItem>
+              <MenuItem value="NORMAL">Bình thường (Normal)</MenuItem>
+              <MenuItem value="HIGH">Cao (High)</MenuItem>
+              <MenuItem value="CRITICAL">Khẩn cấp (Critical)</MenuItem>
+              <MenuItem value="EMERGENCY">Nguy cấp (Emergency)</MenuItem>
             </Select>
           </FormControl>
         </Grid>
@@ -142,7 +142,7 @@ export const NotificationForm: React.FC<NotificationFormProps> = ({
               <MenuItem value="ALL_USERS">Tất cả người dùng</MenuItem>
               <MenuItem value="CUSTOMERS">Khách mua vé</MenuItem>
               <MenuItem value="MEMBERS">Hội viên thường</MenuItem>
-              <MenuItem value="VIP_MEMBERS">Hội viên VIP (Gold/Diamond)</MenuItem>
+              <MenuItem value="VIP_MEMBERS">Hội viên VIP (Vàng/Kim cương)</MenuItem>
               <MenuItem value="VISITORS">Khách du lịch vãng lai</MenuItem>
               <MenuItem value="STAFF">Nhân viên vận hành</MenuItem>
               <MenuItem value="OPERATORS">Điều hành thiết bị</MenuItem>
@@ -183,7 +183,7 @@ export const NotificationForm: React.FC<NotificationFormProps> = ({
                 color="primary"
               />
             }
-            label="Lập lịch gửi tự động (Scheduled Delivery)"
+            label="Lập lịch gửi tự động"
           />
         </Grid>
 

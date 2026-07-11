@@ -46,13 +46,13 @@ export const UploadVenueImage: React.FC<UploadVenueImageProps> = ({ label, value
             onClick={() => onChange('')}
           >
             <Typography color="white" variant="button" fontWeight="bold">
-              Remove Image
+              Gỡ bỏ ảnh
             </Typography>
           </Box>
         </Box>
       ) : (
         <FileUpload
-          label={`Upload ${label}`}
+          label={`Tải lên ${label}`}
           accept="image/*"
           onChange={handleUploadSuccess}
         />

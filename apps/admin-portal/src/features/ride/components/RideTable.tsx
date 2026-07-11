@@ -40,14 +40,14 @@ export const RideTable: React.FC<RideTableProps> = ({
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Ride Code / Name</TableCell>
-              <TableCell>Location / Zone</TableCell>
-              <TableCell>Category</TableCell>
-              <TableCell>Capacity / Hr</TableCell>
-              <TableCell>Restrictions</TableCell>
-              <TableCell>Queue Wait</TableCell>
-              <TableCell>Operating Status</TableCell>
-              <TableCell align="right">Actions</TableCell>
+              <TableCell>Mã / Tên trò chơi</TableCell>
+              <TableCell>Địa điểm / Phân khu</TableCell>
+              <TableCell>Danh mục</TableCell>
+              <TableCell>Công suất / Giờ</TableCell>
+              <TableCell>Giới hạn chiều cao</TableCell>
+              <TableCell>Thời gian chờ</TableCell>
+              <TableCell>Trạng thái vận hành</TableCell>
+              <TableCell align="right">Thao tác</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -73,7 +73,7 @@ export const RideTable: React.FC<RideTableProps> = ({
     return (
       <Paper variant="outlined" sx={{ p: 4, textAlign: 'center', borderRadius: 3 }}>
         <Typography variant="body1" color="text.secondary">
-          No theme park rides found matching the filter criteria.
+          Không tìm thấy trò chơi nào phù hợp với bộ lọc tìm kiếm.
         </Typography>
       </Paper>
     );
@@ -84,21 +84,21 @@ export const RideTable: React.FC<RideTableProps> = ({
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Ride Code / Name</TableCell>
-            <TableCell>Location / Zone</TableCell>
-            <TableCell>Category</TableCell>
-            <TableCell>Capacity / Hr</TableCell>
-            <TableCell>Restrictions</TableCell>
-            <TableCell>Queue Wait</TableCell>
-            <TableCell>Operating Status</TableCell>
-            <TableCell align="right">Actions</TableCell>
+            <TableCell>Mã / Tên trò chơi</TableCell>
+            <TableCell>Địa điểm / Phân khu</TableCell>
+            <TableCell>Danh mục</TableCell>
+            <TableCell>Công suất / Giờ</TableCell>
+            <TableCell>Giới hạn chiều cao</TableCell>
+            <TableCell>Thời gian chờ</TableCell>
+            <TableCell>Trạng thái vận hành</TableCell>
+            <TableCell align="right">Thao tác</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {data.map((ride) => {
             const minH = ride.restrictions.minHeight;
             const maxH = ride.restrictions.maxHeight;
-            let restrictLabel = 'No Limit';
+            let restrictLabel = 'Không giới hạn';
             if (minH && maxH) {
               restrictLabel = `${minH}-${maxH}cm`;
             } else if (minH) {
@@ -135,14 +135,14 @@ export const RideTable: React.FC<RideTableProps> = ({
                 </TableCell>
                 <TableCell>
                   <Typography variant="body2">
-                    {ride.capacity.toLocaleString()} Pax
+                    {ride.capacity.toLocaleString()} khách
                   </Typography>
                 </TableCell>
                 <TableCell>
                   <Box display="flex" alignItems="center" gap={0.5}>
                     <Typography variant="body2">{restrictLabel}</Typography>
                     {extraWarnings && (
-                      <Tooltip title="Medical/Pregnancy Warning Active">
+                      <Tooltip title="Đang bật Cảnh báo Y tế/Thai kỳ">
                         <Box sx={{ color: 'error.main', display: 'flex' }}>
                           <MdInfo size={16} />
                         </Box>

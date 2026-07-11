@@ -31,52 +31,52 @@ export const StatusChip: React.FC<StatusChipProps> = ({
     switch (norm) {
       case 'DRAFT':
         color = 'default';
-        label = 'Draft';
+        label = 'Nháp';
         icon = <MdHourglassEmpty size={14} />;
         break;
       case 'AVAILABLE':
         color = 'success';
-        label = 'Available';
+        label = 'Sẵn sàng';
         icon = <MdCheckCircle size={14} />;
         break;
       case 'RESERVED':
         color = 'warning';
-        label = 'Reserved';
+        label = 'Đã giữ chỗ';
         icon = <MdHourglassEmpty size={14} />;
         break;
       case 'SOLD':
         color = 'primary';
-        label = 'Sold';
+        label = 'Đã bán';
         icon = <MdPayment size={14} />;
         break;
       case 'ACTIVATED':
         color = 'info';
-        label = 'Activated';
+        label = 'Đã kích hoạt';
         icon = <MdCheckCircle size={14} />;
         break;
       case 'USED':
         color = 'secondary';
-        label = 'Used';
+        label = 'Đã sử dụng';
         icon = <MdHistory size={14} />;
         break;
       case 'PARTIALLY_USED':
         color = 'warning';
-        label = 'Partially Used';
+        label = 'Sử dụng một phần';
         icon = <MdHistory size={14} />;
         break;
       case 'EXPIRED':
         color = 'error';
-        label = 'Expired';
+        label = 'Hết hạn';
         icon = <MdOutlineRemoveCircle size={14} />;
         break;
       case 'CANCELLED':
         color = 'error';
-        label = 'Cancelled';
+        label = 'Đã hủy';
         icon = <MdClose size={14} />;
         break;
       case 'REFUNDED':
         color = 'default';
-        label = 'Refunded';
+        label = 'Đã hoàn tiền';
         icon = <MdOutlineRemoveCircle size={14} />;
         break;
       default:
@@ -90,39 +90,39 @@ export const StatusChip: React.FC<StatusChipProps> = ({
       case 'PENDING':
       case '0':
         color = 'warning';
-        label = 'Pending';
+        label = 'Chờ thanh toán';
         icon = <MdHourglassEmpty size={14} />;
         break;
       case 'CONFIRMED':
         color = 'info';
-        label = 'Confirmed';
+        label = 'Đã xác nhận';
         icon = <MdCheckCircle size={14} />;
         break;
       case 'PAID':
       case '1':
         color = 'success';
-        label = 'Paid';
+        label = 'Đã thanh toán';
         icon = <MdCheckCircle size={14} />;
         break;
       case 'CANCELLED':
       case '2':
         color = 'error';
-        label = 'Cancelled';
+        label = 'Đã hủy';
         icon = <MdClose size={14} />;
         break;
       case 'EXPIRED':
         color = 'error';
-        label = 'Expired';
+        label = 'Hết hạn';
         icon = <MdOutlineRemoveCircle size={14} />;
         break;
       case 'REFUNDED':
         color = 'secondary';
-        label = 'Refunded';
+        label = 'Đã hoàn tiền';
         icon = <MdOutlineRemoveCircle size={14} />;
         break;
       case 'COMPLETED':
         color = 'primary';
-        label = 'Completed';
+        label = 'Hoàn thành';
         icon = <MdCheckCircle size={14} />;
         break;
       default:

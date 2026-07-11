@@ -37,19 +37,19 @@ export const UserTable: React.FC<UserTableProps> = ({
   const columns = [
     {
       id: 'avatar' as any,
-      label: 'Avatar',
+      label: 'Ảnh đại diện',
       render: (row: User) => (
         <UserAvatar username={row.username} fullName={row.fullName} avatarUrl={row.avatarUrl} />
       ),
     },
     {
       id: 'fullName' as any,
-      label: 'Full Name',
+      label: 'Họ và tên',
       sortable: true,
     },
     {
       id: 'username' as any,
-      label: 'Username',
+      label: 'Tên đăng nhập',
       sortable: true,
     },
     {
@@ -59,26 +59,27 @@ export const UserTable: React.FC<UserTableProps> = ({
     },
     {
       id: 'phone' as any,
-      label: 'Phone',
+      label: 'Số điện thoại',
     },
     {
       id: 'role' as any,
-      label: 'Role',
+      label: 'Vai trò',
       sortable: true,
+      render: (row: User) => row.role === 'ADMIN' ? 'Quản trị viên' : row.role === 'NHAN_VIEN' ? 'Nhân viên' : row.role,
     },
     {
       id: 'status' as any,
-      label: 'Status',
+      label: 'Trạng thái',
       sortable: true,
       render: (row: User) => <UserStatusChip status={row.status} />,
     },
     {
       id: 'createdDate' as any,
-      label: 'Created Date',
+      label: 'Ngày tạo',
       sortable: true,
       render: (row: User) => {
         try {
-          return new Date(row.createdDate).toLocaleDateString('en-US');
+          return new Date(row.createdDate).toLocaleDateString('vi-VN');
         } catch {
           return row.createdDate;
         }
@@ -86,21 +87,21 @@ export const UserTable: React.FC<UserTableProps> = ({
     },
     {
       id: 'actions' as any,
-      label: 'Actions',
+      label: 'Thao tác',
       render: (row: User) => (
         <Box display="flex" gap={1}>
           <PermissionWrapper requiredPermission="write:users">
-            <IconButton onClick={() => onEdit(row)} color="primary" size="small" title="Edit User">
+            <IconButton onClick={() => onEdit(row)} color="primary" size="small" title="Chỉnh sửa">
               <MdEdit size={18} />
             </IconButton>
           </PermissionWrapper>
           <PermissionWrapper requiredPermission="write:users">
-            <IconButton onClick={() => onAssignRole(row)} color="info" size="small" title="Assign Role">
+            <IconButton onClick={() => onAssignRole(row)} color="info" size="small" title="Phân quyền">
               <MdVpnKey size={18} />
             </IconButton>
           </PermissionWrapper>
           <PermissionWrapper requiredPermission="delete:users">
-            <IconButton onClick={() => onDelete(row)} color="error" size="small" title="Delete User">
+            <IconButton onClick={() => onDelete(row)} color="error" size="small" title="Xóa">
               <MdDelete size={18} />
             </IconButton>
           </PermissionWrapper>

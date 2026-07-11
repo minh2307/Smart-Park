@@ -159,7 +159,7 @@ export const TicketOverviewPage: React.FC = () => {
 
   return (
     <PageContainer
-      title="Ticket Management Overview"
+      title="Tổng quan quản lý vé"
       toolbar={
         <PermissionWrapper requiredPermission="validate:tickets">
           <Button
@@ -168,7 +168,7 @@ export const TicketOverviewPage: React.FC = () => {
             startIcon={<MdQrCodeScanner />}
             onClick={() => setValidationOpen(true)}
           >
-            Scan & Validate Gate
+            Quét & Kiểm tra vé
           </Button>
         </PermissionWrapper>
       }
@@ -183,7 +183,7 @@ export const TicketOverviewPage: React.FC = () => {
                   <MdConfirmationNumber size={26} />
                 </Box>
                 <Box>
-                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Total Sold Tickets</Typography>
+                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Tổng số vé bán ra</Typography>
                   <Typography variant="h5" fontWeight="bold">{totalSold}</Typography>
                 </Box>
               </CardContent>
@@ -196,7 +196,7 @@ export const TicketOverviewPage: React.FC = () => {
                   <MdCheckCircle size={26} />
                 </Box>
                 <Box>
-                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Fully Checked-In (Used)</Typography>
+                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Đã soát vé (Đã sử dụng)</Typography>
                   <Typography variant="h5" fontWeight="bold">{totalUsed}</Typography>
                 </Box>
               </CardContent>
@@ -209,7 +209,7 @@ export const TicketOverviewPage: React.FC = () => {
                   <MdOutlineRemoveCircle size={26} />
                 </Box>
                 <Box>
-                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Expired Passes</Typography>
+                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Vé đã hết hạn</Typography>
                   <Typography variant="h5" fontWeight="bold">{totalExpired}</Typography>
                 </Box>
               </CardContent>
@@ -233,7 +233,7 @@ export const TicketOverviewPage: React.FC = () => {
 
         {isError && (
           <Alert severity="warning" sx={{ borderRadius: 2 }}>
-            Failed to connect to backend ticketing service. Showing offline local records.
+            Không thể kết nối đến máy chủ quản lý vé. Đang hiển thị danh sách ngoại tuyến.
           </Alert>
         )}
 
@@ -264,7 +264,7 @@ export const TicketOverviewPage: React.FC = () => {
         <Modal
           open={detailsOpen}
           onClose={() => setDetailsOpen(false)}
-          title="Ticket Inspection Board"
+          title="Bảng chi tiết thông tin vé"
           maxWidth="md"
         >
           {selectedTicket && <TicketDetails ticket={selectedTicket} />}
@@ -274,7 +274,7 @@ export const TicketOverviewPage: React.FC = () => {
         <Modal
           open={editOpen}
           onClose={() => setEditOpen(false)}
-          title="Adjust Ticket Credentials"
+          title="Điều chỉnh thông tin & trạng thái vé"
         >
           <TicketForm
             initialData={selectedTicket || undefined}

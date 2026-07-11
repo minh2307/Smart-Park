@@ -29,47 +29,47 @@ export const VenueFilterPanel: React.FC<VenueFilterPanelProps> = ({
     <Box display="flex" gap={2} alignItems="center" flexWrap="wrap">
       <Box width={160}>
         <Select
-          label="Status"
+          label="Trạng thái"
           value={status}
           onChange={(e: any) => onStatusChange(e.target.value)}
           options={[
-            { value: '', label: 'All Statuses' },
-            { value: 'ACTIVE', label: 'ACTIVE' },
-            { value: 'INACTIVE', label: 'INACTIVE' },
-            { value: 'UNDER_MAINTENANCE', label: 'UNDER_MAINTENANCE' },
-            { value: 'CLOSED', label: 'CLOSED' },
+            { value: '', label: 'Tất cả trạng thái' },
+            { value: 'ACTIVE', label: 'Hoạt động' },
+            { value: 'INACTIVE', label: 'Ngưng hoạt động' },
+            { value: 'UNDER_MAINTENANCE', label: 'Đang bảo trì' },
+            { value: 'CLOSED', label: 'Đã đóng cửa' },
           ]}
         />
       </Box>
       <Box width={160}>
         <Select
-          label="City"
+          label="Thành phố"
           value={city}
           onChange={(e: any) => onCityChange(e.target.value)}
           options={[
-            { value: '', label: 'All Cities' },
-            { value: 'Ho Chi Minh', label: 'Ho Chi Minh' },
-            { value: 'Hanoi', label: 'Hanoi' },
-            { value: 'Da Nang', label: 'Da Nang' },
+            { value: '', label: 'Tất cả thành phố' },
+            { value: 'Ho Chi Minh', label: 'Hồ Chí Minh' },
+            { value: 'Hanoi', label: 'Hà Nội' },
+            { value: 'Da Nang', label: 'Đà Nẵng' },
           ]}
         />
       </Box>
       <Box width={160}>
         <Select
-          label="Country"
+          label="Quốc gia"
           value={country}
           onChange={(e: any) => onCountryChange(e.target.value)}
           options={[
-            { value: '', label: 'All Countries' },
-            { value: 'Vietnam', label: 'Vietnam' },
+            { value: '', label: 'Tất cả quốc gia' },
+            { value: 'Vietnam', label: 'Việt Nam' },
             { value: 'Singapore', label: 'Singapore' },
           ]}
         />
       </Box>
       <Button variant="outlined" onClick={onReset}>
-        Reset
+        Đặt lại
       </Button>
-      <IconButton onClick={onRefresh} color="primary" title="Refresh List">
+      <IconButton onClick={onRefresh} color="primary" title="Làm mới danh sách">
         <MdRefresh size={22} />
       </IconButton>
     </Box>

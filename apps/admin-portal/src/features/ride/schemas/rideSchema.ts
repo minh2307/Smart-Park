@@ -1,15 +1,15 @@
 import { z } from 'zod';
 
 export const rideSchema = z.object({
-  name: z.string().min(3, 'Ride Name must be at least 3 characters').max(150),
+  name: z.string().min(3, 'Tên trò chơi phải có ít nhất 3 ký tự').max(150),
   code: z
     .string()
-    .min(3, 'Ride Code must be at least 3 characters')
+    .min(3, 'Mã trò chơi phải có ít nhất 3 ký tự')
     .max(20)
-    .regex(/^[A-Z0-9_-]+$/, 'Ride Code must contain only uppercase letters, numbers, hyphens, and underscores'),
-  description: z.string().max(1000, 'Description cannot exceed 1000 characters').optional().or(z.literal('')),
-  capacity: z.coerce.number().int().min(1, 'Capacity must be at least 1 person/hour'),
-  durationSeconds: z.coerce.number().int().min(5, 'Duration must be at least 5 seconds').optional().or(z.literal('')),
+    .regex(/^[A-Z0-9_-]+$/, 'Mã trò chơi chỉ được chứa chữ cái viết hoa, chữ số, dấu gạch nối và dấu gạch dưới'),
+  description: z.string().max(1000, 'Mô tả không được vượt quá 1000 ký tự').optional().or(z.literal('')),
+  capacity: z.coerce.number().int().min(1, 'Công suất phải đạt ít nhất 1 người/giờ'),
+  durationSeconds: z.coerce.number().int().min(5, 'Thời lượng chu kỳ phải đạt ít nhất 5 giây').optional().or(z.literal('')),
   status: z.enum([
     'OPERATING',
     'CLOSED',
@@ -18,12 +18,12 @@ export const rideSchema = z.object({
     'EMERGENCY_STOP',
     'RESERVED',
   ]),
-  venueId: z.coerce.number().int().min(1, 'Please select a venue'),
-  zoneId: z.coerce.number().int().min(1, 'Please select a zone'),
-  rideCategoryId: z.coerce.number().int().min(1, 'Please select a category'),
+  venueId: z.coerce.number().int().min(1, 'Vui lòng chọn địa điểm'),
+  zoneId: z.coerce.number().int().min(1, 'Vui lòng chọn phân khu'),
+  rideCategoryId: z.coerce.number().int().min(1, 'Vui lòng chọn danh mục'),
   operatingHours: z.object({
-    open: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Open hour must be in HH:MM format'),
-    close: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Close hour must be in HH:MM format'),
+    open: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Giờ mở cửa phải có định dạng HH:MM'),
+    close: z.string().regex(/^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$/, 'Giờ đóng cửa phải có định dạng HH:MM'),
   }),
   restrictions: z.object({
     minHeight: z.coerce.number().int().min(0).optional().or(z.literal('')),
@@ -35,7 +35,7 @@ export const rideSchema = z.object({
     healthWarning: z.boolean().default(false),
     pregnancyRestriction: z.boolean().default(false),
     accessibilityFriendly: z.boolean().default(false),
-    safetyNotes: z.string().max(500, 'Safety notes cannot exceed 500 characters').optional().or(z.literal('')),
+    safetyNotes: z.string().max(500, 'Lưu ý an toàn không được vượt quá 500 ký tự').optional().or(z.literal('')),
   }),
 });
 

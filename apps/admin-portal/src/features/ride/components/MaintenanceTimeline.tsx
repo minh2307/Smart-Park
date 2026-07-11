@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Typography, Card, Chip } from '@mui/material';
 import { RideMaintenance } from '../types';
-import { MdBuild, MdCheckCircle, MdCancel, MdSchedule, MdAttachMoney } from 'react-icons/md';
+import { MdBuild, MdCheckCircle, MdCancel, MdSchedule } from 'react-icons/md';
 
 interface MaintenanceTimelineProps {
   logs?: RideMaintenance[];
@@ -12,7 +12,7 @@ export const MaintenanceTimeline: React.FC<MaintenanceTimelineProps> = ({ logs =
     return (
       <Card variant="outlined" sx={{ borderRadius: 3, p: 3 }}>
         <Typography variant="body2" color="text.secondary" align="center">
-          No maintenance logs recorded for this ride.
+          Chưa có nhật ký bảo trì nào được ghi nhận cho trò chơi này.
         </Typography>
       </Card>
     );
@@ -35,6 +35,12 @@ export const MaintenanceTimeline: React.FC<MaintenanceTimelineProps> = ({ logs =
     <Box sx={{ position: 'relative', pl: 3, borderLeft: '2px solid', borderColor: 'divider', ml: 1, my: 1 }}>
       {logs.map((log, index) => {
         const config = getStatusConfig(log.status);
+        const statusLabels: Record<string, string> = {
+          COMPLETED: 'Hoàn thành',
+          IN_PROGRESS: 'Đang thực hiện',
+          CANCELLED: 'Đã hủy',
+          SCHEDULED: 'Đã lên lịch',
+        };
         return (
           <Box key={log.id} sx={{ mb: index === logs.length - 1 ? 0 : 3, position: 'relative' }}>
             {/* Timeline bullet icon */}
@@ -68,7 +74,7 @@ export const MaintenanceTimeline: React.FC<MaintenanceTimelineProps> = ({ logs =
                   </Typography>
                   <Chip
                     size="small"
-                    label={log.status}
+                    label={statusLabels[log.status] || log.status}
                     color={
                       log.status === 'COMPLETED'
                         ? 'success'
@@ -82,8 +88,8 @@ export const MaintenanceTimeline: React.FC<MaintenanceTimelineProps> = ({ logs =
                   />
                 </Box>
                 <Typography variant="caption" color="text.secondary">
-                  Scheduled: {new Date(log.scheduledDate).toLocaleDateString()}
-                  {log.completionDate && ` | Done: ${new Date(log.completionDate).toLocaleDateString()}`}
+                  Lên lịch: {new Date(log.scheduledDate).toLocaleDateString('vi-VN')}
+                  {log.completionDate && ` | Hoàn thành: ${new Date(log.completionDate).toLocaleDateString('vi-VN')}`}
                 </Typography>
               </Box>
 
@@ -95,7 +101,7 @@ export const MaintenanceTimeline: React.FC<MaintenanceTimelineProps> = ({ logs =
 
               <Box display="flex" gap={2} mt={1} flexWrap="wrap">
                 <Typography variant="caption" color="text.disabled" fontWeight={500}>
-                  Technician: {log.technicianName}
+                  Kỹ thuật viên: {log.technicianName}
                 </Typography>
                 {log.cost !== undefined && (
                   <Typography
@@ -106,7 +112,7 @@ export const MaintenanceTimeline: React.FC<MaintenanceTimelineProps> = ({ logs =
                     alignItems="center"
                     gap={0.25}
                   >
-                    <MdAttachMoney size={14} /> Cost: ${log.cost.toLocaleString()}
+                    Chi phí: ${(log.cost * 25000).toLocaleString('vi-VN')} ₫
                   </Typography>
                 )}
               </Box>

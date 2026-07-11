@@ -43,16 +43,30 @@ export const VenueDetails: React.FC<VenueDetailsProps> = ({ venue }) => {
               <Chip label={venue.venueCode} sx={{ fontWeight: 'bold' }} />
             </Box>
             <Typography variant="body1" color="text.secondary" sx={{ mt: 1 }}>
-              {venue.description || 'No description provided for this venue.'}
+              {venue.description || 'Không có mô tả cho địa điểm này.'}
             </Typography>
           </Box>
-          <Chip label={statusStr} color={statusStr === 'ACTIVE' ? 'success' : 'default'} size="medium" />
+          <Chip
+            label={
+              statusStr === 'ACTIVE'
+                ? 'Hoạt động'
+                : statusStr === 'INACTIVE'
+                ? 'Ngưng hoạt động'
+                : statusStr === 'UNDER_MAINTENANCE'
+                ? 'Đang bảo trì'
+                : statusStr === 'CLOSED'
+                ? 'Đã đóng cửa'
+                : statusStr
+            }
+            color={statusStr === 'ACTIVE' ? 'success' : 'default'}
+            size="medium"
+          />
         </Box>
       </Paper>
 
       <Box>
         <Typography variant="h6" fontWeight="bold" gutterBottom>
-          Venue Statistics
+          Thống kê địa điểm
         </Typography>
         <Divider sx={{ mb: 2.5 }} />
         <VenueStatistics />
@@ -62,7 +76,7 @@ export const VenueDetails: React.FC<VenueDetailsProps> = ({ venue }) => {
         <Grid item xs={12} md={6}>
           <Paper variant="outlined" sx={{ p: 3, borderRadius: 2, height: '100%' }}>
             <Typography variant="h6" fontWeight="bold" gutterBottom>
-              Location & Working Hours
+              Vị trí & Giờ mở cửa
             </Typography>
             <Divider sx={{ mb: 2 }} />
             <Box display="flex" flexDirection="column" gap={2}>
@@ -70,7 +84,7 @@ export const VenueDetails: React.FC<VenueDetailsProps> = ({ venue }) => {
                 <MdLocationOn size={20} color="#757575" />
                 <Box>
                   <Typography variant="body2" color="text.secondary">
-                    Address
+                    Địa chỉ
                   </Typography>
                   <Typography variant="body1" fontWeight={500}>
                     {venue.address}, {venue.city}, {venue.provinceState}, {venue.country}
@@ -81,7 +95,7 @@ export const VenueDetails: React.FC<VenueDetailsProps> = ({ venue }) => {
                 <MdAccessTime size={20} color="#757575" />
                 <Box>
                   <Typography variant="body2" color="text.secondary">
-                    Business Hours
+                    Giờ hoạt động
                   </Typography>
                   <Typography variant="body1" fontWeight={500}>
                     {venue.openingTime || '08:00'} - {venue.closingTime || '22:00'}
@@ -94,7 +108,7 @@ export const VenueDetails: React.FC<VenueDetailsProps> = ({ venue }) => {
         <Grid item xs={12} md={6}>
           <Paper variant="outlined" sx={{ p: 3, borderRadius: 2, height: '100%' }}>
             <Typography variant="h6" fontWeight="bold" gutterBottom>
-              Contact Information
+              Thông tin liên hệ
             </Typography>
             <Divider sx={{ mb: 2 }} />
             <Box display="flex" flexDirection="column" gap={2}>
@@ -102,10 +116,10 @@ export const VenueDetails: React.FC<VenueDetailsProps> = ({ venue }) => {
                 <MdPhone size={20} color="#757575" />
                 <Box>
                   <Typography variant="body2" color="text.secondary">
-                    Phone Number
+                    Số điện thoại
                   </Typography>
                   <Typography variant="body1" fontWeight={500}>
-                    {venue.phone || 'N/A'}
+                    {venue.phone || 'Không có'}
                   </Typography>
                 </Box>
               </Box>
@@ -113,10 +127,10 @@ export const VenueDetails: React.FC<VenueDetailsProps> = ({ venue }) => {
                 <MdEmail size={20} color="#757575" />
                 <Box>
                   <Typography variant="body2" color="text.secondary">
-                    Email
+                    Địa chỉ email
                   </Typography>
                   <Typography variant="body1" fontWeight={500}>
-                    {venue.email || 'N/A'}
+                    {venue.email || 'Không có'}
                   </Typography>
                 </Box>
               </Box>
@@ -124,10 +138,10 @@ export const VenueDetails: React.FC<VenueDetailsProps> = ({ venue }) => {
                 <MdWeb size={20} color="#757575" />
                 <Box>
                   <Typography variant="body2" color="text.secondary">
-                    Website
+                    Trang web
                   </Typography>
                   <Typography variant="body1" fontWeight={500}>
-                    {venue.website || 'N/A'}
+                    {venue.website || 'Không có'}
                   </Typography>
                 </Box>
               </Box>

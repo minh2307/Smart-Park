@@ -43,7 +43,7 @@ export const QueueIndicator: React.FC<QueueIndicatorProps> = ({ minutes, status 
     >
       <MdAccessTime size={16} />
       <Typography variant="caption" fontWeight="bold">
-        {minutes === 0 ? 'No Wait' : `${minutes} min`}
+        {minutes === 0 ? 'Không chờ' : `${minutes} phút`}
       </Typography>
     </Box>
   );

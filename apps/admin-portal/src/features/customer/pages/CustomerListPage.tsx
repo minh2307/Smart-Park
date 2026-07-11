@@ -31,6 +31,7 @@ import {
 import { Customer } from '../types';
 import { MdAdd, MdPeople, MdCardMembership, MdAttachMoney } from 'react-icons/md';
 import { PermissionWrapper } from '../../../shared/components/PermissionWrapper';
+import { formatCurrency } from '../../analytics/utils/numberFormatters';
 
 export const CustomerListPage: React.FC = () => {
   const [page, setPage] = useState(0);
@@ -193,7 +194,7 @@ export const CustomerListPage: React.FC = () => {
 
   return (
     <PageContainer
-      title="Customer Relations Management"
+      title="Quản lý quan hệ khách hàng"
       toolbar={
         <PermissionWrapper requiredPermission="write:customers">
           <Button
@@ -204,7 +205,7 @@ export const CustomerListPage: React.FC = () => {
               setFormOpen(true);
             }}
           >
-            Register Customer
+            Đăng ký khách hàng
           </Button>
         </PermissionWrapper>
       }
@@ -219,7 +220,7 @@ export const CustomerListPage: React.FC = () => {
                   <MdPeople size={26} />
                 </Box>
                 <Box>
-                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Registered Customers</Typography>
+                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Khách hàng đăng ký</Typography>
                   <Typography variant="h5" fontWeight="bold">{displayTotal}</Typography>
                 </Box>
               </CardContent>
@@ -232,7 +233,7 @@ export const CustomerListPage: React.FC = () => {
                   <MdCardMembership size={26} />
                 </Box>
                 <Box>
-                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Active Members</Typography>
+                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Thành viên hoạt động</Typography>
                   <Typography variant="h5" fontWeight="bold">{membersCount}</Typography>
                 </Box>
               </CardContent>
@@ -245,8 +246,8 @@ export const CustomerListPage: React.FC = () => {
                   <MdAttachMoney size={26} />
                 </Box>
                 <Box>
-                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Total Spending (Page)</Typography>
-                  <Typography variant="h5" fontWeight="bold">${totalSpendSum.toLocaleString()}</Typography>
+                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Tổng chi tiêu (Trang)</Typography>
+                  <Typography variant="h5" fontWeight="bold">{formatCurrency(totalSpendSum)}</Typography>
                 </Box>
               </CardContent>
             </Card>
@@ -260,35 +261,35 @@ export const CustomerListPage: React.FC = () => {
               <TextField
                 fullWidth
                 size="small"
-                label="Search Customers"
-                placeholder="Name, Email, Phone..."
+                label="Tìm kiếm khách hàng"
+                placeholder="Tên, Email, Số điện thoại..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <FormControl fullWidth size="small">
-                <InputLabel>Status</InputLabel>
+                <InputLabel>Trạng thái</InputLabel>
                 <Select
                   value={status}
-                  label="Status"
+                  label="Trạng thái"
                   onChange={(e) => setStatus(e.target.value)}
                 >
-                  <MenuItem value=""><em>All Statuses</em></MenuItem>
-                  <MenuItem value="ACTIVE">Active</MenuItem>
-                  <MenuItem value="SUSPENDED">Suspended</MenuItem>
+                  <MenuItem value=""><em>Tất cả trạng thái</em></MenuItem>
+                  <MenuItem value="ACTIVE">Đang hoạt động</MenuItem>
+                  <MenuItem value="SUSPENDED">Tạm khóa</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <FormControl fullWidth size="small">
-                <InputLabel>Membership Tier</InputLabel>
+                <InputLabel>Hạng thành viên</InputLabel>
                 <Select
                   value={membershipTierId}
-                  label="Membership Tier"
+                  label="Hạng thành viên"
                   onChange={(e) => setMembershipTierId(e.target.value as number | '')}
                 >
-                  <MenuItem value=""><em>All Tiers</em></MenuItem>
+                  <MenuItem value=""><em>Tất cả các hạng</em></MenuItem>
                   {mockMembershipTiers.map((tier) => (
                     <MenuItem key={tier.id} value={tier.id}>
                       {tier.name}
@@ -299,7 +300,7 @@ export const CustomerListPage: React.FC = () => {
             </Grid>
             <Grid item xs={12} md={2} display="flex" gap={1}>
               <Button fullWidth variant="outlined" onClick={handleResetFilters}>
-                Reset
+                Đặt lại
               </Button>
             </Grid>
           </Grid>
@@ -307,7 +308,7 @@ export const CustomerListPage: React.FC = () => {
 
         {isError && (
           <Alert severity="warning" sx={{ borderRadius: 3 }}>
-            Failed to connect to backend customer endpoints. Switched to offline database sync.
+            Không thể kết nối đến máy chủ dữ liệu khách hàng. Đã chuyển sang đồng bộ cơ sở dữ liệu ngoại tuyến.
           </Alert>
         )}
 
@@ -338,7 +339,7 @@ export const CustomerListPage: React.FC = () => {
         <Modal
           open={detailsOpen}
           onClose={() => setSelectedCustomer(null)}
-          title="Customer CRM Dashboard"
+          title="Bảng điều khiển CRM khách hàng"
           maxWidth="md"
         >
           {selectedCustomer && <CustomerDetails customer={selectedCustomer} />}
@@ -348,7 +349,7 @@ export const CustomerListPage: React.FC = () => {
         <Modal
           open={formOpen}
           onClose={() => setFormOpen(false)}
-          title={editingCustomer ? 'Update Customer Profile' : 'Register New Customer'}
+          title={editingCustomer ? 'Cập nhật thông tin khách hàng' : 'Đăng ký khách hàng mới'}
           maxWidth="md"
         >
           <CustomerForm
@@ -363,10 +364,10 @@ export const CustomerListPage: React.FC = () => {
           open={deleteConfirmOpen}
           onClose={() => setDeleteConfirmOpen(false)}
           type="error"
-          title="Delete Customer Account"
-          message={`Are you sure you want to delete the account for ${deleteTarget?.fullName}? This action is irreversible and will remove all linked bookings, tickets, and visitor profiles.`}
+          title="Xóa tài khoản khách hàng"
+          message={`Bạn có chắc chắn muốn xóa tài khoản của ${deleteTarget?.fullName}? Hành động này không thể hoàn tác và sẽ xóa tất cả các đặt vé, vé và thông tin khách tham quan liên kết.`}
           onConfirm={handleDeleteConfirm}
-          confirmText="Yes, Delete Account"
+          confirmText="Đồng ý, Xóa tài khoản"
         />
       </Box>
     </PageContainer>

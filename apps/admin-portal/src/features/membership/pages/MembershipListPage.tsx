@@ -50,7 +50,7 @@ export const MembershipListPage: React.FC = () => {
   // Modal / Drawer open states
   const [assignModalOpen, setAssignModalOpen] = useState(false);
   const [tierModalOpen, setTierModalOpen] = useState(false);
-  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
+  const [detailsOpen, setDetailsOpen] = useState(false);
   const [selectedMem, setSelectedMem] = useState<Membership | null>(null);
   const [selectedTier, setSelectedTier] = useState<MembershipTier | null>(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -126,8 +126,8 @@ export const MembershipListPage: React.FC = () => {
   return (
     <Box sx={{ p: 4 }}>
       <Toolbar
-        title="Loyalty & Memberships"
-        subtitle="Configure guest tiers, privileges, points rules, and customer memberships"
+        title="Quản lý Thành viên & Điểm thưởng"
+        subtitle="Cấu hình phân hạng khách hàng, đặc quyền, quy tắc tích điểm và tài khoản thành viên"
         action={
           <PermissionWrapper requiredPermission="write:memberships">
             {tabValue === 0 ? (
@@ -140,7 +140,7 @@ export const MembershipListPage: React.FC = () => {
                 }}
                 sx={{ borderRadius: 2 }}
               >
-                Assign Membership
+                Cấp thẻ thành viên
               </Button>
             ) : (
               <Button
@@ -152,7 +152,7 @@ export const MembershipListPage: React.FC = () => {
                 }}
                 sx={{ borderRadius: 2 }}
               >
-                Create Tier
+                Tạo hạng thẻ
               </Button>
             )}
           </PermissionWrapper>
@@ -161,8 +161,8 @@ export const MembershipListPage: React.FC = () => {
 
       <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
         <Tabs value={tabValue} onChange={handleTabChange}>
-          <Tab label="Customer Memberships" id="membership-tab-0" />
-          <Tab label="Membership Tiers & Rules" id="membership-tab-1" />
+          <Tab label="Tài khoản Thành viên" id="membership-tab-0" />
+          <Tab label="Hạng thẻ & Quy tắc" id="membership-tab-1" />
         </Tabs>
       </Box>
 
@@ -179,18 +179,18 @@ export const MembershipListPage: React.FC = () => {
             <SearchPanel
               search={search}
               onSearchChange={setSearch}
-              placeholder="Search member name or card code..."
+              placeholder="Tìm tên thành viên hoặc mã thẻ..."
               onClear={() => setSearch('')}
             >
               <TextField
                 select
-                label="Filter Tier"
+                label="Lọc hạng thẻ"
                 size="small"
                 value={tierFilter}
                 onChange={(e) => setTierFilter(e.target.value)}
                 sx={{ minWidth: 150 }}
               >
-                <MenuItem value="">All Tiers</MenuItem>
+                <MenuItem value="">Tất cả các hạng</MenuItem>
                 {tiers.map((t) => (
                   <MenuItem key={t.id} value={t.name}>
                     {t.name}
@@ -200,22 +200,22 @@ export const MembershipListPage: React.FC = () => {
 
               <TextField
                 select
-                label="Filter Status"
+                label="Lọc trạng thái"
                 size="small"
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
                 sx={{ minWidth: 150 }}
               >
-                <MenuItem value="">All Statuses</MenuItem>
-                <MenuItem value="ACTIVE">Active</MenuItem>
-                <MenuItem value="EXPIRED">Expired</MenuItem>
-                <MenuItem value="SUSPENDED">Suspended</MenuItem>
-                <MenuItem value="CANCELLED">Cancelled</MenuItem>
+                <MenuItem value="">Tất cả trạng thái</MenuItem>
+                <MenuItem value="ACTIVE">Đang hoạt động</MenuItem>
+                <MenuItem value="EXPIRED">Đã hết hạn</MenuItem>
+                <MenuItem value="SUSPENDED">Tạm khóa</MenuItem>
+                <MenuItem value="CANCELLED">Đã hủy</MenuItem>
               </TextField>
 
               <TextField
                 type="number"
-                label="Min Points"
+                label="Điểm tích lũy tối thiểu"
                 size="small"
                 value={minPoints}
                 onChange={(e) => setMinPoints(e.target.value === '' ? '' : Number(e.target.value))}
@@ -228,7 +228,7 @@ export const MembershipListPage: React.FC = () => {
               loading={membershipsLoading}
               onViewDetails={(m) => {
                 setSelectedMem(m);
-                setDetailsModalOpen(true);
+                setDetailsOpen(true);
               }}
               onEdit={(m) => {
                 setSelectedMem(m);
@@ -256,7 +256,7 @@ export const MembershipListPage: React.FC = () => {
                   }}
                   onSelect={(t) => {
                     setSelectedTier(t);
-                    setDetailsModalOpen(true);
+                    setDetailsOpen(true);
                   }}
                 />
               </Grid>
@@ -274,7 +274,7 @@ export const MembershipListPage: React.FC = () => {
         PaperProps={{ sx: { borderRadius: 3 } }}
       >
         <DialogTitle fontWeight="bold">
-          {selectedMem ? 'Edit Membership Assignment' : 'Assign New Membership'}
+          {selectedMem ? 'Chỉnh sửa cấp thẻ thành viên' : 'Cấp thẻ thành viên mới'}
         </DialogTitle>
         <DialogContent>
           <MembershipForm
@@ -295,7 +295,7 @@ export const MembershipListPage: React.FC = () => {
         PaperProps={{ sx: { borderRadius: 3 } }}
       >
         <DialogTitle fontWeight="bold">
-          {selectedTier ? `Configure Tier: ${selectedTier.name}` : 'Create Membership Tier'}
+          {selectedTier ? `Cấu hình hạng thẻ: ${selectedTier.name}` : 'Tạo hạng thẻ thành viên'}
         </DialogTitle>
         <DialogContent>
           <MembershipTierForm
@@ -308,9 +308,9 @@ export const MembershipListPage: React.FC = () => {
 
       {/* Details View Modal */}
       <Dialog
-        open={detailsModalOpen}
+        open={detailsOpen}
         onClose={() => {
-          setDetailsModalOpen(false);
+          setDetailsOpen(false);
           setSelectedMem(null);
           setSelectedTier(null);
         }}
@@ -320,11 +320,11 @@ export const MembershipListPage: React.FC = () => {
       >
         <DialogTitle display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="h6" fontWeight="bold">
-            {selectedMem ? 'Customer Membership Profile' : `Membership Tier Details`}
+            {selectedMem ? 'Hồ sơ thành viên khách hàng' : `Chi tiết hạng thẻ thành viên`}
           </Typography>
           <IconButton
             onClick={() => {
-              setDetailsModalOpen(false);
+              setDetailsOpen(false);
               setSelectedMem(null);
               setSelectedTier(null);
             }}
@@ -339,7 +339,7 @@ export const MembershipListPage: React.FC = () => {
                 <Card variant="outlined" sx={{ borderRadius: 3, height: '100%' }}>
                   <CardContent>
                     <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                      CUSTOMER PROFILE
+                      THÔNG TIN KHÁCH HÀNG
                     </Typography>
                     <Typography variant="h5" fontWeight="bold" gutterBottom>
                       {selectedMem.customerName}
@@ -352,19 +352,19 @@ export const MembershipListPage: React.FC = () => {
                     </Typography>
                     <Divider sx={{ my: 2 }} />
                     <Typography variant="body2" gutterBottom>
-                      <strong>Card Code:</strong> {selectedMem.membershipCode}
+                      <strong>Mã số thẻ:</strong> {selectedMem.membershipCode}
                     </Typography>
                     <Typography variant="body2" gutterBottom>
-                      <strong>Points:</strong> {selectedMem.points}
+                      <strong>Điểm tích lũy:</strong> {selectedMem.points}
                     </Typography>
                     <Typography variant="body2" gutterBottom>
-                      <strong>Status:</strong> {selectedMem.status}
+                      <strong>Trạng thái:</strong> {selectedMem.status === 'ACTIVE' ? 'Đang hoạt động' : selectedMem.status === 'EXPIRED' ? 'Đã hết hạn' : selectedMem.status === 'SUSPENDED' ? 'Tạm khóa' : 'Đã hủy'}
                     </Typography>
                     <Typography variant="body2" gutterBottom>
-                      <strong>Join Date:</strong> {selectedMem.joinDate}
+                      <strong>Ngày tham gia:</strong> {selectedMem.joinDate}
                     </Typography>
                     <Typography variant="body2" gutterBottom>
-                      <strong>Expiration Date:</strong> {selectedMem.expirationDate || 'Lifetime'}
+                      <strong>Ngày hết hạn:</strong> {selectedMem.expirationDate || 'Vô thời hạn'}
                     </Typography>
                   </CardContent>
                 </Card>
@@ -376,7 +376,7 @@ export const MembershipListPage: React.FC = () => {
                     <MembershipDetails tier={matchingTier} />
                   ) : (
                     <Typography variant="body2" color="text.secondary">
-                      Loading Tier configuration rules...
+                      Đang tải quy tắc cấu hình hạng thẻ...
                     </Typography>
                   );
                 })()}
@@ -391,8 +391,8 @@ export const MembershipListPage: React.FC = () => {
       {/* Delete / Cancel warning Dialog */}
       <DeleteDialog
         open={deleteDialogOpen}
-        title="Revoke / Delete Membership"
-        description={`Are you sure you want to cancel the membership for ${memToDelete?.customerName}? This will forfeit all earned loyalty points (${memToDelete?.points}) and benefits.`}
+        title="Thu hồi / Xóa thẻ thành viên"
+        description={`Bạn có chắc chắn muốn hủy thẻ thành viên của ${memToDelete?.customerName}? Thao tác này sẽ hủy bỏ toàn bộ số điểm tích lũy (${memToDelete?.points}) và các đặc quyền đi kèm.`}
         onConfirm={handleDeleteConfirm}
         onCancel={() => {
           setDeleteDialogOpen(false);

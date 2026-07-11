@@ -88,38 +88,11 @@ export const UserListPage: React.FC = () => {
     }
   };
 
-  const mockUsers: User[] = [
-    {
-      id: 1,
-      username: 'admin',
-      fullName: 'System Administrator',
-      email: 'admin@smartpark.com',
-      phone: '0123456789',
-      role: 'ADMIN',
-      status: 'ACTIVE',
-      createdDate: '2026-07-01T08:00:00Z',
-      lastUpdated: '2026-07-01T08:00:00Z',
-      permissions: ['read:users', 'write:users', 'delete:users'],
-    },
-    {
-      id: 2,
-      username: 'nv_son',
-      fullName: 'Nguyen Son Minh',
-      email: 'son.minh@smartpark.com',
-      phone: '0987654321',
-      role: 'NHAN_VIEN',
-      status: 'ACTIVE',
-      createdDate: '2026-07-05T09:30:00Z',
-      lastUpdated: '2026-07-05T09:30:00Z',
-      permissions: ['read:users'],
-    }
-  ];
-
-  const displayData = data?.content || (isLoading ? [] : mockUsers);
-  const displayTotal = data?.totalElements ?? mockUsers.length;
+  const displayData = data?.content || [];
+  const displayTotal = data?.totalElements ?? 0;
 
   return (
-    <PageContainer title="User Management">
+    <PageContainer title="Quản lý người dùng">
       <Box display="flex" flexDirection="column" gap={3}>
         <Paper variant="outlined" sx={{ p: 2, borderRadius: 2 }}>
           <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={2}>
@@ -140,15 +113,15 @@ export const UserListPage: React.FC = () => {
                   setFormOpen(true);
                 }}
               >
-                Add User
+                Thêm người dùng
               </Button>
             </PermissionWrapper>
           </Box>
         </Paper>
 
         {isError && (
-          <Alert severity="warning" sx={{ borderRadius: 2 }}>
-            Failed to connect to backend user API. Displaying mock accounts for demo/fallback purposes.
+          <Alert severity="error" sx={{ borderRadius: 2 }}>
+            Không thể kết nối tới máy chủ. Vui lòng kiểm tra lại kết nối mạng hoặc trạng thái máy chủ.
           </Alert>
         )}
 
@@ -178,7 +151,7 @@ export const UserListPage: React.FC = () => {
         <Modal
           open={formOpen}
           onClose={() => setFormOpen(false)}
-          title={selectedUser ? 'Edit User' : 'Create User'}
+          title={selectedUser ? 'Cập nhật thông tin' : 'Thêm người dùng mới'}
         >
           <UserForm
             initialData={selectedUser || undefined}

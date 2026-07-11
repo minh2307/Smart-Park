@@ -14,9 +14,16 @@ export const UserStatusChip: React.FC<UserStatusChipProps> = ({ status }) => {
     SUSPENDED: 'warning',
   };
 
+  const labelMap: Record<UserStatus, string> = {
+    ACTIVE: 'Hoạt động',
+    INACTIVE: 'Ngưng hoạt động',
+    LOCKED: 'Bị khóa',
+    SUSPENDED: 'Tạm đình chỉ',
+  };
+
   return (
     <Chip
-      label={status}
+      label={labelMap[status] || status}
       color={colorMap[status]}
       size="small"
       variant="outlined"

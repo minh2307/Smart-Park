@@ -36,33 +36,33 @@ export const AssignRoleDialog: React.FC<AssignRoleDialogProps> = ({
     <Modal
       open={open}
       onClose={onClose}
-      title="Assign Role"
+      title="Phân quyền người dùng"
       actions={
         <Box display="flex" gap={1.5} justifyContent="flex-end" width="100%">
           <Button variant="outlined" onClick={onClose} disabled={loading}>
-            Cancel
+            Hủy
           </Button>
           <Button
             variant="contained"
             onClick={handleConfirm}
             loading={loading}
           >
-            Save Changes
+            Lưu thay đổi
           </Button>
         </Box>
       }
     >
       <Box display="flex" flexDirection="column" gap={2} mt={1}>
         <Typography variant="body2" color="text.secondary">
-          Update system role for account <strong>{username}</strong>.
+          Cập nhật vai trò hệ thống cho tài khoản <strong>{username}</strong>.
         </Typography>
         <Select
-          label="Select Role"
+          label="Chọn vai trò"
           value={role}
           onChange={(e: any) => setRole(e.target.value as UserRole)}
           options={[
-            { value: 'ADMIN', label: 'Administrator (ADMIN)' },
-            { value: 'NHAN_VIEN', label: 'Staff (NHAN_VIEN)' },
+            { value: 'ADMIN', label: 'Quản trị viên (ADMIN)' },
+            { value: 'NHAN_VIEN', label: 'Nhân viên (NHÂN VIÊN)' },
           ]}
         />
       </Box>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Typography, Divider, Grid, Card, CardContent, Button } from '@mui/material';
 import { NotificationItem } from '../types';
-import { getRecipientLabel } from './NotificationTable';
+import { getRecipientLabel, getChannelLabel, getPriorityLabel, getStatusLabel } from './NotificationTable';
 
 interface NotificationPreviewProps {
   item: NotificationItem;
@@ -36,7 +36,7 @@ export const NotificationPreview: React.FC<NotificationPreviewProps> = ({ item, 
             Kênh Gửi
           </Typography>
           <Typography variant="body2" sx={{ fontWeight: 500 }}>
-            {item.channel}
+            {getChannelLabel(item.channel)}
           </Typography>
         </Grid>
 
@@ -45,7 +45,7 @@ export const NotificationPreview: React.FC<NotificationPreviewProps> = ({ item, 
             Độ Ưu Tiên
           </Typography>
           <Typography variant="body2" sx={{ fontWeight: 500 }}>
-            {item.priority}
+            {getPriorityLabel(item.priority)}
           </Typography>
         </Grid>
 
@@ -63,7 +63,7 @@ export const NotificationPreview: React.FC<NotificationPreviewProps> = ({ item, 
             Trạng Thái
           </Typography>
           <Typography variant="body2" sx={{ fontWeight: 500 }}>
-            {item.status}
+            {getStatusLabel(item.status)}
           </Typography>
         </Grid>
 

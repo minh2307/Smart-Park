@@ -22,10 +22,10 @@ export const LoginPage: React.FC = () => {
       <LoadingOverlay open={loading} />
       <Box sx={{ mb: 4, textAlign: 'center' }}>
         <Typography component="h1" variant="h4" fontWeight="bold" color="text.primary" gutterBottom>
-          Welcome Back
+          Chào mừng trở lại
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          Please sign in to continue to Smart Park
+          Vui lòng đăng nhập để tiếp tục vào Smart Park
         </Typography>
       </Box>
       

@@ -20,38 +20,38 @@ export const StatusChip: React.FC<StatusChipProps> = ({ status, size = 'small' }
     switch (statusValue) {
       case 'OPERATING':
         return {
-          label: 'OPERATING',
+          label: 'Đang vận hành',
           color: 'success' as const,
           icon: <MdPlayArrow />,
         };
       case 'CLOSED':
         return {
-          label: 'CLOSED',
+          label: 'Đã đóng cửa',
           color: 'default' as const,
           icon: <MdPause />,
         };
       case 'MAINTENANCE':
         return {
-          label: 'MAINTENANCE',
+          label: 'Đang bảo trì',
           color: 'warning' as const,
           icon: <MdBuild />,
         };
       case 'TEMPORARILY_CLOSED':
         return {
-          label: 'TEMP CLOSED',
+          label: 'Tạm đóng cửa',
           color: 'error' as const,
           icon: <MdWarning />,
           variant: 'outlined' as const,
         };
       case 'EMERGENCY_STOP':
         return {
-          label: 'EMERGENCY STOP',
+          label: 'Dừng khẩn cấp',
           color: 'error' as const,
           icon: <MdReportProblem />,
         };
       case 'RESERVED':
         return {
-          label: 'RESERVED',
+          label: 'Đã đặt chỗ',
           color: 'primary' as const,
           icon: <MdLock />,
         };

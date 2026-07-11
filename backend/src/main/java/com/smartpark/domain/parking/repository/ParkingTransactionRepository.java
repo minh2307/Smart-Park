@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface ParkingTransactionRepository extends JpaRepository<ParkingTransaction, Long> {
     Optional<ParkingTransaction> findByVehiclePlateAndStatus(String plate, ParkingTransaction.ParkingStatus status);
     List<ParkingTransaction> findByParkingLotId(Long lotId);
+    long countByExitTimeIsNull();
 
     @org.springframework.data.jpa.repository.Query("SELECT COALESCE(SUM(pt.amountPaid), 0) FROM ParkingTransaction pt WHERE pt.status = com.smartpark.domain.parking.entity.ParkingTransaction.ParkingStatus.EXITED AND pt.exitTime BETWEEN :from AND :to")
     java.math.BigDecimal sumAmountPaidByExitTimeBetween(@org.springframework.data.repository.query.Param("from") java.time.LocalDateTime from, @org.springframework.data.repository.query.Param("to") java.time.LocalDateTime to);

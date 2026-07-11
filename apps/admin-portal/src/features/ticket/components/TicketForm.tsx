@@ -57,6 +57,19 @@ export const TicketForm: React.FC<TicketFormProps> = ({
     'REFUNDED',
   ];
 
+  const statusLabels: Record<TicketStatus, string> = {
+    DRAFT: 'Bản nháp',
+    AVAILABLE: 'Sẵn sàng',
+    RESERVED: 'Đã giữ chỗ',
+    SOLD: 'Đã bán',
+    ACTIVATED: 'Đã kích hoạt',
+    USED: 'Đã sử dụng',
+    PARTIALLY_USED: 'Sử dụng một phần',
+    EXPIRED: 'Đã hết hạn',
+    CANCELLED: 'Đã hủy',
+    REFUNDED: 'Đã hoàn tiền',
+  };
+
   return (
     <Box component="form" onSubmit={handleSubmit(onSubmit)} display="flex" flexDirection="column" gap={2.5} sx={{ mt: 1 }}>
       <Controller
@@ -64,16 +77,16 @@ export const TicketForm: React.FC<TicketFormProps> = ({
         control={control}
         render={({ field }) => (
           <FormControl fullWidth size="small" error={!!errors.status}>
-            <InputLabel id="ticket-form-status-label">Ticket Status</InputLabel>
+            <InputLabel id="ticket-form-status-label">Trạng thái vé</InputLabel>
             <Select
               labelId="ticket-form-status-label"
               id="ticket-form-status"
               {...field}
-              label="Ticket Status"
+              label="Trạng thái vé"
             >
               {ticketStatuses.map((s) => (
                 <MenuItem key={s} value={s}>
-                  {s.charAt(0) + s.slice(1).toLowerCase().replace('_', ' ')}
+                  {statusLabels[s] || s}
                 </MenuItem>
               ))}
             </Select>
@@ -90,7 +103,7 @@ export const TicketForm: React.FC<TicketFormProps> = ({
             {...field}
             fullWidth
             size="small"
-            label="Expiration Date (YYYY-MM-DD)"
+            label="Ngày hết hạn (YYYY-MM-DD)"
             type="date"
             InputLabelProps={{ shrink: true }}
             error={!!errors.validDate}
@@ -109,7 +122,7 @@ export const TicketForm: React.FC<TicketFormProps> = ({
             onChange={(e) => onChange(e.target.value === '' ? '' : parseInt(e.target.value, 10))}
             fullWidth
             size="small"
-            label="Maximum Uses"
+            label="Số lượt sử dụng tối đa"
             type="number"
             error={!!errors.maxUses}
             helperText={errors.maxUses?.message}
@@ -125,7 +138,7 @@ export const TicketForm: React.FC<TicketFormProps> = ({
             {...field}
             fullWidth
             size="small"
-            label="Visitor Full Name"
+            label="Họ và tên khách tham quan"
             error={!!errors.customerName}
             helperText={errors.customerName?.message}
           />
@@ -140,7 +153,7 @@ export const TicketForm: React.FC<TicketFormProps> = ({
             {...field}
             fullWidth
             size="small"
-            label="Visitor Email Address (Optional)"
+            label="Địa chỉ Email khách hàng (Không bắt buộc)"
             error={!!errors.customerEmail}
             helperText={errors.customerEmail?.message}
           />
@@ -149,7 +162,7 @@ export const TicketForm: React.FC<TicketFormProps> = ({
 
       <Box display="flex" justifyContent="flex-end" gap={2} sx={{ mt: 1 }}>
         <Button variant="contained" type="submit" disabled={loading}>
-          {loading ? 'Saving...' : 'Save Changes'}
+          {loading ? 'Đang lưu...' : 'Lưu thay đổi'}
         </Button>
       </Box>
     </Box>

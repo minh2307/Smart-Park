@@ -53,7 +53,7 @@ export const VisitorForm: React.FC<VisitorFormProps> = ({
       <Grid container spacing={3}>
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth error={!!errors.customerId}>
-            <InputLabel id="customer-owner-label">Owner Customer Account *</InputLabel>
+            <InputLabel id="customer-owner-label">Tài khoản khách hàng sở hữu *</InputLabel>
             <Controller
               name="customerId"
               control={control}
@@ -61,7 +61,7 @@ export const VisitorForm: React.FC<VisitorFormProps> = ({
                 <Select
                   {...field}
                   labelId="customer-owner-label"
-                  label="Owner Customer Account *"
+                  label="Tài khoản khách hàng sở hữu *"
                   disabled={!!initialData} // Lock customer association on edit
                 >
                   {mockCustomers.map((cust) => (
@@ -83,7 +83,7 @@ export const VisitorForm: React.FC<VisitorFormProps> = ({
             render={({ field }) => (
               <TextField
                 {...field}
-                label="Visitor Full Name *"
+                label="Họ và tên khách tham quan *"
                 fullWidth
                 error={!!errors.fullName}
                 helperText={errors.fullName?.message}
@@ -100,7 +100,7 @@ export const VisitorForm: React.FC<VisitorFormProps> = ({
               <TextField
                 {...field}
                 type="number"
-                label="Age *"
+                label="Tuổi *"
                 fullWidth
                 error={!!errors.age}
                 helperText={errors.age?.message}
@@ -111,15 +111,15 @@ export const VisitorForm: React.FC<VisitorFormProps> = ({
 
         <Grid item xs={12} sm={4}>
           <FormControl fullWidth error={!!errors.gender}>
-            <InputLabel id="visitor-gender-label">Gender *</InputLabel>
+            <InputLabel id="visitor-gender-label">Giới tính *</InputLabel>
             <Controller
               name="gender"
               control={control}
               render={({ field }) => (
-                <Select {...field} labelId="visitor-gender-label" label="Gender *">
-                  <MenuItem value="MALE">Male</MenuItem>
-                  <MenuItem value="FEMALE">Female</MenuItem>
-                  <MenuItem value="OTHER">Other</MenuItem>
+                <Select {...field} labelId="visitor-gender-label" label="Giới tính *">
+                  <MenuItem value="MALE">Nam</MenuItem>
+                  <MenuItem value="FEMALE">Nữ</MenuItem>
+                  <MenuItem value="OTHER">Khác</MenuItem>
                 </Select>
               )}
             />
@@ -129,18 +129,18 @@ export const VisitorForm: React.FC<VisitorFormProps> = ({
 
         <Grid item xs={12} sm={4}>
           <FormControl fullWidth error={!!errors.relationship}>
-            <InputLabel id="relationship-label">Relationship to Customer *</InputLabel>
+            <InputLabel id="relationship-label">Mối quan hệ với chủ tài khoản *</InputLabel>
             <Controller
               name="relationship"
               control={control}
               render={({ field }) => (
-                <Select {...field} labelId="relationship-label" label="Relationship to Customer *">
-                  <MenuItem value="SELF">Self</MenuItem>
-                  <MenuItem value="SPOUSE">Spouse</MenuItem>
-                  <MenuItem value="CHILD">Child</MenuItem>
-                  <MenuItem value="PARENT">Parent</MenuItem>
-                  <MenuItem value="FRIEND">Friend</MenuItem>
-                  <MenuItem value="OTHER">Other</MenuItem>
+                <Select {...field} labelId="relationship-label" label="Mối quan hệ với chủ tài khoản *">
+                  <MenuItem value="SELF">Bản thân</MenuItem>
+                  <MenuItem value="SPOUSE">Vợ/Chồng</MenuItem>
+                  <MenuItem value="CHILD">Con cái</MenuItem>
+                  <MenuItem value="PARENT">Cha mẹ</MenuItem>
+                  <MenuItem value="FRIEND">Bạn bè</MenuItem>
+                  <MenuItem value="OTHER">Khác</MenuItem>
                 </Select>
               )}
             />
@@ -155,7 +155,7 @@ export const VisitorForm: React.FC<VisitorFormProps> = ({
             render={({ field }) => (
               <TextField
                 {...field}
-                label="Nationality *"
+                label="Quốc tịch *"
                 fullWidth
                 error={!!errors.nationality}
                 helperText={errors.nationality?.message}
@@ -171,7 +171,7 @@ export const VisitorForm: React.FC<VisitorFormProps> = ({
             render={({ field }) => (
               <TextField
                 {...field}
-                label="Identification Number (ID / Passport) *"
+                label="Số giấy tờ tùy thân (CMND/CCCD/Hộ chiếu) *"
                 fullWidth
                 error={!!errors.identificationNumber}
                 helperText={errors.identificationNumber?.message}
@@ -187,7 +187,7 @@ export const VisitorForm: React.FC<VisitorFormProps> = ({
             render={({ field }) => (
               <TextField
                 {...field}
-                label="Emergency Contact Name"
+                label="Tên người liên hệ khẩn cấp"
                 fullWidth
                 error={!!errors.emergencyContactName}
                 helperText={errors.emergencyContactName?.message}
@@ -203,7 +203,7 @@ export const VisitorForm: React.FC<VisitorFormProps> = ({
             render={({ field }) => (
               <TextField
                 {...field}
-                label="Emergency Contact Phone"
+                label="Số điện thoại liên hệ khẩn cấp"
                 fullWidth
                 error={!!errors.emergencyContactPhone}
                 helperText={errors.emergencyContactPhone?.message}
@@ -219,13 +219,13 @@ export const VisitorForm: React.FC<VisitorFormProps> = ({
             render={({ field }) => (
               <TextField
                 {...field}
-                label="Special Medical Notes / Allergies / Assistance Request"
+                label="Lưu ý y tế đặc biệt / Dị ứng / Yêu cầu trợ giúp"
                 fullWidth
                 multiline
                 rows={3}
                 error={!!errors.medicalNotes}
                 helperText={errors.medicalNotes?.message}
-                placeholder="List food allergies, physical constraints, or medical alerts..."
+                placeholder="Liệt kê các dị ứng thực phẩm, hạn chế thể chất hoặc cảnh báo y tế..."
               />
             )}
           />
@@ -233,14 +233,14 @@ export const VisitorForm: React.FC<VisitorFormProps> = ({
 
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth error={!!errors.status}>
-            <InputLabel id="visitor-status-label">Status</InputLabel>
+            <InputLabel id="visitor-status-label">Trạng thái</InputLabel>
             <Controller
               name="status"
               control={control}
               render={({ field }) => (
-                <Select {...field} labelId="visitor-status-label" label="Status">
-                  <MenuItem value="ACTIVE">Active</MenuItem>
-                  <MenuItem value="INACTIVE">Inactive</MenuItem>
+                <Select {...field} labelId="visitor-status-label" label="Trạng thái">
+                  <MenuItem value="ACTIVE">Hoạt động</MenuItem>
+                  <MenuItem value="INACTIVE">Ngưng hoạt động</MenuItem>
                 </Select>
               )}
             />
@@ -251,7 +251,7 @@ export const VisitorForm: React.FC<VisitorFormProps> = ({
 
       <Box display="flex" justifyContent="flex-end" gap={2} mt={4}>
         <Button type="submit" variant="contained" loading={loading}>
-          {initialData ? 'Save Changes' : 'Register Visitor'}
+          {initialData ? 'Lưu thay đổi' : 'Đăng ký khách tham quan'}
         </Button>
       </Box>
     </Box>

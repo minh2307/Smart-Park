@@ -36,21 +36,21 @@ export const RideCategoryDetails: React.FC<RideCategoryDetailsProps> = ({ catego
           <Card variant="outlined" sx={{ borderRadius: 3, height: '100%' }}>
             <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <Typography variant="subtitle2" fontWeight="bold" display="flex" alignItems="center" gap={1}>
-                <MdInfo color="primary" /> General Information
+                <MdInfo color="primary" /> Thông tin chung
               </Typography>
               <Divider />
               <Box display="flex" flexDirection="column" gap={1.5} sx={{ mt: 1 }}>
                 <Box>
-                  <Typography variant="caption" color="text.secondary">Description</Typography>
+                  <Typography variant="caption" color="text.secondary">Mô tả</Typography>
                   <Typography variant="body2" color="text.primary">
-                    {category.description || 'No description provided.'}
+                    {category.description || 'Không có mô tả nào được cung cấp.'}
                   </Typography>
                 </Box>
                 <Box>
-                  <Typography variant="caption" color="text.secondary">Status</Typography>
+                  <Typography variant="caption" color="text.secondary">Trạng thái</Typography>
                   <Box sx={{ mt: 0.5 }}>
                     <Chip
-                      label={category.status}
+                      label={category.status === 'ACTIVE' ? 'Hoạt động' : 'Ngưng hoạt động'}
                       size="small"
                       color={category.status === 'ACTIVE' ? 'success' : 'default'}
                       sx={{ fontWeight: 'bold' }}
@@ -66,25 +66,25 @@ export const RideCategoryDetails: React.FC<RideCategoryDetailsProps> = ({ catego
           <Card variant="outlined" sx={{ borderRadius: 3, height: '100%' }}>
             <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <Typography variant="subtitle2" fontWeight="bold" display="flex" alignItems="center" gap={1}>
-                <MdOutlineSettingsInputComponent color="primary" /> Statistics & Metrics
+                <MdOutlineSettingsInputComponent color="primary" /> Thống kê & Chỉ số
               </Typography>
               <Divider />
               <Grid container spacing={2} sx={{ mt: 1 }}>
                 <Grid item xs={4}>
                   <Box textAlign="center" p={1.5} bgcolor="action.hover" sx={{ borderRadius: 2 }}>
-                    <Typography variant="caption" color="text.secondary">Total Rides</Typography>
+                    <Typography variant="caption" color="text.secondary">Tổng số trò chơi</Typography>
                     <Typography variant="h6" fontWeight="bold">{assignedRides.length}</Typography>
                   </Box>
                 </Grid>
                 <Grid item xs={4}>
                   <Box textAlign="center" p={1.5} bgcolor="success.light" sx={{ borderRadius: 2, color: 'success.contrastText' }}>
-                    <Typography variant="caption" color="text.secondary">Operating</Typography>
+                    <Typography variant="caption" color="text.secondary">Đang vận hành</Typography>
                     <Typography variant="h6" fontWeight="bold">{operatingCount}</Typography>
                   </Box>
                 </Grid>
                 <Grid item xs={4}>
                   <Box textAlign="center" p={1.5} bgcolor="warning.light" sx={{ borderRadius: 2, color: 'warning.contrastText' }}>
-                    <Typography variant="caption" color="text.secondary">Service</Typography>
+                    <Typography variant="caption" color="text.secondary">Đang bảo trì</Typography>
                     <Typography variant="h6" fontWeight="bold">{maintenanceCount}</Typography>
                   </Box>
                 </Grid>
@@ -97,7 +97,7 @@ export const RideCategoryDetails: React.FC<RideCategoryDetailsProps> = ({ catego
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <Typography variant="subtitle2" fontWeight="bold">
-                Assigned Rides ({assignedRides.length})
+                Trò chơi trực thuộc ({assignedRides.length})
               </Typography>
               <Divider />
               <List sx={{ p: 0 }}>
@@ -106,12 +106,12 @@ export const RideCategoryDetails: React.FC<RideCategoryDetailsProps> = ({ catego
                     <ListItem sx={{ px: 0, py: 1.5, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                       <ListItemText
                         primary={ride.name}
-                        secondary={`${ride.venueName} | Code: ${ride.code}`}
+                        secondary={`${ride.venueName} | Mã: ${ride.code}`}
                         primaryTypographyProps={{ fontWeight: 'bold', variant: 'body2' }}
                       />
                       <Box display="flex" alignItems="center" gap={2}>
                         <Typography variant="caption" color="text.secondary">
-                          Queue: {ride.queueTimeMinutes} min
+                          Chờ: {ride.queueTimeMinutes} phút
                         </Typography>
                         <StatusChip status={ride.status} />
                       </Box>
@@ -121,7 +121,7 @@ export const RideCategoryDetails: React.FC<RideCategoryDetailsProps> = ({ catego
                 ))}
                 {assignedRides.length === 0 && (
                   <Typography variant="body2" color="text.secondary" sx={{ py: 2 }}>
-                    No rides currently associated with this category.
+                    Chưa có trò chơi nào trực thuộc danh mục này.
                   </Typography>
                 )}
               </List>
@@ -132,10 +132,10 @@ export const RideCategoryDetails: React.FC<RideCategoryDetailsProps> = ({ catego
         <Grid item xs={12}>
           <Box display="flex" justifyContent="space-between" p={2} bgcolor="action.selected" sx={{ borderRadius: 2 }}>
             <Typography variant="caption" color="text.secondary" display="flex" alignItems="center" gap={0.5}>
-              <MdCalendarToday size={14} /> Created: {new Date(category.createdAt).toLocaleString()}
+              <MdCalendarToday size={14} /> Đã tạo: {new Date(category.createdAt).toLocaleString('vi-VN')}
             </Typography>
             <Typography variant="caption" color="text.secondary" display="flex" alignItems="center" gap={0.5}>
-              <MdCalendarToday size={14} /> Last Updated: {new Date(category.updatedAt).toLocaleString()}
+              <MdCalendarToday size={14} /> Cập nhật lần cuối: {new Date(category.updatedAt).toLocaleString('vi-VN')}
             </Typography>
           </Box>
         </Grid>

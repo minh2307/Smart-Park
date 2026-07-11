@@ -36,15 +36,15 @@ export const VoucherTable: React.FC<VoucherTableProps> = ({
       <Table>
         <TableHead sx={{ bgcolor: 'action.hover' }}>
           <TableRow>
-            <TableCell sx={{ fontWeight: 'bold' }}>Ma Voucher</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Loai Voucher</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Menh gia</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Khach hang</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Ngay phat hanh</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Thoi han</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Ngay su dung</TableCell>
-            <TableCell sx={{ fontWeight: 'bold' }}>Trang thai</TableCell>
-            <TableCell sx={{ fontWeight: 'bold', textAlign: 'right' }}>Hanh dong</TableCell>
+            <TableCell sx={{ fontWeight: 'bold' }}>Mã Voucher</TableCell>
+            <TableCell sx={{ fontWeight: 'bold' }}>Loại Voucher</TableCell>
+            <TableCell sx={{ fontWeight: 'bold' }}>Mệnh giá</TableCell>
+            <TableCell sx={{ fontWeight: 'bold' }}>Khách hàng</TableCell>
+            <TableCell sx={{ fontWeight: 'bold' }}>Ngày phát hành</TableCell>
+            <TableCell sx={{ fontWeight: 'bold' }}>Thời hạn</TableCell>
+            <TableCell sx={{ fontWeight: 'bold' }}>Ngày sử dụng</TableCell>
+            <TableCell sx={{ fontWeight: 'bold' }}>Trạng thái</TableCell>
+            <TableCell sx={{ fontWeight: 'bold', textAlign: 'right' }}>Hành động</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -52,8 +52,8 @@ export const VoucherTable: React.FC<VoucherTableProps> = ({
             <TableRow key={v.id} hover>
               <TableCell sx={{ fontFamily: 'monospace', fontWeight: 'bold' }}>{v.code}</TableCell>
               <TableCell>{v.voucherType}</TableCell>
-              <TableCell>${v.voucherValue.toLocaleString()}</TableCell>
-              <TableCell>{v.assignedCustomer || 'Chua gan'}</TableCell>
+              <TableCell>{v.voucherValue ? `${(v.voucherValue * 25000).toLocaleString('vi-VN')} ₫` : '0 ₫'}</TableCell>
+              <TableCell>{v.assignedCustomer || 'Chưa gán'}</TableCell>
               <TableCell>{v.issueDate}</TableCell>
               <TableCell>{v.expirationDate}</TableCell>
               <TableCell>{v.redeemedDate ? new Date(v.redeemedDate).toLocaleDateString() : '-'}</TableCell>
@@ -62,25 +62,25 @@ export const VoucherTable: React.FC<VoucherTableProps> = ({
               </TableCell>
               <TableCell align="right">
                 <Box display="flex" justifyContent="flex-end" gap={0.5}>
-                  <Tooltip title="Xem chi tiet">
+                  <Tooltip title="Xem chi tiết">
                     <IconButton onClick={() => onView(v)} color="info" size="small">
                       <MdVisibility />
                     </IconButton>
                   </Tooltip>
                   {v.status === 'UNREDEEMED' && onRedeem && (
-                    <Tooltip title="Su dung (Redeem)">
+                    <Tooltip title="Sử dụng (Redeem)">
                       <IconButton onClick={() => onRedeem(v)} color="success" size="small">
                         <MdCheckCircle />
                       </IconButton>
                     </Tooltip>
                   )}
                   <PermissionWrapper requiredPermission="write:promotions">
-                    <Tooltip title="Chinh sua">
+                    <Tooltip title="Chỉnh sửa">
                       <IconButton onClick={() => onEdit(v)} color="primary" size="small">
                         <MdEdit />
                       </IconButton>
                     </Tooltip>
-                    <Tooltip title="Xoa">
+                    <Tooltip title="Xóa">
                       <IconButton onClick={() => onDelete(v)} color="error" size="small">
                         <MdDelete />
                       </IconButton>

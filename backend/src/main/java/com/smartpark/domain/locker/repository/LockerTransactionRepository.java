@@ -11,6 +11,7 @@ import java.util.Optional;
 public interface LockerTransactionRepository extends JpaRepository<LockerTransaction, Long> {
     Optional<LockerTransaction> findByLockerIdAndStatus(Long lockerId, LockerTransaction.LockerTransactionStatus status);
     List<LockerTransaction> findByCustomerId(Long customerId);
+    long countByStatus(LockerTransaction.LockerTransactionStatus status);
 
     @org.springframework.data.jpa.repository.Query("SELECT COALESCE(SUM(lt.amountPaid), 0) FROM LockerTransaction lt WHERE lt.status = com.smartpark.domain.locker.entity.LockerTransaction.LockerTransactionStatus.COMPLETED AND lt.endTime BETWEEN :from AND :to")
     java.math.BigDecimal sumAmountPaidByEndTimeBetween(@org.springframework.data.repository.query.Param("from") java.time.LocalDateTime from, @org.springframework.data.repository.query.Param("to") java.time.LocalDateTime to);

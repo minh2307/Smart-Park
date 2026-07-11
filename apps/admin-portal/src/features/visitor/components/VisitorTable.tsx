@@ -56,11 +56,33 @@ export const VisitorTable: React.FC<VisitorTableProps> = ({
     return cust ? cust.fullName : `CUST-${String(customerId).padStart(4, '0')}`;
   };
 
+  const getGenderLabel = (g: string) => {
+    switch (g) {
+      case 'MALE': return 'Nam';
+      case 'FEMALE': return 'Nữ';
+      case 'OTHER': return 'Khác';
+      default: return g;
+    }
+  };
+
+  const getRelationshipLabel = (r: string) => {
+    switch (r) {
+      case 'SELF': return 'Bản thân';
+      case 'SPOUSE': return 'Vợ/Chồng';
+      case 'CHILD': return 'Con cái';
+      case 'PARENT': return 'Cha mẹ';
+      case 'FRIEND': return 'Bạn bè';
+      case 'OTHER': return 'Khác';
+      default: return r;
+    }
+  };
+
   const renderStatus = (status: string) => {
     const isInactive = status === 'INACTIVE';
+    const statusLabel = status === 'ACTIVE' ? 'Hoạt động' : status === 'INACTIVE' ? 'Ngưng hoạt động' : status;
     return (
       <Chip
-        label={status}
+        label={statusLabel}
         size="small"
         color={isInactive ? 'default' : 'success'}
         variant="outlined"
@@ -75,15 +97,15 @@ export const VisitorTable: React.FC<VisitorTableProps> = ({
         <Table sx={{ minWidth: 800 }}>
           <TableHead>
             <TableRow sx={{ bgcolor: 'action.hover' }}>
-              <TableCell sx={{ fontWeight: 'bold' }}>Visitor Name</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Owner Customer</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Relationship</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Age / Gender</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Nationality</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>ID Number</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Bookings / Tickets</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
-              <TableCell align="right" sx={{ fontWeight: 'bold' }}>Actions</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Tên khách tham quan</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Khách hàng sở hữu</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Mối quan hệ</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Tuổi / Giới tính</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Quốc tịch</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Số giấy tờ</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Đặt vé / Số vé</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Trạng thái</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 'bold' }}>Hành động</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -105,7 +127,7 @@ export const VisitorTable: React.FC<VisitorTableProps> = ({
               <TableRow>
                 <TableCell colSpan={9} align="center" sx={{ py: 6 }}>
                   <Typography variant="body1" color="text.secondary">
-                    No visitor records found.
+                    Không tìm thấy hồ sơ khách tham quan nào.
                   </Typography>
                 </TableCell>
               </TableRow>
@@ -121,22 +143,22 @@ export const VisitorTable: React.FC<VisitorTableProps> = ({
                   </TableCell>
                   <TableCell>
                     <Chip
-                      label={row.relationship}
+                      label={getRelationshipLabel(row.relationship)}
                       size="small"
                       color="primary"
                       variant="outlined"
                       sx={{ fontWeight: 'bold' }}
                     />
                   </TableCell>
-                  <TableCell>{row.age} yrs / {row.gender}</TableCell>
+                  <TableCell>{row.age} tuổi / {getGenderLabel(row.gender)}</TableCell>
                   <TableCell>{row.nationality}</TableCell>
                   <TableCell sx={{ fontFamily: 'monospace' }}>{row.identificationNumber}</TableCell>
                   <TableCell>
                     <Typography variant="body2" fontWeight={600}>
-                      {row.bookingCount} bookings
+                      {row.bookingCount} đơn đặt
                     </Typography>
                     <Typography variant="caption" color="text.secondary">
-                      {row.ticketCount} tickets
+                      {row.ticketCount} vé
                     </Typography>
                   </TableCell>
                   <TableCell>{renderStatus(row.status)}</TableCell>
@@ -179,6 +201,10 @@ export const VisitorTable: React.FC<VisitorTableProps> = ({
         page={page}
         onPageChange={handleChangePage}
         onRowsPerPageChange={handleChangeRowsPerPage}
+        labelRowsPerPage="Số dòng mỗi trang:"
+        labelDisplayedRows={({ from, to, count }) =>
+          `${from}-${to} trong số ${count !== -1 ? count : `hơn ${to}`}`
+        }
       />
     </Paper>
   );

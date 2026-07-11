@@ -38,8 +38,8 @@ export const CustomerAnalyticsPage: React.FC = () => {
       mode,
       categories,
       [
-        { name: 'New Customers', data: customerData.customerGrowth.map((g) => g.newCustomers), areaStyle: true },
-        { name: 'Total Customers', data: customerData.customerGrowth.map((g) => g.totalCustomers), color: '#3b82f6', areaStyle: true },
+        { name: 'Khách hàng mới', data: customerData.customerGrowth.map((g) => g.newCustomers), areaStyle: true },
+        { name: 'Tổng số khách hàng', data: customerData.customerGrowth.map((g) => g.totalCustomers), color: '#3b82f6', areaStyle: true },
       ],
       'number'
     );
@@ -73,7 +73,7 @@ export const CustomerAnalyticsPage: React.FC = () => {
     return buildBarChartOption(
       mode,
       categories,
-      [{ name: 'Average LTV', data: dataValues, color: '#10b981' }],
+      [{ name: 'LTV Trung bình', data: dataValues, color: '#10b981' }],
       true,
       'currency'
     );
@@ -84,10 +84,10 @@ export const CustomerAnalyticsPage: React.FC = () => {
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
         <Box>
           <Typography variant="h4" sx={{ fontWeight: 800, letterSpacing: '-0.02em' }}>
-            Customer Analytics
+            Phân tích khách hàng
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Insights on customer demographics, spending behaviors, retention, and loyalty
+            Thông tin chi tiết về nhân khẩu học khách hàng, hành vi chi tiêu, tỷ lệ giữ chân và lòng trung thành
           </Typography>
         </Box>
       </Box>
@@ -100,13 +100,13 @@ export const CustomerAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Total Active Customers
+                Tổng khách hàng hoạt động
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5 }}>
                 {customerData?.totalCustomers.toLocaleString() || '0'}
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                Registered profiles
+                Hồ sơ đăng ký hệ thống
               </Typography>
             </CardContent>
           </Card>
@@ -115,13 +115,13 @@ export const CustomerAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                New Signups (Today)
+                Đăng ký mới (Hôm nay)
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5, color: 'primary.main' }}>
                 +{customerData?.newCustomers || '0'}
               </Typography>
               <Typography variant="caption" color="success.main">
-                Active expansion
+                Tăng trưởng tích cực
               </Typography>
             </CardContent>
           </Card>
@@ -130,13 +130,13 @@ export const CustomerAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Customer Retention Rate
+                Tỷ lệ giữ chân khách hàng
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5, color: 'success.main' }}>
                 {customerData?.retentionRate || 0}%
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                Churn rate: {customerData?.churnRate || 0}%
+                Tỷ lệ rời bỏ: {customerData?.churnRate || 0}%
               </Typography>
             </CardContent>
           </Card>
@@ -145,13 +145,13 @@ export const CustomerAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Average Spending
+                Chi tiêu trung bình
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5 }}>
                 {formatCurrency(customerData?.averageSpending || 0)}
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                Per transaction average
+                Trung bình trên mỗi đơn hàng
               </Typography>
             </CardContent>
           </Card>
@@ -161,42 +161,42 @@ export const CustomerAnalyticsPage: React.FC = () => {
       {/* Visual Analytics */}
       <Grid container spacing={2.5} sx={{ mb: 4 }}>
         <Grid item xs={12} lg={8}>
-          <DashboardCard title="Customer Growth" subtitle="New vs returning customer trends">
+          <DashboardCard title="Tăng trưởng khách hàng" subtitle="Xu hướng khách hàng mới so với khách hàng quay lại">
             <ChartContainer option={growthOption} height={320} loading={isLoading} />
           </DashboardCard>
         </Grid>
 
         <Grid item xs={12} lg={4}>
-          <DashboardCard title="Age Demographics" subtitle="Customer age bracket distribution">
+          <DashboardCard title="Nhân khẩu học theo độ tuổi" subtitle="Phân bổ độ tuổi của khách hàng tham quan">
             <ChartContainer option={ageOption} height={320} loading={isLoading} />
           </DashboardCard>
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <DashboardCard title="Membership Tier Distribution" subtitle="Active loyalty membership breakdown">
+          <DashboardCard title="Phân bổ hạng thành viên" subtitle="Chi tiết phân bổ hạng thành viên thân thiết">
             <ChartContainer option={membershipOption} height={300} loading={isLoading} />
           </DashboardCard>
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <DashboardCard title="Lifetime Value by Segment" subtitle="Average monetary spending by segment">
+          <DashboardCard title="Giá trị vòng đời theo phân khúc" subtitle="Mức chi tiêu trung bình theo phân khúc (LTV)">
             <ChartContainer option={ltvSegmentOption} height={300} loading={isLoading} />
           </DashboardCard>
         </Grid>
 
         {/* Top Customers Table */}
         <Grid item xs={12}>
-          <DashboardCard title="Top Performing Customers" subtitle="Most active customers by revenue and visits">
+          <DashboardCard title="Khách hàng tiêu biểu" subtitle="Danh sách những khách hàng hoạt động tích cực nhất theo doanh thu và lượt đi">
             <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
               <Table size="medium">
                 <TableHead sx={{ backgroundColor: 'action.hover' }}>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Customer Name</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Tên khách hàng</TableCell>
                     <TableCell sx={{ fontWeight: 'bold' }}>Email</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Membership Tier</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Total Visits</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Total Spent</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Last Visit</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Hạng thành viên</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Tổng số lượt đi</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Tổng chi tiêu</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Lần cuối tham quan</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

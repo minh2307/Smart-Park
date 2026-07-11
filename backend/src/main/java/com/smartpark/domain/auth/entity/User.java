@@ -29,6 +29,9 @@ public class User {
     @Column(unique = true, nullable = false, length = 100)
     private String email;
 
+    @Column(name = "avatar_url", length = 255)
+    private String avatarUrl;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @Builder.Default

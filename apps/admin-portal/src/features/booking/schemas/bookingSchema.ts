@@ -1,20 +1,20 @@
 import { z } from 'zod';
 
 export const bookingSchema = z.object({
-  customerId: z.number({ required_error: 'Please select a customer' }).min(1, 'Please select a customer'),
-  venueId: z.number({ required_error: 'Please select a venue' }).min(1, 'Please select a venue'),
-  visitDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Date must be YYYY-MM-DD'),
+  customerId: z.number({ required_error: 'Vui lòng chọn khách hàng' }).min(1, 'Vui lòng chọn khách hàng'),
+  venueId: z.number({ required_error: 'Vui lòng chọn địa điểm' }).min(1, 'Vui lòng chọn địa điểm'),
+  visitDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, 'Ngày phải ở định dạng YYYY-MM-DD'),
   items: z.array(
     z.object({
-      ticketTypeId: z.number().min(1, 'Select a ticket type'),
-      quantity: z.number().min(1, 'Quantity must be at least 1').max(20, 'Max 20 tickets per type'),
+      ticketTypeId: z.number().min(1, 'Vui lòng chọn loại vé'),
+      quantity: z.number().min(1, 'Số lượng phải ít nhất là 1').max(20, 'Tối đa 20 vé cho mỗi loại'),
     })
-  ).min(1, 'Add at least one ticket type'),
+  ).min(1, 'Thêm ít nhất một loại vé'),
   visitors: z.array(
     z.object({
-      fullName: z.string().min(2, 'Name must be at least 2 characters'),
-      phone: z.string().min(10, 'Phone must be at least 10 digits').optional().or(z.literal('')),
-      idCard: z.string().min(9, 'ID card must be at least 9 characters').optional().or(z.literal('')),
+      fullName: z.string().min(2, 'Họ tên phải từ 2 ký tự trở lên'),
+      phone: z.string().min(10, 'Số điện thoại phải từ 10 chữ số trở lên').optional().or(z.literal('')),
+      idCard: z.string().min(9, 'CCCD/Hộ chiếu phải từ 9 ký tự trở lên').optional().or(z.literal('')),
     })
   ).optional(),
   paymentMethod: z.enum(['CHUYEN_KHOAN_QR', 'TIEN_MAT']).default('CHUYEN_KHOAN_QR'),

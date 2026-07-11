@@ -81,9 +81,9 @@ export const {
 // --- FALLBACK MOCK DATA FOR OFFLINE / BACKEND FALLBACKS ---
 export const mockMembershipTiers = [
   { id: 1, name: 'Bronze', code: 'BRONZE', discountPercentage: 0, pointsMultiplier: 1.0, minSpend: 0 },
-  { id: 2, name: 'Silver', code: 'SILVER', discountPercentage: 5, pointsMultiplier: 1.15, minSpend: 500 },
-  { id: 3, name: 'Gold', code: 'GOLD', discountPercentage: 10, pointsMultiplier: 1.3, minSpend: 1500 },
-  { id: 4, name: 'Platinum', code: 'PLATINUM', discountPercentage: 15, pointsMultiplier: 1.5, minSpend: 4000 },
+  { id: 2, name: 'Silver', code: 'SILVER', discountPercentage: 5, pointsMultiplier: 1.15, minSpend: 5000000 },
+  { id: 3, name: 'Gold', code: 'GOLD', discountPercentage: 10, pointsMultiplier: 1.3, minSpend: 15000000 },
+  { id: 4, name: 'Platinum', code: 'PLATINUM', discountPercentage: 15, pointsMultiplier: 1.5, minSpend: 40000000 },
 ];
 
 export const mockCustomers: Customer[] = [
@@ -110,7 +110,7 @@ export const mockCustomers: Customer[] = [
     stats: {
       totalOrders: 12,
       totalTickets: 28,
-      totalSpending: 1650.00,
+      totalSpending: 16500000,
     },
   },
   {
@@ -135,7 +135,7 @@ export const mockCustomers: Customer[] = [
     stats: {
       totalOrders: 24,
       totalTickets: 64,
-      totalSpending: 4120.50,
+      totalSpending: 41205000,
     },
   },
   {
@@ -161,7 +161,7 @@ export const mockCustomers: Customer[] = [
     stats: {
       totalOrders: 2,
       totalTickets: 4,
-      totalSpending: 180.00,
+      totalSpending: 1800000,
     },
   },
   {
@@ -187,28 +187,28 @@ export const mockCustomers: Customer[] = [
     stats: {
       totalOrders: 6,
       totalTickets: 12,
-      totalSpending: 890.00,
+      totalSpending: 8900000,
     },
   },
 ];
 
 export const mockCustomerActivities: Record<number, CustomerActivityLog[]> = {
   1: [
-    { id: 1, action: 'CREATE', description: 'Registered customer account via Admin Panel', ipAddress: '192.168.1.15', createdAt: '2026-01-15T08:30:00Z' },
-    { id: 2, action: 'UPDATE', description: 'Assigned to Gold Membership Tier', ipAddress: '192.168.1.15', createdAt: '2026-01-15T08:45:00Z' },
-    { id: 3, action: 'TRANSACTION', description: 'Created Booking BK-0001 (Amount: $120.00)', ipAddress: '12.45.67.89', createdAt: '2026-02-14T10:30:00Z' },
-    { id: 4, action: 'UPDATE', description: 'Updated contact address information', ipAddress: '192.168.1.18', createdAt: '2026-07-01T10:15:00Z' },
+    { id: 1, action: 'CREATE', description: 'Đăng ký tài khoản khách hàng qua Trang Admin', ipAddress: '192.168.1.15', createdAt: '2026-01-15T08:30:00Z' },
+    { id: 2, action: 'UPDATE', description: 'Được gán Hạng Thành viên Vàng', ipAddress: '192.168.1.15', createdAt: '2026-01-15T08:45:00Z' },
+    { id: 3, action: 'TRANSACTION', description: 'Đã tạo Đơn đặt vé BK-0001 (Số tiền: 1.200.000 ₫)', ipAddress: '12.45.67.89', createdAt: '2026-02-14T10:30:00Z' },
+    { id: 4, action: 'UPDATE', description: 'Cập nhật thông tin địa chỉ liên hệ', ipAddress: '192.168.1.18', createdAt: '2026-07-01T10:15:00Z' },
   ],
   2: [
-    { id: 1, action: 'CREATE', description: 'Self-registered account via Web Portal', ipAddress: '115.78.162.2', createdAt: '2026-02-10T14:22:00Z' },
-    { id: 2, action: 'TRANSACTION', description: 'Created Booking BK-0002 (Amount: $950.00)', ipAddress: '115.78.162.2', createdAt: '2026-02-10T15:00:00Z' },
-    { id: 3, action: 'UPDATE', description: 'Upgraded to Platinum Membership Tier', ipAddress: 'system', createdAt: '2026-06-28T09:40:00Z' },
+    { id: 1, action: 'CREATE', description: 'Tự đăng ký tài khoản qua Cổng Web', ipAddress: '115.78.162.2', createdAt: '2026-02-10T14:22:00Z' },
+    { id: 2, action: 'TRANSACTION', description: 'Đã tạo Đơn đặt vé BK-0002 (Số tiền: 9.500.000 ₫)', ipAddress: '115.78.162.2', createdAt: '2026-02-10T15:00:00Z' },
+    { id: 3, action: 'UPDATE', description: 'Được nâng cấp lên Hạng Thành viên Bạch kim', ipAddress: 'system', createdAt: '2026-06-28T09:40:00Z' },
   ],
   3: [
-    { id: 1, action: 'CREATE', description: 'Registered customer account via Admin Panel', ipAddress: '192.168.1.15', createdAt: '2026-03-05T09:15:00Z' },
-    { id: 2, action: 'UPDATE', description: 'Account SUSPENDED due to chargeback dispute', ipAddress: '192.168.1.10', createdAt: '2026-07-05T16:30:00Z' },
+    { id: 1, action: 'CREATE', description: 'Đăng ký tài khoản khách hàng qua Trang Admin', ipAddress: '192.168.1.15', createdAt: '2026-03-05T09:15:00Z' },
+    { id: 2, action: 'UPDATE', description: 'Tài khoản bị KHÓA do tranh chấp hoàn tiền', ipAddress: '192.168.1.10', createdAt: '2026-07-05T16:30:00Z' },
   ],
   4: [
-    { id: 1, action: 'CREATE', description: 'Registered customer account via Admin Panel', ipAddress: '192.168.1.15', createdAt: '2026-04-01T10:00:00Z' },
+    { id: 1, action: 'CREATE', description: 'Đăng ký tài khoản khách hàng qua Trang Admin', ipAddress: '192.168.1.15', createdAt: '2026-04-01T10:00:00Z' },
   ]
 };

@@ -56,7 +56,7 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({
             render={({ field }) => (
               <TextField
                 {...field}
-                label="Full Name *"
+                label="Họ và tên *"
                 fullWidth
                 error={!!errors.fullName}
                 helperText={errors.fullName?.message}
@@ -72,7 +72,7 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({
             render={({ field }) => (
               <TextField
                 {...field}
-                label="Email Address *"
+                label="Địa chỉ email *"
                 fullWidth
                 error={!!errors.email}
                 helperText={errors.email?.message}
@@ -89,7 +89,7 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({
             render={({ field }) => (
               <TextField
                 {...field}
-                label="Phone Number *"
+                label="Số điện thoại *"
                 fullWidth
                 error={!!errors.phone}
                 helperText={errors.phone?.message}
@@ -106,7 +106,7 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({
               <TextField
                 {...field}
                 type="date"
-                label="Birth Date"
+                label="Ngày sinh"
                 fullWidth
                 InputLabelProps={{ shrink: true }}
                 error={!!errors.birthDate}
@@ -118,16 +118,16 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({
 
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth error={!!errors.gender}>
-            <InputLabel id="gender-label">Gender</InputLabel>
+            <InputLabel id="gender-label">Giới tính</InputLabel>
             <Controller
               name="gender"
               control={control}
               render={({ field }) => (
-                <Select {...field} labelId="gender-label" label="Gender">
-                  <MenuItem value=""><em>None</em></MenuItem>
-                  <MenuItem value="MALE">Male</MenuItem>
-                  <MenuItem value="FEMALE">Female</MenuItem>
-                  <MenuItem value="OTHER">Other</MenuItem>
+                <Select {...field} labelId="gender-label" label="Giới tính">
+                  <MenuItem value=""><em>Không chọn</em></MenuItem>
+                  <MenuItem value="MALE">Nam</MenuItem>
+                  <MenuItem value="FEMALE">Nữ</MenuItem>
+                  <MenuItem value="OTHER">Khác</MenuItem>
                 </Select>
               )}
             />
@@ -137,14 +137,14 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({
 
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth error={!!errors.status}>
-            <InputLabel id="status-label">Status</InputLabel>
+            <InputLabel id="status-label">Trạng thái</InputLabel>
             <Controller
               name="status"
               control={control}
               render={({ field }) => (
-                <Select {...field} labelId="status-label" label="Status">
-                  <MenuItem value="ACTIVE">Active</MenuItem>
-                  <MenuItem value="SUSPENDED">Suspended</MenuItem>
+                <Select {...field} labelId="status-label" label="Trạng thái">
+                  <MenuItem value="ACTIVE">Hoạt động</MenuItem>
+                  <MenuItem value="SUSPENDED">Đã khóa</MenuItem>
                 </Select>
               )}
             />
@@ -159,7 +159,7 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({
             render={({ field }) => (
               <TextField
                 {...field}
-                label="Residential Address"
+                label="Địa chỉ thường trú"
                 fullWidth
                 multiline
                 rows={2}
@@ -173,16 +173,16 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({
         {/* Membership Details */}
         <Grid item xs={12} sm={6}>
           <FormControl fullWidth error={!!errors.membershipTierId}>
-            <InputLabel id="membership-label">Membership Tier</InputLabel>
+            <InputLabel id="membership-label">Hạng thành viên</InputLabel>
             <Controller
               name="membershipTierId"
               control={control}
               render={({ field }) => (
-                <Select {...field} labelId="membership-label" label="Membership Tier">
-                  <MenuItem value=""><em>No Membership</em></MenuItem>
+                <Select {...field} labelId="membership-label" label="Hạng thành viên">
+                  <MenuItem value=""><em>Không có hạng thành viên</em></MenuItem>
                   {mockMembershipTiers.map((tier) => (
                     <MenuItem key={tier.id} value={tier.id}>
-                      {tier.name} ({tier.discountPercentage}% off)
+                      {tier.name} (Giảm {tier.discountPercentage}%)
                     </MenuItem>
                   ))}
                 </Select>
@@ -200,7 +200,7 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({
               <TextField
                 {...field}
                 type="number"
-                label="Reward Points Balance"
+                label="Số dư điểm thưởng"
                 fullWidth
                 error={!!errors.initialPoints}
                 helperText={errors.initialPoints?.message}
@@ -213,7 +213,7 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({
 
       <Box display="flex" justifyContent="flex-end" gap={2} mt={4}>
         <Button type="submit" variant="contained" loading={loading}>
-          {initialData ? 'Save Changes' : 'Register Customer'}
+          {initialData ? 'Lưu thay đổi' : 'Đăng ký khách hàng'}
         </Button>
       </Box>
     </Box>

@@ -47,11 +47,24 @@ export const TicketFilterPanel: React.FC<TicketFilterPanelProps> = ({
     'REFUNDED',
   ];
 
+  const statusLabels: Record<TicketStatus, string> = {
+    DRAFT: 'Bản nháp',
+    AVAILABLE: 'Có sẵn',
+    RESERVED: 'Đã giữ chỗ',
+    SOLD: 'Đã bán',
+    ACTIVATED: 'Đã kích hoạt',
+    USED: 'Đã sử dụng',
+    PARTIALLY_USED: 'Sử dụng một phần',
+    EXPIRED: 'Đã hết hạn',
+    CANCELLED: 'Đã hủy',
+    REFUNDED: 'Đã hoàn tiền',
+  };
+
   return (
     <Box display="flex" flexWrap="wrap" gap={2} alignItems="center" width="100%">
       <TextField
         size="small"
-        placeholder="Search code/visitor..."
+        placeholder="Tìm kiếm mã/khách hàng..."
         value={search}
         onChange={(e) => onSearchChange(e.target.value)}
         onKeyPress={handleSearchKeyPress}
@@ -62,33 +75,33 @@ export const TicketFilterPanel: React.FC<TicketFilterPanelProps> = ({
       />
 
       <FormControl size="small" sx={{ width: { xs: '100%', sm: 160 } }}>
-        <InputLabel id="ticket-status-filter-label">Status</InputLabel>
+        <InputLabel id="ticket-status-filter-label">Trạng thái</InputLabel>
         <Select
           labelId="ticket-status-filter-label"
           id="ticket-status-filter"
           value={status}
-          label="Status"
+          label="Trạng thái"
           onChange={(e) => onStatusChange(e.target.value as TicketStatus | '')}
         >
-          <MenuItem value="">All Statuses</MenuItem>
+          <MenuItem value="">Tất cả trạng thái</MenuItem>
           {ticketStatuses.map((s) => (
             <MenuItem key={s} value={s}>
-              {s.charAt(0) + s.slice(1).toLowerCase().replace('_', ' ')}
+              {statusLabels[s] || s}
             </MenuItem>
           ))}
         </Select>
       </FormControl>
 
       <FormControl size="small" sx={{ width: { xs: '100%', sm: 200 } }}>
-        <InputLabel id="ticket-venue-filter-label">Venue</InputLabel>
+        <InputLabel id="ticket-venue-filter-label">Địa điểm</InputLabel>
         <Select
           labelId="ticket-venue-filter-label"
           id="ticket-venue-filter"
           value={venueId}
-          label="Venue"
+          label="Địa điểm"
           onChange={(e) => onVenueChange(e.target.value as number | '')}
         >
-          <MenuItem value="">All Venues</MenuItem>
+          <MenuItem value="">Tất cả địa điểm</MenuItem>
           {venues.map((v) => (
             <MenuItem key={v.id} value={v.id}>
               {v.name}
@@ -106,9 +119,9 @@ export const TicketFilterPanel: React.FC<TicketFilterPanelProps> = ({
           size="small"
           sx={{ flexGrow: { xs: 1, sm: 0 } }}
         >
-          Reset
+          Đặt lại
         </Button>
-        <IconButton onClick={onRefresh} title="Refresh Data" color="primary" sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2 }}>
+        <IconButton onClick={onRefresh} title="Làm mới" color="primary" sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2 }}>
           <MdRefresh size={20} />
         </IconButton>
       </Box>

@@ -115,7 +115,7 @@ export const VenueListPage: React.FC = () => {
   const displayTotal = data?.totalElements ?? mockVenues.length;
 
   return (
-    <PageContainer title="Venue Management">
+    <PageContainer title="Quản lý địa điểm">
       <Box display="flex" flexDirection="column" gap={3}>
         <Paper variant="outlined" sx={{ p: 2, borderRadius: 2 }}>
           <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap="wrap" gap={2}>
@@ -136,10 +136,10 @@ export const VenueListPage: React.FC = () => {
                 onChange={(_, val) => val && setViewMode(val)}
                 size="small"
               >
-                <ToggleButton value="grid" title="Grid View">
+                <ToggleButton value="grid" title="Chế độ lưới">
                   <MdViewModule size={20} />
                 </ToggleButton>
-                <ToggleButton value="table" title="Table View">
+                <ToggleButton value="table" title="Chế độ bảng">
                   <MdViewList size={20} />
                 </ToggleButton>
               </ToggleButtonGroup>
@@ -152,7 +152,7 @@ export const VenueListPage: React.FC = () => {
                     setFormOpen(true);
                   }}
                 >
-                  Add Venue
+                  Thêm địa điểm
                 </Button>
               </PermissionWrapper>
             </Box>
@@ -161,7 +161,7 @@ export const VenueListPage: React.FC = () => {
 
         {isError && (
           <Alert severity="warning" sx={{ borderRadius: 2 }}>
-            Failed to connect to backend venue service. Showing local records as fallback.
+            Không thể kết nối với dịch vụ địa điểm ở máy chủ. Đang hiển thị danh sách cục bộ thay thế.
           </Alert>
         )}
 
@@ -197,7 +197,7 @@ export const VenueListPage: React.FC = () => {
         <Modal
           open={formOpen}
           onClose={() => setFormOpen(false)}
-          title={selectedVenue ? 'Edit Venue' : 'Create Venue'}
+          title={selectedVenue ? 'Chỉnh sửa địa điểm' : 'Tạo địa điểm mới'}
         >
           <VenueForm
             initialData={selectedVenue || undefined}

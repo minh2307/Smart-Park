@@ -26,7 +26,7 @@ export interface DateRangePreset {
 export const DATE_RANGE_PRESETS: DateRangePreset[] = [
   {
     key: 'today',
-    label: 'Today',
+    label: 'Hôm nay',
     getRange: () => ({
       startDate: dayjs().startOf('day').toISOString(),
       endDate: dayjs().endOf('day').toISOString(),
@@ -34,7 +34,7 @@ export const DATE_RANGE_PRESETS: DateRangePreset[] = [
   },
   {
     key: 'yesterday',
-    label: 'Yesterday',
+    label: 'Hôm qua',
     getRange: () => ({
       startDate: dayjs().subtract(1, 'day').startOf('day').toISOString(),
       endDate: dayjs().subtract(1, 'day').endOf('day').toISOString(),
@@ -42,7 +42,7 @@ export const DATE_RANGE_PRESETS: DateRangePreset[] = [
   },
   {
     key: 'last7days',
-    label: 'Last 7 Days',
+    label: '7 ngày qua',
     getRange: () => ({
       startDate: dayjs().subtract(6, 'day').startOf('day').toISOString(),
       endDate: dayjs().endOf('day').toISOString(),
@@ -50,7 +50,7 @@ export const DATE_RANGE_PRESETS: DateRangePreset[] = [
   },
   {
     key: 'last30days',
-    label: 'Last 30 Days',
+    label: '30 ngày qua',
     getRange: () => ({
       startDate: dayjs().subtract(29, 'day').startOf('day').toISOString(),
       endDate: dayjs().endOf('day').toISOString(),
@@ -58,7 +58,7 @@ export const DATE_RANGE_PRESETS: DateRangePreset[] = [
   },
   {
     key: 'thisWeek',
-    label: 'This Week',
+    label: 'Tuần này',
     getRange: () => ({
       startDate: dayjs().startOf('isoWeek').toISOString(),
       endDate: dayjs().endOf('isoWeek').toISOString(),
@@ -66,7 +66,7 @@ export const DATE_RANGE_PRESETS: DateRangePreset[] = [
   },
   {
     key: 'lastWeek',
-    label: 'Last Week',
+    label: 'Tuần trước',
     getRange: () => ({
       startDate: dayjs().subtract(1, 'week').startOf('isoWeek').toISOString(),
       endDate: dayjs().subtract(1, 'week').endOf('isoWeek').toISOString(),
@@ -74,7 +74,7 @@ export const DATE_RANGE_PRESETS: DateRangePreset[] = [
   },
   {
     key: 'thisMonth',
-    label: 'This Month',
+    label: 'Tháng này',
     getRange: () => ({
       startDate: dayjs().startOf('month').toISOString(),
       endDate: dayjs().endOf('month').toISOString(),
@@ -82,7 +82,7 @@ export const DATE_RANGE_PRESETS: DateRangePreset[] = [
   },
   {
     key: 'lastMonth',
-    label: 'Last Month',
+    label: 'Tháng trước',
     getRange: () => ({
       startDate: dayjs().subtract(1, 'month').startOf('month').toISOString(),
       endDate: dayjs().subtract(1, 'month').endOf('month').toISOString(),
@@ -90,7 +90,7 @@ export const DATE_RANGE_PRESETS: DateRangePreset[] = [
   },
   {
     key: 'thisQuarter',
-    label: 'This Quarter',
+    label: 'Quý này',
     getRange: () => ({
       startDate: dayjs().startOf('quarter').toISOString(),
       endDate: dayjs().endOf('quarter').toISOString(),
@@ -98,7 +98,7 @@ export const DATE_RANGE_PRESETS: DateRangePreset[] = [
   },
   {
     key: 'lastQuarter',
-    label: 'Last Quarter',
+    label: 'Quý trước',
     getRange: () => ({
       startDate: dayjs().subtract(1, 'quarter').startOf('quarter').toISOString(),
       endDate: dayjs().subtract(1, 'quarter').endOf('quarter').toISOString(),
@@ -106,7 +106,7 @@ export const DATE_RANGE_PRESETS: DateRangePreset[] = [
   },
   {
     key: 'thisYear',
-    label: 'This Year',
+    label: 'Năm nay',
     getRange: () => ({
       startDate: dayjs().startOf('year').toISOString(),
       endDate: dayjs().endOf('year').toISOString(),
@@ -114,7 +114,7 @@ export const DATE_RANGE_PRESETS: DateRangePreset[] = [
   },
   {
     key: 'lastYear',
-    label: 'Last Year',
+    label: 'Năm ngoái',
     getRange: () => ({
       startDate: dayjs().subtract(1, 'year').startOf('year').toISOString(),
       endDate: dayjs().subtract(1, 'year').endOf('year').toISOString(),

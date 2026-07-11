@@ -19,10 +19,10 @@ export const DeleteVenueDialog: React.FC<DeleteVenueDialogProps> = ({
       open={open}
       onClose={onClose}
       type="error"
-      title="Delete Venue"
-      message={`Are you sure you want to delete venue "${venueName}"? This action cannot be undone.`}
+      title="Xóa địa điểm"
+      message={`Bạn có chắc chắn muốn xóa địa điểm "${venueName}" không? Hành động này không thể hoàn tác.`}
       onConfirm={onConfirm}
-      confirmText="Delete"
+      confirmText="Xóa"
     />
   );
 };

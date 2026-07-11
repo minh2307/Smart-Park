@@ -39,9 +39,9 @@ export const RevenueAnalyticsPage: React.FC = () => {
       mode,
       categories,
       [
-        { name: 'Revenue', data: revenueData.trend.map((p) => p.revenue), areaStyle: true },
-        { name: 'Operating Cost', data: revenueData.trend.map((p) => p.cost), color: '#ef4444', areaStyle: true },
-        { name: 'Net Profit', data: revenueData.trend.map((p) => p.profit), color: '#10b981', areaStyle: true },
+        { name: 'Doanh thu', data: revenueData.trend.map((p) => p.revenue), areaStyle: true },
+        { name: 'Chi phí vận hành', data: revenueData.trend.map((p) => p.cost), color: '#ef4444', areaStyle: true },
+        { name: 'Lợi nhuận ròng', data: revenueData.trend.map((p) => p.profit), color: '#10b981', areaStyle: true },
       ],
       'currency'
     );
@@ -65,7 +65,7 @@ export const RevenueAnalyticsPage: React.FC = () => {
     return buildBarChartOption(
       mode,
       categories,
-      [{ name: 'Revenue', data: dataValues, color: '#f59e0b' }],
+      [{ name: 'Doanh thu', data: dataValues, color: '#f59e0b' }],
       true,
       'currency'
     );
@@ -74,7 +74,7 @@ export const RevenueAnalyticsPage: React.FC = () => {
   // 4. Heatmap: Hourly Revenue by Day of Week
   const heatmapOption = useMemo(() => {
     if (!revenueData?.heatmapData.length) return null;
-    const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    const days = ['T2', 'T3', 'T4', 'T5', 'T6', 'T7', 'CN'];
     const hours = Array.from({ length: 24 }, (_, i) => `${i}:00`);
     return buildHeatmapOption(
       mode,
@@ -110,8 +110,8 @@ export const RevenueAnalyticsPage: React.FC = () => {
         type: 'value',
         axisLabel: {
           formatter: (value: number) => {
-            if (value >= 1e6) return `₫${(value / 1e6).toFixed(0)}M`;
-            if (value <= -1e6) return `-₫${(Math.abs(value) / 1e6).toFixed(0)}M`;
+            if (value >= 1e6) return `₫${(value / 1e6).toFixed(0)}Tr`;
+            if (value <= -1e6) return `-₫${(Math.abs(value) / 1e6).toFixed(0)}Tr`;
             return `₫${value}`;
           },
         },
@@ -143,7 +143,7 @@ export const RevenueAnalyticsPage: React.FC = () => {
           }),
         },
         {
-          name: 'Value',
+          name: 'Giá trị',
           type: 'bar',
           stack: 'Total',
           label: {
@@ -151,7 +151,7 @@ export const RevenueAnalyticsPage: React.FC = () => {
             position: 'inside',
             formatter: (params: any) => {
               const val = Math.abs(params.value);
-              return val >= 1e6 ? `₫${(val / 1e6).toFixed(1)}M` : `₫${val}`;
+              return val >= 1e6 ? `₫${(val / 1e6).toFixed(1)}Tr` : `₫${val}`;
             },
           },
           data: revenueData.waterfallData.map((item) => {
@@ -178,10 +178,10 @@ export const RevenueAnalyticsPage: React.FC = () => {
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
         <Box>
           <Typography variant="h4" sx={{ fontWeight: 800, letterSpacing: '-0.02em' }}>
-            Revenue Analytics
+            Phân tích doanh thu
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            In-depth analysis of sales, revenue channels, costs, and profit metrics
+            Phân tích chi tiết doanh số, các kênh doanh thu, chi phí vận hành và lợi nhuận ròng
           </Typography>
         </Box>
       </Box>
@@ -194,13 +194,13 @@ export const RevenueAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Gross Revenue
+                Doanh thu gộp
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5, color: 'primary.main' }}>
                 {formatCurrency(revenueData?.totalRevenue || 0)}
               </Typography>
               <Typography variant="caption" color="success.main" sx={{ display: 'block', mt: 0.5 }}>
-                +{revenueData?.growthRate || 0}% growth vs last period
+                +{revenueData?.growthRate || 0}% so với kỳ trước
               </Typography>
             </CardContent>
           </Card>
@@ -209,13 +209,13 @@ export const RevenueAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Operating Cost
+                Chi phí vận hành
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5, color: 'error.main' }}>
                 {formatCurrency(revenueData?.totalCost || 0)}
               </Typography>
               <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.5 }}>
-                Fixed and variable expenses
+                Tổng các khoản chi cố định và biến đổi
               </Typography>
             </CardContent>
           </Card>
@@ -224,13 +224,13 @@ export const RevenueAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Net Profit
+                Lợi nhuận ròng
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5, color: 'success.main' }}>
                 {formatCurrency(revenueData?.totalProfit || 0)}
               </Typography>
               <Typography variant="caption" color="success.main" sx={{ display: 'block', mt: 0.5 }}>
-                Margin: {((revenueData?.totalProfit || 0) / (revenueData?.totalRevenue || 1) * 100).toFixed(1)}%
+                Biên lợi nhuận: {((revenueData?.totalProfit || 0) / (revenueData?.totalRevenue || 1) * 100).toFixed(1)}%
               </Typography>
             </CardContent>
           </Card>
@@ -240,31 +240,31 @@ export const RevenueAnalyticsPage: React.FC = () => {
       {/* Main charts */}
       <Grid container spacing={2.5}>
         <Grid item xs={12}>
-          <DashboardCard title="Revenue Trend" subtitle="Revenue, costs, and profit comparison over time">
+          <DashboardCard title="Xu hướng doanh thu" subtitle="So sánh doanh thu, chi phí và lợi nhuận thực tế theo thời gian">
             <ChartContainer option={trendOption} height={350} loading={isLoading} />
           </DashboardCard>
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <DashboardCard title="Revenue by Venue" subtitle="Share of sales across park pavilions">
+          <DashboardCard title="Doanh thu theo địa điểm" subtitle="Tỷ trọng doanh số giữa các phân khu trong công viên">
             <ChartContainer option={venuePieOption} height={300} loading={isLoading} />
           </DashboardCard>
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <DashboardCard title="Ticket Type Sales" subtitle="Revenue distribution by ticket category">
+          <DashboardCard title="Doanh số theo loại vé" subtitle="Cơ cấu doanh thu phân bổ theo hạng vé bán ra">
             <ChartContainer option={ticketTypeOption} height={300} loading={isLoading} />
           </DashboardCard>
         </Grid>
 
         <Grid item xs={12} lg={7}>
-          <DashboardCard title="Revenue Heatmap" subtitle="Density of visitor purchases by day and hour">
+          <DashboardCard title="Biểu đồ nhiệt doanh thu" subtitle="Mật độ giao dịch thanh toán của du khách theo thứ và giờ">
             <ChartContainer option={heatmapOption} height={320} loading={isLoading} />
           </DashboardCard>
         </Grid>
 
         <Grid item xs={12} lg={5}>
-          <DashboardCard title="Profitability Waterfall" subtitle="Flow from gross sales to net profit">
+          <DashboardCard title="Thác nước lợi nhuận" subtitle="Dòng biến chuyển từ doanh thu gộp sang lợi nhuận ròng thực tế">
             <ChartContainer option={waterfallOption} height={320} loading={isLoading} />
           </DashboardCard>
         </Grid>

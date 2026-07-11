@@ -147,7 +147,7 @@ export const RideCategoryListPage: React.FC = () => {
 
   return (
     <PageContainer
-      title="Ride Category Administration"
+      title="Quản lý danh mục trò chơi"
       toolbar={
         <PermissionWrapper requiredPermission="write:rides">
           <Button
@@ -158,7 +158,7 @@ export const RideCategoryListPage: React.FC = () => {
               setFormOpen(true);
             }}
           >
-            Add Category
+            Thêm danh mục
           </Button>
         </PermissionWrapper>
       }
@@ -173,7 +173,7 @@ export const RideCategoryListPage: React.FC = () => {
                   <MdCategory size={26} />
                 </Box>
                 <Box>
-                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Total Categories</Typography>
+                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Tổng danh mục</Typography>
                   <Typography variant="h5" fontWeight="bold">{displayTotal}</Typography>
                 </Box>
               </CardContent>
@@ -186,7 +186,7 @@ export const RideCategoryListPage: React.FC = () => {
                   <MdCheckCircle size={26} />
                 </Box>
                 <Box>
-                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Active Categories</Typography>
+                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Danh mục hoạt động</Typography>
                   <Typography variant="h5" fontWeight="bold">{activeCount}</Typography>
                 </Box>
               </CardContent>
@@ -201,29 +201,29 @@ export const RideCategoryListPage: React.FC = () => {
               <TextField
                 fullWidth
                 size="small"
-                label="Search Categories"
-                placeholder="Category Name or Code..."
+                label="Tìm kiếm danh mục"
+                placeholder="Tên danh mục hoặc Mã danh mục..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
             </Grid>
             <Grid item xs={12} sm={4}>
               <FormControl fullWidth size="small">
-                <InputLabel>Status</InputLabel>
+                <InputLabel>Trạng thái</InputLabel>
                 <Select
                   value={status}
-                  label="Status"
+                  label="Trạng thái"
                   onChange={(e) => setStatus(e.target.value)}
                 >
-                  <MenuItem value=""><em>All Statuses</em></MenuItem>
-                  <MenuItem value="ACTIVE">Active</MenuItem>
-                  <MenuItem value="INACTIVE">Inactive</MenuItem>
+                  <MenuItem value=""><em>Tất cả trạng thái</em></MenuItem>
+                  <MenuItem value="ACTIVE">Hoạt động</MenuItem>
+                  <MenuItem value="INACTIVE">Ngưng hoạt động</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
             <Grid item xs={12} sm={2}>
               <Button fullWidth variant="outlined" onClick={handleResetFilters}>
-                Reset
+                Thiết lập lại
               </Button>
             </Grid>
           </Grid>
@@ -231,7 +231,7 @@ export const RideCategoryListPage: React.FC = () => {
 
         {isError && (
           <Alert severity="warning" sx={{ borderRadius: 3 }}>
-            Failed to fetch ride categories. Switched to offline database sync.
+            Không thể tải danh mục trò chơi từ hệ thống. Đã chuyển sang chế độ cục bộ ngoại tuyến.
           </Alert>
         )}
 
@@ -255,8 +255,11 @@ export const RideCategoryListPage: React.FC = () => {
         {/* Details Dialog */}
         <Modal
           open={detailsOpen}
-          onClose={() => setSelectedCategory(null)}
-          title="Category Specification Card"
+          onClose={() => {
+            setDetailsOpen(false);
+            setSelectedCategory(null);
+          }}
+          title="Thông tin chi tiết danh mục"
           maxWidth="md"
         >
           {selectedCategory && <RideCategoryDetails category={selectedCategory} />}
@@ -266,7 +269,7 @@ export const RideCategoryListPage: React.FC = () => {
         <Modal
           open={formOpen}
           onClose={() => setFormOpen(false)}
-          title={editingCategory ? 'Update Ride Category' : 'Register New Ride Category'}
+          title={editingCategory ? 'Cập nhật danh mục trò chơi' : 'Đăng ký danh mục trò chơi mới'}
           maxWidth="sm"
         >
           <RideCategoryForm
@@ -281,10 +284,10 @@ export const RideCategoryListPage: React.FC = () => {
           open={deleteConfirmOpen}
           onClose={() => setDeleteConfirmOpen(false)}
           type="error"
-          title="Remove Ride Category"
-          message={`Are you sure you want to delete the category "${deleteTarget?.name}"? Make sure no active theme park rides are currently associated with it.`}
+          title="Xóa danh mục trò chơi"
+          message={`Bạn có chắc chắn muốn xóa danh mục trò chơi "${deleteTarget?.name}" không? Hãy đảm bảo rằng không có trò chơi đang hoạt động nào thuộc danh mục này.`}
           onConfirm={handleDeleteConfirm}
-          confirmText="Yes, Remove Category"
+          confirmText="Có, Xóa danh mục"
         />
       </Box>
     </PageContainer>

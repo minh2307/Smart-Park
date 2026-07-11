@@ -3,6 +3,7 @@ import { Card, CardContent, Typography, Box, LinearProgress } from '@mui/materia
 import { MdStar, MdTrendingUp } from 'react-icons/md';
 import { CustomerMembership, MembershipTier } from '../types';
 import { mockMembershipTiers } from '../services/customerApi';
+import { formatCurrency } from '../../analytics/utils/numberFormatters';
 
 interface RewardPointCardProps {
   membership?: CustomerMembership;
@@ -18,10 +19,10 @@ export const RewardPointCard: React.FC<RewardPointCardProps> = ({ membership, to
             <Box p={1} bgcolor="action.hover" sx={{ borderRadius: 2, display: 'flex', color: 'text.secondary' }}>
               <MdStar size={24} />
             </Box>
-            <Typography variant="subtitle1" fontWeight="bold">Loyalty Program</Typography>
+            <Typography variant="subtitle1" fontWeight="bold">Chương trình thành viên</Typography>
           </Box>
           <Typography variant="body2" color="text.secondary">
-            This customer is not currently enrolled in the loyalty program. Add a membership tier to start earning points.
+            Khách hàng này hiện chưa đăng ký chương trình thành viên. Vui lòng thêm hạng thành viên để bắt đầu tích điểm.
           </Typography>
         </CardContent>
       </Card>
@@ -49,17 +50,17 @@ export const RewardPointCard: React.FC<RewardPointCardProps> = ({ membership, to
               <Box p={1} bgcolor="primary.light" sx={{ borderRadius: 2, display: 'flex', color: 'primary.contrastText' }}>
                 <MdStar size={24} />
               </Box>
-              <Typography variant="subtitle1" fontWeight="bold">Reward Points Balance</Typography>
+              <Typography variant="subtitle1" fontWeight="bold">Số dư điểm thưởng</Typography>
             </Box>
             <Typography variant="caption" sx={{ fontFamily: 'monospace', bgcolor: 'action.selected', px: 1, py: 0.5, borderRadius: 1 }}>
-              {membership.tier.pointsMultiplier}x Multiplier
+              Hệ số tích điểm: {membership.tier.pointsMultiplier}x
             </Typography>
           </Box>
           <Box display="flex" alignItems="baseline" gap={1} mt={1}>
             <Typography variant="h3" fontWeight="bold" color="primary.main">
               {membership.points.toLocaleString()}
             </Typography>
-            <Typography variant="body2" color="text.secondary">PTS</Typography>
+            <Typography variant="body2" color="text.secondary">Điểm</Typography>
           </Box>
         </Box>
 
@@ -69,7 +70,7 @@ export const RewardPointCard: React.FC<RewardPointCardProps> = ({ membership, to
               <Box display="flex" alignItems="center" gap={0.5}>
                 <MdTrendingUp color="text.secondary" />
                 <Typography variant="caption" color="text.secondary" fontWeight={500}>
-                  Progress to {nextTier.name} (${currentSpend.toFixed(0)} / ${targetSpend.toFixed(0)})
+                  Tiến trình lên hạng {nextTier.name} ({formatCurrency(currentSpend)} / {formatCurrency(targetSpend)})
                 </Typography>
               </Box>
               <Typography variant="caption" fontWeight="bold" color="primary.main">
@@ -92,7 +93,7 @@ export const RewardPointCard: React.FC<RewardPointCardProps> = ({ membership, to
         ) : (
           <Box sx={{ p: 1, bgcolor: 'success.light', borderRadius: 2, color: 'success.contrastText' }}>
             <Typography variant="caption" fontWeight="bold" display="flex" alignItems="center" gap={0.5}>
-              🎉 Highest Membership Tier Reached!
+              🎉 Đã đạt hạng thành viên cao nhất!
             </Typography>
           </Box>
         )}

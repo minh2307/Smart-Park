@@ -75,7 +75,7 @@ export const LoyaltyDashboardPage: React.FC = () => {
       const selectedCust = customersList.find((c) => c.id === values.customerId);
       await createAdjustment({
         ...values,
-        customerName: selectedCust?.fullName || 'Loyal Guest',
+        customerName: selectedCust?.fullName || 'Khách hàng thân thiết',
         requestedBy: 'current_operator',
       }).unwrap();
       setAdjustModalOpen(false);
@@ -120,8 +120,8 @@ export const LoyaltyDashboardPage: React.FC = () => {
   return (
     <Box sx={{ p: 4 }}>
       <Toolbar
-        title="Loyalty Points & Transactions"
-        subtitle="Manage member points accrual, redemption rules, manual balance corrections, and ledger"
+        title="Điểm tích lũy & Giao dịch"
+        subtitle="Quản lý tích lũy điểm thành viên, quy tắc đổi điểm, điều chỉnh số dư thủ công và sổ cái"
         action={
           <PermissionWrapper requiredPermission="write:memberships">
             <Button
@@ -130,7 +130,7 @@ export const LoyaltyDashboardPage: React.FC = () => {
               onClick={() => setAdjustModalOpen(true)}
               sx={{ borderRadius: 2 }}
             >
-              Adjust Points Balance
+              Điều chỉnh số dư điểm
             </Button>
           </PermissionWrapper>
         }
@@ -138,10 +138,10 @@ export const LoyaltyDashboardPage: React.FC = () => {
 
       <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 3 }}>
         <Tabs value={tabValue} onChange={handleTabChange}>
-          <Tab label="Analytics & Performance" />
-          <Tab label="Accrual Ledger" />
-          <Tab label="Pending Adjustments" />
-          <Tab label="Accrual Rules" />
+          <Tab label="Phân tích & Hiệu suất" />
+          <Tab label="Sổ cái tích lũy" />
+          <Tab label="Yêu cầu điều chỉnh" />
+          <Tab label="Quy tắc tích lũy" />
         </Tabs>
       </Box>
 
@@ -157,22 +157,22 @@ export const LoyaltyDashboardPage: React.FC = () => {
           <SearchPanel
             search={search}
             onSearchChange={setSearch}
-            placeholder="Search transactions..."
+            placeholder="Tìm kiếm giao dịch..."
             onClear={() => setSearch('')}
           >
             <TextField
               select
-              label="Transaction Type"
+              label="Loại giao dịch"
               size="small"
               value={txTypeFilter}
               onChange={(e) => setTxTypeFilter(e.target.value)}
               sx={{ minWidth: 180 }}
             >
-              <MenuItem value="">All Types</MenuItem>
-              <MenuItem value="EARNED">Points Earned</MenuItem>
-              <MenuItem value="REDEEMED">Points Redeemed</MenuItem>
-              <MenuItem value="EXPIRED">Points Expired</MenuItem>
-              <MenuItem value="ADJUSTED">Balance Adjusted</MenuItem>
+              <MenuItem value="">Tất cả các loại</MenuItem>
+              <MenuItem value="EARNED">Tích lũy</MenuItem>
+              <MenuItem value="REDEEMED">Quy đổi</MenuItem>
+              <MenuItem value="EXPIRED">Hết hạn</MenuItem>
+              <MenuItem value="ADJUSTED">Điều chỉnh số dư</MenuItem>
             </TextField>
           </SearchPanel>
 
@@ -183,19 +183,19 @@ export const LoyaltyDashboardPage: React.FC = () => {
       {tabValue === 2 && (
         <Box>
           <Typography variant="h6" fontWeight="bold" mb={2}>
-            Point Balance Correction Requests
+            Yêu cầu hiệu chỉnh số dư điểm
           </Typography>
           <TableContainer component={Card} variant="outlined" sx={{ borderRadius: 3 }}>
             <Table>
               <TableHead>
                 <TableRow sx={{ bgcolor: 'action.hover' }}>
-                  <TableCell>Customer</TableCell>
-                  <TableCell>Type</TableCell>
-                  <TableCell>Amount</TableCell>
-                  <TableCell>Reason for adjustment</TableCell>
-                  <TableCell>Requested By</TableCell>
-                  <TableCell>Status</TableCell>
-                  <TableCell align="right">Actions</TableCell>
+                  <TableCell>Khách hàng</TableCell>
+                  <TableCell>Loại</TableCell>
+                  <TableCell>Số lượng</TableCell>
+                  <TableCell>Lý do điều chỉnh</TableCell>
+                  <TableCell>Người yêu cầu</TableCell>
+                  <TableCell>Trạng thái</TableCell>
+                  <TableCell align="right">Hành động</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -207,13 +207,13 @@ export const LoyaltyDashboardPage: React.FC = () => {
                       </Typography>
                     </TableCell>
                     <TableCell>
-                      <Typography variant="body2">{req.type === 'ADD' ? 'Add (+)' : 'Deduct (-)'}</Typography>
+                      <Typography variant="body2">{req.type === 'ADD' ? 'Cộng (+)' : 'Trừ (-)'}</Typography>
                     </TableCell>
                     <TableCell>
                       <Box display="flex" alignItems="center" gap={0.5}>
                         <MdStars color="#eab308" />
                         <Typography variant="body2" fontWeight="bold">
-                          {req.points} Pts
+                          {req.points} Điểm
                         </Typography>
                       </Box>
                     </TableCell>
@@ -233,7 +233,7 @@ export const LoyaltyDashboardPage: React.FC = () => {
                               startIcon={<MdCheck />}
                               onClick={() => handleApprove(req.id)}
                             >
-                              Approve
+                              Duyệt
                             </Button>
                             <Button
                               size="small"
@@ -242,13 +242,13 @@ export const LoyaltyDashboardPage: React.FC = () => {
                               startIcon={<MdClose />}
                               onClick={() => handleReject(req.id)}
                             >
-                              Reject
+                              Từ chối
                             </Button>
                           </PermissionWrapper>
                         </Box>
                       ) : (
                         <Typography variant="caption" color="text.secondary">
-                          Handled by: {req.approvedBy}
+                          Người xử lý: {req.approvedBy}
                         </Typography>
                       )}
                     </TableCell>
@@ -258,7 +258,7 @@ export const LoyaltyDashboardPage: React.FC = () => {
                   <TableRow>
                     <TableCell colSpan={7} align="center" sx={{ py: 4 }}>
                       <Typography variant="body2" color="text.secondary">
-                        No pending adjustment requests.
+                        Không có yêu cầu hiệu chỉnh nào đang chờ.
                       </Typography>
                     </TableCell>
                   </TableRow>
@@ -275,14 +275,14 @@ export const LoyaltyDashboardPage: React.FC = () => {
             <Card variant="outlined" component="form" onSubmit={handleUpdateRules} sx={{ borderRadius: 4 }}>
               <CardContent sx={{ p: 4 }}>
                 <Typography variant="h6" fontWeight="bold" mb={3}>
-                  Global Points Accumulation & Redemptions
+                  Thiết lập tích lũy & Quy đổi điểm toàn cục
                 </Typography>
                 <Grid container spacing={3}>
                   <Grid item xs={12} sm={6}>
                     <TextField
                       type="number"
                       name="earnRate"
-                      label="Earn Rate (Points per $1 spend)"
+                      label="Tỷ lệ tích lũy (Điểm trên mỗi 10.000đ chi tiêu)"
                       defaultValue={rules.earnRate}
                       inputProps={{ step: 0.1 }}
                       fullWidth
@@ -292,9 +292,9 @@ export const LoyaltyDashboardPage: React.FC = () => {
                     <TextField
                       type="number"
                       name="redeemRate"
-                      label="Redeem Value ($ per Point)"
+                      label="Giá trị quy đổi (VND trên mỗi Điểm)"
                       defaultValue={rules.redeemRate}
-                      inputProps={{ step: 0.001 }}
+                      inputProps={{ step: 100 }}
                       fullWidth
                     />
                   </Grid>
@@ -302,7 +302,7 @@ export const LoyaltyDashboardPage: React.FC = () => {
                     <TextField
                       type="number"
                       name="expirationMonths"
-                      label="Expiration Period (Months)"
+                      label="Thời hạn hết hạn (Tháng)"
                       defaultValue={rules.expirationMonths}
                       fullWidth
                     />
@@ -311,7 +311,7 @@ export const LoyaltyDashboardPage: React.FC = () => {
                     <TextField
                       type="number"
                       name="firstPurchaseBonus"
-                      label="First Purchase Bonus Points"
+                      label="Điểm thưởng cho lần mua đầu tiên"
                       defaultValue={rules.firstPurchaseBonus}
                       fullWidth
                     />
@@ -320,7 +320,7 @@ export const LoyaltyDashboardPage: React.FC = () => {
                     <TextField
                       type="number"
                       name="birthdayBonus"
-                      label="Birthday Bonus Points Reward"
+                      label="Điểm thưởng mừng sinh nhật"
                       defaultValue={rules.birthdayBonus}
                       fullWidth
                     />
@@ -328,7 +328,7 @@ export const LoyaltyDashboardPage: React.FC = () => {
                 </Grid>
                 <Box display="flex" justifyContent="flex-end" sx={{ mt: 4 }}>
                   <Button type="submit" variant="contained" startIcon={<MdTune />} sx={{ borderRadius: 2 }}>
-                    Save Point Rules Config
+                    Lưu cấu hình quy tắc điểm
                   </Button>
                 </Box>
               </CardContent>

@@ -4,6 +4,7 @@ import com.smartpark.common.response.ApiResponse;
 import com.smartpark.domain.dashboard.dto.DashboardSummaryDto;
 import com.smartpark.domain.dashboard.dto.RevenueAnalyticsDto;
 import com.smartpark.domain.dashboard.dto.VisitorFlowDto;
+import com.smartpark.domain.dashboard.dto.OperationalDashboardDto;
 import com.smartpark.domain.dashboard.service.DashboardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -79,5 +80,73 @@ public class DashboardController {
     })
     public ResponseEntity<ApiResponse<List<VisitorFlowDto>>> getVisitorFlow() {
         return ResponseEntity.ok(ApiResponse.success(dashboardService.getVisitorFlow()));
+    }
+
+    @GetMapping("/operational")
+    @Operation(summary = "Get Operational Dashboard Metrics", description = "Retrieves live operational metrics including gate status, ride status, parking summary, locker summary, scanner status, operator status, incidents, support tickets, maintenance items, and weather impact.")
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Successfully retrieved operational dashboard data.",
+                    content = @Content(schema = @Schema(implementation = OperationalDashboardDto.class))),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized request.", content = @Content),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "403", description = "Forbidden. Access is denied.", content = @Content)
+    })
+    public ResponseEntity<ApiResponse<OperationalDashboardDto>> getOperationalDashboard() {
+        return ResponseEntity.ok(ApiResponse.success(dashboardService.getOperationalDashboard()));
+    }
+ 
+    @GetMapping("/analytics/customer")
+    public ResponseEntity<ApiResponse<java.util.Map<String, Object>>> getCustomerAnalytics(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        return ResponseEntity.ok(ApiResponse.success(dashboardService.getCustomerAnalytics(startDate, endDate)));
+    }
+ 
+    @GetMapping("/analytics/booking")
+    public ResponseEntity<ApiResponse<java.util.Map<String, Object>>> getBookingAnalytics(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        return ResponseEntity.ok(ApiResponse.success(dashboardService.getBookingAnalytics(startDate, endDate)));
+    }
+ 
+    @GetMapping("/analytics/ticket")
+    public ResponseEntity<ApiResponse<java.util.Map<String, Object>>> getTicketAnalytics(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        return ResponseEntity.ok(ApiResponse.success(dashboardService.getTicketAnalytics(startDate, endDate)));
+    }
+ 
+    @GetMapping("/analytics/ride")
+    public ResponseEntity<ApiResponse<java.util.Map<String, Object>>> getRideAnalytics(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        return ResponseEntity.ok(ApiResponse.success(dashboardService.getRideAnalytics(startDate, endDate)));
+    }
+ 
+    @GetMapping("/analytics/parking")
+    public ResponseEntity<ApiResponse<java.util.Map<String, Object>>> getParkingAnalytics(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        return ResponseEntity.ok(ApiResponse.success(dashboardService.getParkingAnalytics(startDate, endDate)));
+    }
+ 
+    @GetMapping("/analytics/retail-food")
+    public ResponseEntity<ApiResponse<java.util.Map<String, Object>>> getRetailFoodAnalytics(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        return ResponseEntity.ok(ApiResponse.success(dashboardService.getRetailFoodAnalytics(startDate, endDate)));
+    }
+ 
+    @GetMapping("/analytics/membership")
+    public ResponseEntity<ApiResponse<java.util.Map<String, Object>>> getMembershipAnalytics(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        return ResponseEntity.ok(ApiResponse.success(dashboardService.getMembershipAnalytics(startDate, endDate)));
+    }
+ 
+    @GetMapping("/analytics/promotion")
+    public ResponseEntity<ApiResponse<java.util.Map<String, Object>>> getPromotionAnalytics(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
+        return ResponseEntity.ok(ApiResponse.success(dashboardService.getPromotionAnalytics(startDate, endDate)));
     }
 }

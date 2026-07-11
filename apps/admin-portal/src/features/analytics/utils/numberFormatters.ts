@@ -21,33 +21,36 @@ export const formatCurrency = (value: number, compact = false): string => {
  * Format a number as a percentage string
  */
 export const formatPercentage = (value: number, decimals = 1): string => {
-  return `${value >= 0 ? '+' : ''}${value.toFixed(decimals)}%`;
+  return `${value >= 0 ? '+' : ''}${value.toFixed(decimals).replace('.', ',')}%`;
 };
 
 /**
  * Format percentage without sign
  */
 export const formatPercentageUnsigned = (value: number, decimals = 1): string => {
-  return `${value.toFixed(decimals)}%`;
+  return `${value.toFixed(decimals).replace('.', ',')}%`;
 };
 
 /**
  * Format large numbers with compact notation (K, M, B)
  */
-export const formatCompactNumber = (value: number, prefix = ''): string => {
+export const formatCompactNumber = (value: number, suffix = ''): string => {
   const abs = Math.abs(value);
   const sign = value < 0 ? '-' : '';
 
+  // Use Vietnamese decimal separator (,) instead of (.) for toFixed results
+  const formatVal = (val: number) => val.toFixed(1).replace('.', ',');
+
   if (abs >= 1_000_000_000) {
-    return `${sign}${prefix}${(abs / 1_000_000_000).toFixed(1)}B`;
+    return `${sign}${formatVal(abs / 1_000_000_000)} Tỷ${suffix ? ' ' + suffix : ''}`;
   }
   if (abs >= 1_000_000) {
-    return `${sign}${prefix}${(abs / 1_000_000).toFixed(1)}M`;
+    return `${sign}${formatVal(abs / 1_000_000)} Tr${suffix ? ' ' + suffix : ''}`;
   }
   if (abs >= 1_000) {
-    return `${sign}${prefix}${(abs / 1_000).toFixed(1)}K`;
+    return `${sign}${formatVal(abs / 1_000)} N${suffix ? ' ' + suffix : ''}`;
   }
-  return `${sign}${prefix}${abs.toFixed(0)}`;
+  return `${sign}${abs.toFixed(0)}${suffix ? ' ' + suffix : ''}`;
 };
 
 /**
@@ -64,6 +67,7 @@ export const formatNumber = (value: number, decimals = 0): string => {
  * Format based on KPI type
  */
 export const formatKpiValue = (
+
   value: number,
   format: 'currency' | 'number' | 'percentage',
   compact = true
@@ -84,11 +88,11 @@ export const formatKpiValue = (
  * Format duration in minutes to human-readable
  */
 export const formatDuration = (minutes: number): string => {
-  if (minutes < 60) return `${Math.round(minutes)}m`;
+  if (minutes < 60) return `${Math.round(minutes)} phút`;
   const hours = Math.floor(minutes / 60);
   const mins = Math.round(minutes % 60);
-  if (mins === 0) return `${hours}h`;
-  return `${hours}h ${mins}m`;
+  if (mins === 0) return `${hours} giờ`;
+  return `${hours} giờ ${mins} phút`;
 };
 
 /**
@@ -98,5 +102,5 @@ export const formatFileSize = (bytes: number): string => {
   if (bytes === 0) return '0 B';
   const units = ['B', 'KB', 'MB', 'GB'];
   const i = Math.floor(Math.log(bytes) / Math.log(1024));
-  return `${(bytes / Math.pow(1024, i)).toFixed(1)} ${units[i]}`;
+  return `${(bytes / Math.pow(1024, i)).toFixed(1).replace('.', ',')} ${units[i]}`;
 };

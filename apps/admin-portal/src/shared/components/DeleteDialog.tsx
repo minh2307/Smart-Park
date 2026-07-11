@@ -26,10 +26,10 @@ export const DeleteDialog: React.FC<DeleteDialogProps> = ({
       </DialogContent>
       <DialogActions sx={{ px: 3, pb: 2 }}>
         <Button onClick={onCancel} color="secondary" variant="outlined" disabled={loading}>
-          Cancel
+          Hủy
         </Button>
         <Button onClick={onConfirm} color="error" variant="contained" autoFocus disabled={loading}>
-          Confirm Delete
+          Xác nhận xóa
         </Button>
       </DialogActions>
     </Dialog>

@@ -68,10 +68,10 @@ export const VoucherListPage: React.FC = () => {
   const handleCreate = async (values: any) => {
     try {
       await createVoucher(values).unwrap();
-      toast.success('Da tao voucher thanh cong!');
+      toast.success('Đã tạo voucher thành công!');
       setFormOpen(false);
     } catch (err) {
-      toast.error('Loi khi tao voucher.');
+      toast.error('Lỗi khi tạo voucher.');
     }
   };
 
@@ -79,26 +79,26 @@ export const VoucherListPage: React.FC = () => {
     if (!selectedVoucher) return;
     try {
       await updateVoucher({ id: selectedVoucher.id, body: values }).unwrap();
-      toast.success('Da cap nhat voucher thanh cong!');
+      toast.success('Đã cập nhật voucher thành công!');
       setFormOpen(false);
       setSelectedVoucher(null);
     } catch (err) {
-      toast.error('Loi khi cap nhat voucher.');
+      toast.error('Lỗi khi cập nhật voucher.');
     }
   };
 
   const handleRedeem = async (v: Voucher) => {
     try {
       await redeemVoucher(v.id).unwrap();
-      toast.success(`Da su dung voucher ${v.code} thanh cong!`);
+      toast.success(`Đã sử dụng voucher ${v.code} thành công!`);
     } catch (err) {
-      toast.error('Loi khi su dung voucher.');
+      toast.error('Lỗi khi sử dụng voucher.');
     }
   };
 
   const handleBulkGenerate = async () => {
     if (!bulkExpiration) {
-      toast.error('Vui long chon ngay het han cho phat hanh hang loat.');
+      toast.error('Vui lòng chọn ngày hết hạn cho phát hành hàng loạt.');
       return;
     }
     try {
@@ -109,10 +109,10 @@ export const VoucherListPage: React.FC = () => {
         prefix: bulkPrefix,
         count: bulkCount,
       }).unwrap();
-      toast.success(`Da tao thanh cong ${res.length} voucher hang loat!`);
+      toast.success(`Đã tạo thành công ${res.length} voucher hàng loạt!`);
       setActiveTab(0);
     } catch (err) {
-      toast.error('Loi khi tao hang loat.');
+      toast.error('Lỗi khi tạo hàng loạt.');
     }
   };
 
@@ -120,11 +120,11 @@ export const VoucherListPage: React.FC = () => {
     if (!voucherToDelete) return;
     try {
       await deleteVoucher(voucherToDelete.id).unwrap();
-      toast.success('Da xoa voucher thanh cong!');
+      toast.success('Đã xóa voucher thành công!');
       setDeleteConfirmOpen(false);
       setVoucherToDelete(null);
     } catch (err) {
-      toast.error('Loi khi xoa voucher.');
+      toast.error('Lỗi khi xóa voucher.');
     }
   };
 
@@ -134,7 +134,7 @@ export const VoucherListPage: React.FC = () => {
     <Box sx={{ p: 3 }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
         <Typography variant="h5" fontWeight="bold">
-          Quan Ly Voucher (Vouchers)
+          Quản lý Voucher (Voucher)
         </Typography>
         {activeTab === 0 && (
           <PermissionWrapper requiredPermission="write:promotions">
@@ -146,15 +146,15 @@ export const VoucherListPage: React.FC = () => {
                 setFormOpen(true);
               }}
             >
-              Tao Voucher Moi
+              Tạo Voucher Mới
             </Button>
           </PermissionWrapper>
         )}
       </Box>
 
       <Tabs value={activeTab} onChange={(_e, val) => setActiveTab(val)} sx={{ mb: 3 }}>
-        <Tab label="Danh sach Voucher" />
-        <Tab label="Phat hanh hang loat" />
+        <Tab label="Danh sách Voucher" />
+        <Tab label="Phát hành hàng loạt" />
       </Tabs>
 
       {activeTab === 0 && (
@@ -162,7 +162,7 @@ export const VoucherListPage: React.FC = () => {
           {/* Filters */}
           <Box display="flex" gap={2} mb={3} flexWrap="wrap">
             <TextField
-              label="Tim kiem..."
+              label="Tìm kiếm..."
               variant="outlined"
               size="small"
               value={search}
@@ -171,36 +171,36 @@ export const VoucherListPage: React.FC = () => {
             />
             <TextField
               select
-              label="Loai Voucher"
+              label="Loại Voucher"
               variant="outlined"
               size="small"
               value={voucherType}
               onChange={(e) => setVoucherType(e.target.value)}
               sx={{ minWidth: 160 }}
             >
-              <MenuItem value="">Tat ca loai</MenuItem>
-              <MenuItem value="GIFT">Qua tang</MenuItem>
-              <MenuItem value="CASH">Tien mat</MenuItem>
-              <MenuItem value="DISCOUNT">Giam gia</MenuItem>
-              <MenuItem value="MEMBERSHIP">Thanh vien</MenuItem>
-              <MenuItem value="BIRTHDAY">Sinh nhat</MenuItem>
-              <MenuItem value="PROMOTION">Khuyen mai</MenuItem>
-              <MenuItem value="REFERRAL">Gioi thieu</MenuItem>
-              <MenuItem value="COMPENSATION">Den bu</MenuItem>
+              <MenuItem value="">Tất cả các loại</MenuItem>
+              <MenuItem value="GIFT">Quà tặng</MenuItem>
+              <MenuItem value="CASH">Tiền mặt</MenuItem>
+              <MenuItem value="DISCOUNT">Giảm giá</MenuItem>
+              <MenuItem value="MEMBERSHIP">Thành viên</MenuItem>
+              <MenuItem value="BIRTHDAY">Sinh nhật</MenuItem>
+              <MenuItem value="PROMOTION">Khuyến mãi</MenuItem>
+              <MenuItem value="REFERRAL">Giới thiệu</MenuItem>
+              <MenuItem value="COMPENSATION">Đền bù</MenuItem>
             </TextField>
             <TextField
               select
-              label="Trang thai"
+              label="Trạng thái"
               variant="outlined"
               size="small"
               value={status}
               onChange={(e) => setStatus(e.target.value)}
               sx={{ minWidth: 160 }}
             >
-              <MenuItem value="">Tat ca trang thai</MenuItem>
-              <MenuItem value="UNREDEEMED">Chua su dung</MenuItem>
-              <MenuItem value="REDEEMED">Da su dung</MenuItem>
-              <MenuItem value="EXPIRED">Het han</MenuItem>
+              <MenuItem value="">Tất cả trạng thái</MenuItem>
+              <MenuItem value="UNREDEEMED">Chưa sử dụng</MenuItem>
+              <MenuItem value="REDEEMED">Đã sử dụng</MenuItem>
+              <MenuItem value="EXPIRED">Hết hạn</MenuItem>
             </TextField>
           </Box>
 
@@ -226,30 +226,30 @@ export const VoucherListPage: React.FC = () => {
       {activeTab === 1 && (
         <Paper sx={{ p: 4, borderRadius: '16px' }}>
           <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-            Phat sinh hang loat cac code voucher ngau nhien cho khach hang.
+            Phát sinh hàng loạt các mã voucher ngẫu nhiên cho khách hàng.
           </Typography>
           <Grid container spacing={3} mt={1}>
             <Grid item xs={12} sm={6}>
               <TextField
                 select
-                label="Loai Voucher *"
+                label="Loại Voucher *"
                 value={bulkType}
                 onChange={(e) => setBulkType(e.target.value as any)}
                 fullWidth
               >
-                <MenuItem value="GIFT">Qua tang (Gift)</MenuItem>
-                <MenuItem value="CASH">Tien mat (Cash)</MenuItem>
-                <MenuItem value="DISCOUNT">Giam gia (Discount)</MenuItem>
-                <MenuItem value="MEMBERSHIP">Thanh vien (Membership)</MenuItem>
-                <MenuItem value="BIRTHDAY">Sinh nhat (Birthday)</MenuItem>
-                <MenuItem value="PROMOTION">Khuyen mai (Promotion)</MenuItem>
-                <MenuItem value="REFERRAL">Gioi thieu (Referral)</MenuItem>
-                <MenuItem value="COMPENSATION">Den bu (Compensation)</MenuItem>
+                <MenuItem value="GIFT">Quà tặng (Gift)</MenuItem>
+                <MenuItem value="CASH">Tiền mặt (Cash)</MenuItem>
+                <MenuItem value="DISCOUNT">Giảm giá (Discount)</MenuItem>
+                <MenuItem value="MEMBERSHIP">Thành viên (Membership)</MenuItem>
+                <MenuItem value="BIRTHDAY">Sinh nhật (Birthday)</MenuItem>
+                <MenuItem value="PROMOTION">Khuyến mãi (Promotion)</MenuItem>
+                <MenuItem value="REFERRAL">Giới thiệu (Referral)</MenuItem>
+                <MenuItem value="COMPENSATION">Đền bù (Compensation)</MenuItem>
               </TextField>
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                label="Menh gia voucher (USD) *"
+                label="Mệnh giá voucher (USD) *"
                 type="number"
                 value={bulkValue}
                 onChange={(e) => setBulkValue(Number(e.target.value))}
@@ -258,7 +258,7 @@ export const VoucherListPage: React.FC = () => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                label="Ngay het han *"
+                label="Ngày hết hạn *"
                 type="date"
                 value={bulkExpiration}
                 onChange={(e) => setBulkExpiration(e.target.value)}
@@ -268,7 +268,7 @@ export const VoucherListPage: React.FC = () => {
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField
-                label="Tien to (Prefix)"
+                label="Tiền tố (Prefix)"
                 value={bulkPrefix}
                 onChange={(e) => setBulkPrefix(e.target.value)}
                 fullWidth
@@ -276,7 +276,7 @@ export const VoucherListPage: React.FC = () => {
             </Grid>
             <Grid item xs={12}>
               <TextField
-                label="So luong code phat sinh hang loat *"
+                label="Số lượng mã phát sinh hàng loạt *"
                 type="number"
                 value={bulkCount}
                 onChange={(e) => setBulkCount(Number(e.target.value))}
@@ -286,10 +286,10 @@ export const VoucherListPage: React.FC = () => {
           </Grid>
           <Box display="flex" justifyContent="flex-end" gap={2} mt={4}>
             <Button onClick={() => setActiveTab(0)} variant="outlined" color="inherit">
-              Huy
+              Hủy
             </Button>
             <Button onClick={handleBulkGenerate} variant="contained">
-              Phat sinh voucher
+              Phát sinh voucher
             </Button>
           </Box>
         </Paper>
@@ -298,7 +298,7 @@ export const VoucherListPage: React.FC = () => {
       {/* Form Dialog */}
       <Dialog open={formOpen} onClose={() => setFormOpen(false)} maxWidth="md" fullWidth>
         <DialogTitle sx={{ fontWeight: 'bold' }}>
-          {selectedVoucher ? 'Cap nhat Voucher' : 'Tao Voucher Moi'}
+          {selectedVoucher ? 'Cập nhật Voucher' : 'Tạo Voucher Mới'}
         </DialogTitle>
         <DialogContent>
           <VoucherForm
@@ -319,8 +319,8 @@ export const VoucherListPage: React.FC = () => {
       {/* Delete confirmation */}
       <ConfirmDialog
         open={deleteConfirmOpen}
-        title="Xac nhan xoa voucher"
-        message={`Ban co chac muon xoa voucher "${voucherToDelete?.code}"? Hanh dong nay khong the hoan tac.`}
+        title="Xác nhận xóa voucher"
+        message={`Bạn có chắc chắn muốn xóa voucher "${voucherToDelete?.code}"? Hành động này không thể hoàn tác.`}
         onConfirm={handleDelete}
         onClose={() => setDeleteConfirmOpen(false)}
       />

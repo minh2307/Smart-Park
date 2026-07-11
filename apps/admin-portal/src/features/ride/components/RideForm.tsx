@@ -84,7 +84,7 @@ export const RideForm: React.FC<RideFormProps> = ({
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <Typography variant="subtitle2" color="primary" fontWeight="bold">
-            Basic Attraction Specs
+            Thông số cơ bản trò chơi
           </Typography>
           <Divider sx={{ my: 1 }} />
         </Grid>
@@ -98,8 +98,8 @@ export const RideForm: React.FC<RideFormProps> = ({
                 {...field}
                 required
                 fullWidth
-                label="Ride Name"
-                placeholder="e.g. Space Mountain"
+                label="Tên trò chơi"
+                placeholder="VD: Tàu lượn siêu tốc"
                 error={!!errors.name}
                 helperText={errors.name?.message}
                 disabled={loading}
@@ -117,10 +117,10 @@ export const RideForm: React.FC<RideFormProps> = ({
                 {...field}
                 required
                 fullWidth
-                label="Ride Code"
-                placeholder="e.g. RD-SPACE"
+                label="Mã trò chơi"
+                placeholder="VD: RD-SPACE"
                 error={!!errors.code}
-                helperText={errors.code?.message || 'Uppercase alphanumeric with hyphens/underscores'}
+                helperText={errors.code?.message || 'Chữ viết hoa và số, có thể dùng dấu gạch ngang/gạch dưới'}
                 disabled={loading || !!initialData}
               />
             )}
@@ -133,8 +133,8 @@ export const RideForm: React.FC<RideFormProps> = ({
             control={control}
             render={({ field }) => (
               <FormControl fullWidth error={!!errors.rideCategoryId} disabled={loading}>
-                <InputLabel id="ride-cat-label">Category *</InputLabel>
-                <Select {...field} labelId="ride-cat-label" label="Category *">
+                <InputLabel id="ride-cat-label">Danh mục *</InputLabel>
+                <Select {...field} labelId="ride-cat-label" label="Danh mục *">
                   {mockRideCategories.map((c) => (
                     <MenuItem key={c.id} value={c.id}>
                       {c.name}
@@ -153,8 +153,8 @@ export const RideForm: React.FC<RideFormProps> = ({
             control={control}
             render={({ field }) => (
               <FormControl fullWidth error={!!errors.venueId} disabled={loading}>
-                <InputLabel id="ride-venue-label">Venue *</InputLabel>
-                <Select {...field} labelId="ride-venue-label" label="Venue *">
+                <InputLabel id="ride-venue-label">Địa điểm *</InputLabel>
+                <Select {...field} labelId="ride-venue-label" label="Địa điểm *">
                   {mockVenues.map((v) => (
                     <MenuItem key={v.id} value={v.id}>
                       {v.name}
@@ -173,8 +173,8 @@ export const RideForm: React.FC<RideFormProps> = ({
             control={control}
             render={({ field }) => (
               <FormControl fullWidth error={!!errors.zoneId} disabled={loading}>
-                <InputLabel id="ride-zone-label">Zone *</InputLabel>
-                <Select {...field} labelId="ride-zone-label" label="Zone *">
+                <InputLabel id="ride-zone-label">Phân khu *</InputLabel>
+                <Select {...field} labelId="ride-zone-label" label="Phân khu *">
                   {mockZones.map((z) => (
                     <MenuItem key={z.id} value={z.id}>
                       {z.name}
@@ -197,7 +197,7 @@ export const RideForm: React.FC<RideFormProps> = ({
                 required
                 fullWidth
                 type="number"
-                label="Hourly Capacity (Pax/Hr)"
+                label="Công suất hàng giờ (Khách/Giờ)"
                 error={!!errors.capacity}
                 helperText={errors.capacity?.message}
                 disabled={loading}
@@ -215,7 +215,7 @@ export const RideForm: React.FC<RideFormProps> = ({
                 {...field}
                 fullWidth
                 type="number"
-                label="Ride Duration (Seconds)"
+                label="Thời lượng chu kỳ (Giây)"
                 error={!!errors.durationSeconds}
                 helperText={errors.durationSeconds?.message}
                 disabled={loading}
@@ -230,14 +230,14 @@ export const RideForm: React.FC<RideFormProps> = ({
             control={control}
             render={({ field }) => (
               <FormControl fullWidth error={!!errors.status} disabled={loading}>
-                <InputLabel id="ride-status-label">Operating Status *</InputLabel>
-                <Select {...field} labelId="ride-status-label" label="Operating Status *">
-                  <MenuItem value="OPERATING">Operating</MenuItem>
-                  <MenuItem value="CLOSED">Closed</MenuItem>
-                  <MenuItem value="MAINTENANCE">Maintenance</MenuItem>
-                  <MenuItem value="TEMPORARILY_CLOSED">Temporarily Closed</MenuItem>
-                  <MenuItem value="EMERGENCY_STOP">Emergency Stop</MenuItem>
-                  <MenuItem value="RESERVED">Reserved</MenuItem>
+                <InputLabel id="ride-status-label">Trạng thái vận hành *</InputLabel>
+                <Select {...field} labelId="ride-status-label" label="Trạng thái vận hành *">
+                  <MenuItem value="OPERATING">Đang vận hành</MenuItem>
+                  <MenuItem value="CLOSED">Đã đóng cửa</MenuItem>
+                  <MenuItem value="MAINTENANCE">Đang bảo trì</MenuItem>
+                  <MenuItem value="TEMPORARILY_CLOSED">Tạm đóng cửa</MenuItem>
+                  <MenuItem value="EMERGENCY_STOP">Dừng khẩn cấp</MenuItem>
+                  <MenuItem value="RESERVED">Đã đặt chỗ</MenuItem>
                 </Select>
                 {errors.status && <FormHelperText>{errors.status.message}</FormHelperText>}
               </FormControl>
@@ -254,7 +254,7 @@ export const RideForm: React.FC<RideFormProps> = ({
                 {...field}
                 required
                 fullWidth
-                label="Opening Hour (HH:MM)"
+                label="Giờ mở cửa (HH:MM)"
                 placeholder="09:00"
                 error={!!errors.operatingHours?.open}
                 helperText={errors.operatingHours?.open?.message}
@@ -273,7 +273,7 @@ export const RideForm: React.FC<RideFormProps> = ({
                 {...field}
                 required
                 fullWidth
-                label="Closing Hour (HH:MM)"
+                label="Giờ đóng cửa (HH:MM)"
                 placeholder="21:00"
                 error={!!errors.operatingHours?.close}
                 helperText={errors.operatingHours?.close?.message}
@@ -293,8 +293,8 @@ export const RideForm: React.FC<RideFormProps> = ({
                 fullWidth
                 multiline
                 rows={3}
-                label="Description"
-                placeholder="Details about attraction story, special effects, etc."
+                label="Mô tả"
+                placeholder="Chi tiết về câu chuyện trò chơi, hiệu ứng đặc biệt, v.v."
                 error={!!errors.description}
                 helperText={errors.description?.message}
                 disabled={loading}
@@ -305,7 +305,7 @@ export const RideForm: React.FC<RideFormProps> = ({
 
         <Grid item xs={12} sx={{ mt: 2 }}>
           <Typography variant="subtitle2" color="primary" fontWeight="bold">
-            Safety Restrictions & Exclusions
+            Giới hạn an toàn & Quy định tham gia
           </Typography>
           <Divider sx={{ my: 1 }} />
         </Grid>
@@ -319,7 +319,7 @@ export const RideForm: React.FC<RideFormProps> = ({
                 {...field}
                 fullWidth
                 type="number"
-                label="Min Height (cm)"
+                label="Chiều cao tối thiểu (cm)"
                 error={!!errors.restrictions?.minHeight}
                 helperText={errors.restrictions?.minHeight?.message}
                 disabled={loading}
@@ -337,7 +337,7 @@ export const RideForm: React.FC<RideFormProps> = ({
                 {...field}
                 fullWidth
                 type="number"
-                label="Max Height (cm)"
+                label="Chiều cao tối đa (cm)"
                 error={!!errors.restrictions?.maxHeight}
                 helperText={errors.restrictions?.maxHeight?.message}
                 disabled={loading}
@@ -355,7 +355,7 @@ export const RideForm: React.FC<RideFormProps> = ({
                 {...field}
                 fullWidth
                 type="number"
-                label="Min Age (Years)"
+                label="Độ tuổi tối thiểu (Tuổi)"
                 error={!!errors.restrictions?.minAge}
                 helperText={errors.restrictions?.minAge?.message}
                 disabled={loading}
@@ -373,7 +373,7 @@ export const RideForm: React.FC<RideFormProps> = ({
                 {...field}
                 fullWidth
                 type="number"
-                label="Min Weight (kg)"
+                label="Cân nặng tối thiểu (kg)"
                 error={!!errors.restrictions?.minWeight}
                 helperText={errors.restrictions?.minWeight?.message}
                 disabled={loading}
@@ -389,7 +389,7 @@ export const RideForm: React.FC<RideFormProps> = ({
             render={({ field }) => (
               <FormControlLabel
                 control={<Checkbox checked={field.value} onChange={field.onChange} />}
-                label="Activate Medical/Heart Warning"
+                label="Kích hoạt cảnh báo y tế/tim mạch"
                 disabled={loading}
               />
             )}
@@ -403,7 +403,7 @@ export const RideForm: React.FC<RideFormProps> = ({
             render={({ field }) => (
               <FormControlLabel
                 control={<Checkbox checked={field.value} onChange={field.onChange} />}
-                label="Pregnancy Restriction"
+                label="Không dành cho phụ nữ mang thai"
                 disabled={loading}
               />
             )}
@@ -417,7 +417,7 @@ export const RideForm: React.FC<RideFormProps> = ({
             render={({ field }) => (
               <FormControlLabel
                 control={<Checkbox checked={field.value} onChange={field.onChange} />}
-                label="Wheelchair/Accessibility Friendly"
+                label="Hỗ trợ xe lăn/tiếp cận dễ dàng"
                 disabled={loading}
               />
             )}
@@ -434,8 +434,8 @@ export const RideForm: React.FC<RideFormProps> = ({
                 fullWidth
                 multiline
                 rows={2}
-                label="Safety & Boarding Advisory Notes"
-                placeholder="e.g. Keep hands inside car at all times..."
+                label="Lưu ý hướng dẫn an toàn & lên xe"
+                placeholder="VD: Giữ tay bên trong cabin mọi lúc..."
                 error={!!errors.restrictions?.safetyNotes}
                 helperText={errors.restrictions?.safetyNotes?.message}
                 disabled={loading}
@@ -447,7 +447,7 @@ export const RideForm: React.FC<RideFormProps> = ({
 
       <Box display="flex" justifyContent="flex-end" gap={2} mt={3}>
         <Button type="submit" variant="contained" loading={loading}>
-          {initialData ? 'Update Ride Specs' : 'Register Ride'}
+          {initialData ? 'Cập nhật thông số' : 'Đăng ký trò chơi'}
         </Button>
       </Box>
     </Box>

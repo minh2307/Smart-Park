@@ -19,10 +19,10 @@ export const DeleteUserDialog: React.FC<DeleteUserDialogProps> = ({
       open={open}
       onClose={onClose}
       type="error"
-      title="Delete User"
-      message={`Are you sure you want to delete user "${username}"? This action cannot be undone.`}
+      title="Xóa tài khoản người dùng"
+      message={`Bạn có chắc chắn muốn xóa tài khoản "${username}" không? Hành động này không thể hoàn tác.`}
       onConfirm={onConfirm}
-      confirmText="Delete"
+      confirmText="Xóa"
     />
   );
 };

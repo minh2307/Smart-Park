@@ -53,7 +53,7 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData, onSubmit, loadi
       <Grid container spacing={2.5}>
         <Grid item xs={12} sm={6}>
           <TextField
-            label="Full Name"
+            label="Họ và tên"
             error={!!errors.fullName}
             helperText={errors.fullName?.message as string}
             {...register('fullName')}
@@ -61,7 +61,7 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData, onSubmit, loadi
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            label="Username"
+            label="Tên đăng nhập"
             error={!!errors.username}
             helperText={errors.username?.message as string}
             {...register('username')}
@@ -70,7 +70,7 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData, onSubmit, loadi
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            label="Email Address"
+            label="Địa chỉ Email"
             error={!!errors.email}
             helperText={errors.email?.message as string}
             {...register('email')}
@@ -78,7 +78,7 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData, onSubmit, loadi
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            label="Phone Number"
+            label="Số điện thoại"
             error={!!errors.phone}
             helperText={errors.phone?.message as string}
             {...register('phone')}
@@ -86,36 +86,36 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData, onSubmit, loadi
         </Grid>
         <Grid item xs={12} sm={6}>
           <Select
-            label="Role"
+            label="Vai trò"
             value={selectedRole}
             onChange={(e: any) => setValue('role', e.target.value)}
             error={!!errors.role}
             helperText={errors.role?.message as string}
             options={[
-              { value: 'ADMIN', label: 'ADMIN' },
-              { value: 'NHAN_VIEN', label: 'NHAN_VIEN' },
+              { value: 'ADMIN', label: 'Quản trị viên (ADMIN)' },
+              { value: 'NHAN_VIEN', label: 'Nhân viên (NHÂN VIÊN)' },
             ]}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <Select
-            label="Status"
+            label="Trạng thái"
             value={selectedStatus}
             onChange={(e: any) => setValue('status', e.target.value)}
             error={!!errors.status}
             helperText={errors.status?.message as string}
             options={[
-              { value: 'ACTIVE', label: 'ACTIVE' },
-              { value: 'INACTIVE', label: 'INACTIVE' },
-              { value: 'LOCKED', label: 'LOCKED' },
-              { value: 'SUSPENDED', label: 'SUSPENDED' },
+              { value: 'ACTIVE', label: 'Hoạt động' },
+              { value: 'INACTIVE', label: 'Ngưng hoạt động' },
+              { value: 'LOCKED', label: 'Bị khóa' },
+              { value: 'SUSPENDED', label: 'Tạm đình chỉ' },
             ]}
           />
         </Grid>
         {!isEdit && (
           <Grid item xs={12}>
             <PasswordField
-              label="Password"
+              label="Mật khẩu"
               error={!!errors.password}
               helperText={errors.password?.message as string}
               {...register('password')}
@@ -124,7 +124,7 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData, onSubmit, loadi
         )}
         <Grid item xs={12} display="flex" justifyContent="flex-end" gap={2} mt={2}>
           <Button type="submit" variant="contained" loading={loading}>
-            {isEdit ? 'Save Changes' : 'Create User'}
+            {isEdit ? 'Lưu thay đổi' : 'Tạo người dùng'}
           </Button>
         </Grid>
       </Grid>

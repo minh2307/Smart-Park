@@ -78,7 +78,7 @@ export const VenueForm: React.FC<VenueFormProps> = ({ initialData, onSubmit, loa
       <Grid container spacing={2.5}>
         <Grid item xs={12} sm={6}>
           <TextField
-            label="Venue Name"
+            label="Tên địa điểm"
             error={!!errors.name}
             helperText={errors.name?.message as string}
             {...register('name')}
@@ -86,7 +86,7 @@ export const VenueForm: React.FC<VenueFormProps> = ({ initialData, onSubmit, loa
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            label="Venue Code"
+            label="Mã địa điểm"
             error={!!errors.venueCode}
             helperText={errors.venueCode?.message as string}
             {...register('venueCode')}
@@ -95,7 +95,7 @@ export const VenueForm: React.FC<VenueFormProps> = ({ initialData, onSubmit, loa
         </Grid>
         <Grid item xs={12}>
           <TextField
-            label="Description"
+            label="Mô tả"
             multiline
             rows={3}
             error={!!errors.description}
@@ -105,7 +105,7 @@ export const VenueForm: React.FC<VenueFormProps> = ({ initialData, onSubmit, loa
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            label="Address"
+            label="Địa chỉ"
             error={!!errors.address}
             helperText={errors.address?.message as string}
             {...register('address')}
@@ -113,7 +113,7 @@ export const VenueForm: React.FC<VenueFormProps> = ({ initialData, onSubmit, loa
         </Grid>
         <Grid item xs={12} sm={6}>
           <TextField
-            label="City"
+            label="Thành phố"
             error={!!errors.city}
             helperText={errors.city?.message as string}
             {...register('city')}
@@ -121,7 +121,7 @@ export const VenueForm: React.FC<VenueFormProps> = ({ initialData, onSubmit, loa
         </Grid>
         <Grid item xs={12} sm={4}>
           <TextField
-            label="Province / State"
+            label="Tỉnh / Bang"
             error={!!errors.provinceState}
             helperText={errors.provinceState?.message as string}
             {...register('provinceState')}
@@ -129,7 +129,7 @@ export const VenueForm: React.FC<VenueFormProps> = ({ initialData, onSubmit, loa
         </Grid>
         <Grid item xs={12} sm={4}>
           <TextField
-            label="Country"
+            label="Quốc gia"
             error={!!errors.country}
             helperText={errors.country?.message as string}
             {...register('country')}
@@ -137,7 +137,7 @@ export const VenueForm: React.FC<VenueFormProps> = ({ initialData, onSubmit, loa
         </Grid>
         <Grid item xs={12} sm={4}>
           <TextField
-            label="Postal Code"
+            label="Mã bưu chính"
             error={!!errors.postalCode}
             helperText={errors.postalCode?.message as string}
             {...register('postalCode')}
@@ -145,7 +145,7 @@ export const VenueForm: React.FC<VenueFormProps> = ({ initialData, onSubmit, loa
         </Grid>
         <Grid item xs={12} sm={4}>
           <TextField
-            label="Phone"
+            label="Số điện thoại"
             error={!!errors.phone}
             helperText={errors.phone?.message as string}
             {...register('phone')}
@@ -153,7 +153,7 @@ export const VenueForm: React.FC<VenueFormProps> = ({ initialData, onSubmit, loa
         </Grid>
         <Grid item xs={12} sm={4}>
           <TextField
-            label="Email"
+            label="Địa chỉ email"
             error={!!errors.email}
             helperText={errors.email?.message as string}
             {...register('email')}
@@ -161,7 +161,7 @@ export const VenueForm: React.FC<VenueFormProps> = ({ initialData, onSubmit, loa
         </Grid>
         <Grid item xs={12} sm={4}>
           <TextField
-            label="Website"
+            label="Trang web"
             error={!!errors.website}
             helperText={errors.website?.message as string}
             {...register('website')}
@@ -169,7 +169,7 @@ export const VenueForm: React.FC<VenueFormProps> = ({ initialData, onSubmit, loa
         </Grid>
         <Grid item xs={12} sm={4}>
           <TextField
-            label="Opening Time (HH:MM)"
+            label="Giờ mở cửa (HH:MM)"
             error={!!errors.openingTime}
             helperText={errors.openingTime?.message as string}
             {...register('openingTime')}
@@ -177,7 +177,7 @@ export const VenueForm: React.FC<VenueFormProps> = ({ initialData, onSubmit, loa
         </Grid>
         <Grid item xs={12} sm={4}>
           <TextField
-            label="Closing Time (HH:MM)"
+            label="Giờ đóng cửa (HH:MM)"
             error={!!errors.closingTime}
             helperText={errors.closingTime?.message as string}
             {...register('closingTime')}
@@ -185,36 +185,36 @@ export const VenueForm: React.FC<VenueFormProps> = ({ initialData, onSubmit, loa
         </Grid>
         <Grid item xs={12} sm={4}>
           <Select
-            label="Status"
+            label="Trạng thái"
             value={selectedStatus}
             onChange={(e: any) => setValue('status', e.target.value)}
             error={!!errors.status}
             helperText={errors.status?.message as string}
             options={[
-              { value: 'ACTIVE', label: 'ACTIVE' },
-              { value: 'INACTIVE', label: 'INACTIVE' },
-              { value: 'UNDER_MAINTENANCE', label: 'UNDER_MAINTENANCE' },
-              { value: 'CLOSED', label: 'CLOSED' },
+              { value: 'ACTIVE', label: 'Hoạt động' },
+              { value: 'INACTIVE', label: 'Ngưng hoạt động' },
+              { value: 'UNDER_MAINTENANCE', label: 'Đang bảo trì' },
+              { value: 'CLOSED', label: 'Đã đóng cửa' },
             ]}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <UploadVenueImage
-            label="Logo Image"
+            label="Ảnh Logo"
             value={logoUrl}
             onChange={(url) => setValue('logoUrl', url)}
           />
         </Grid>
         <Grid item xs={12} sm={6}>
           <UploadVenueImage
-            label="Cover Image"
+            label="Ảnh bìa"
             value={coverImageUrl}
             onChange={(url) => setValue('coverImageUrl', url)}
           />
         </Grid>
         <Grid item xs={12} display="flex" justifyContent="flex-end" gap={2} mt={2}>
           <Button type="submit" variant="contained" loading={loading}>
-            {isEdit ? 'Save Changes' : 'Create Venue'}
+            {isEdit ? 'Lưu thay đổi' : 'Tạo địa điểm'}
           </Button>
         </Grid>
       </Grid>

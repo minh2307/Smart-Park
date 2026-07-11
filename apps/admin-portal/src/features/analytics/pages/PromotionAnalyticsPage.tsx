@@ -30,13 +30,13 @@ export const PromotionAnalyticsPage: React.FC = () => {
   // 1. Line Chart: Daily Promo Revenue vs Discounts
   const dailyTrendOption = useMemo(() => {
     if (!promoData?.dailyTrend.length) return null;
-    const categories = promoData.dailyTrend.map((d) => new Date(d.date).toLocaleDateString());
+    const categories = promoData.dailyTrend.map((d) => new Date(d.date).toLocaleDateString('vi-VN'));
     return buildLineChartOption(
       mode,
       categories,
       [
-        { name: 'Generated Revenue (₫)', data: promoData.dailyTrend.map((d) => d.revenue) },
-        { name: 'Discounts Granted (₫)', data: promoData.dailyTrend.map((d) => d.discounts), color: '#ef4444' },
+        { name: 'Doanh thu được tạo ra (₫)', data: promoData.dailyTrend.map((d) => d.revenue) },
+        { name: 'Mức giảm giá đã cấp (₫)', data: promoData.dailyTrend.map((d) => d.discounts), color: '#ef4444' },
       ],
       'currency'
     );
@@ -57,10 +57,10 @@ export const PromotionAnalyticsPage: React.FC = () => {
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
         <Box>
           <Typography variant="h4" sx={{ fontWeight: 800, letterSpacing: '-0.02em' }}>
-            Promotion Analytics
+            Phân tích Khuyến mãi
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Marketing campaign ROI tracking, coupon redemption ratios, conversion rates, and discount disbursements
+            Theo dõi ROI chiến dịch marketing, tỷ lệ quy đổi mã giảm giá, tỷ lệ chuyển đổi và số tiền giảm giá đã áp dụng
           </Typography>
         </Box>
       </Box>
@@ -73,13 +73,13 @@ export const PromotionAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Generated Revenue
+                Doanh thu tạo ra
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5, color: 'primary.main' }}>
                 {formatCurrency(promoData?.promotionRevenue || 0)}
               </Typography>
               <Typography variant="caption" color="success.main">
-                Campaign-attributed yield
+                Doanh thu phân bổ theo chiến dịch
               </Typography>
             </CardContent>
           </Card>
@@ -88,13 +88,13 @@ export const PromotionAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Discounts Disbursed
+                Mức giảm giá đã cấp
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5, color: 'error.main' }}>
                 {formatCurrency(promoData?.totalDiscountAmount || 0)}
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                Total discount value
+                Tổng giá trị giảm giá
               </Typography>
             </CardContent>
           </Card>
@@ -103,13 +103,13 @@ export const PromotionAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Average Campaign ROI
+                ROI chiến dịch trung bình
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5, color: 'success.main' }}>
                 {promoData?.roi || 0}%
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                Return on ad spend index
+                Chỉ số hoàn vốn đầu tư quảng cáo
               </Typography>
             </CardContent>
           </Card>
@@ -118,13 +118,13 @@ export const PromotionAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Redemption Conversion
+                Tỷ lệ quy đổi giảm giá
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5 }}>
                 {promoData?.conversionRate || 0}%
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                Impressions to sales conversion
+                Tỷ lệ chuyển đổi từ lượt xem sang lượt mua
               </Typography>
             </CardContent>
           </Card>
@@ -134,32 +134,32 @@ export const PromotionAnalyticsPage: React.FC = () => {
       {/* Visual Analytics */}
       <Grid container spacing={2.5} sx={{ mb: 4 }}>
         <Grid item xs={12} lg={8}>
-          <DashboardCard title="Daily Campaign Attributed Sales vs Discounts" subtitle="Co-relation of attributed sales revenues vs promotional discount values (₫)">
+          <DashboardCard title="Doanh số phân bổ theo chiến dịch hàng ngày so với số tiền giảm giá" subtitle="Mối tương quan giữa doanh thu bán hàng được phân bổ so với giá trị giảm giá khuyến mãi (₫)">
             <ChartContainer option={dailyTrendOption} height={320} loading={isLoading} />
           </DashboardCard>
         </Grid>
 
         <Grid item xs={12} lg={4}>
-          <DashboardCard title="Redeemed Coupon Codes" subtitle="Active coupon codes distribution shares">
+          <DashboardCard title="Mã giảm giá đã quy đổi" subtitle="Tỷ lệ phân bổ các mã giảm giá đang hoạt động">
             <ChartContainer option={couponTypeOption} height={320} loading={isLoading} />
           </DashboardCard>
         </Grid>
 
         {/* Campaign rankings list */}
         <Grid item xs={12}>
-          <DashboardCard title="Campaign Performance Matrix" subtitle="Detailed breakdown of impressions, cost, revenue, and ROI metrics by campaign">
+          <DashboardCard title="Ma trận hiệu suất chiến dịch" subtitle="Báo cáo chi tiết về lượt hiển thị, chi phí, doanh thu và các chỉ số ROI theo từng chiến dịch">
             <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
               <Table size="medium">
                 <TableHead sx={{ backgroundColor: 'action.hover' }}>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Campaign Name</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Type</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Impressions</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Conversions</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Advertising Cost</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Attributed Revenue</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Campaign ROI</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Tên chiến dịch</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Loại</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Lượt hiển thị</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Lượt chuyển đổi</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Chi phí quảng cáo</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Doanh thu phân bổ</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>ROI chiến dịch</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Trạng thái</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -174,7 +174,7 @@ export const PromotionAnalyticsPage: React.FC = () => {
                       <TableCell sx={{ fontWeight: 'bold', color: 'success.main' }}>{c.roi}%</TableCell>
                       <TableCell>
                         <StatusChip
-                          label={c.status}
+                          label={c.status === 'active' ? 'Hoạt động' : 'Tạm dừng'}
                           status={c.status === 'active' ? 'active' : 'pending'}
                         />
                       </TableCell>

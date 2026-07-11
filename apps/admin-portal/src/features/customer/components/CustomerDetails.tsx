@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { formatCurrency } from '../../analytics/utils/numberFormatters';
 import {
   Grid,
   Box,
@@ -57,9 +58,9 @@ export const CustomerDetails: React.FC<CustomerDetailsProps> = ({ customer }) =>
 
   // Mock booking history records for detail view
   const mockCustomerBookings = [
-    { id: 1, bookingCode: 'BK-0912', date: '2026-07-01', amount: 165.00, status: 'PAID', tickets: 3 },
-    { id: 2, bookingCode: 'BK-0782', date: '2026-06-15', amount: 95.00, status: 'PAID', tickets: 1 },
-    { id: 3, bookingCode: 'BK-0520', date: '2026-05-10', amount: 120.00, status: 'PAID', tickets: 2 },
+    { id: 1, bookingCode: 'BK-0912', date: '2026-07-01', amount: 1650000, status: 'PAID', tickets: 3 },
+    { id: 2, bookingCode: 'BK-0782', date: '2026-06-15', amount: 950000, status: 'PAID', tickets: 1 },
+    { id: 3, bookingCode: 'BK-0520', date: '2026-05-10', amount: 1200000, status: 'PAID', tickets: 2 },
   ];
 
   return (
@@ -85,17 +86,17 @@ export const CustomerDetails: React.FC<CustomerDetailsProps> = ({ customer }) =>
                 {customer.fullName}
               </Typography>
               <Chip
-                label={customer.status}
+                label={customer.status === 'ACTIVE' ? 'HOẠT ĐỘNG' : customer.status === 'SUSPENDED' ? 'TẠM KHÓA' : customer.status}
                 size="small"
                 color={customer.status === 'ACTIVE' ? 'success' : 'error'}
                 sx={{ fontWeight: 'bold' }}
               />
             </Box>
             <Typography variant="body2" color="text.secondary" gutterBottom>
-              Customer Code: CUST-{String(customer.id).padStart(4, '0')}
+              Mã khách hàng: CUST-{String(customer.id).padStart(4, '0')}
             </Typography>
             <Typography variant="caption" color="text.disabled">
-              Registered on: {new Date(customer.createdAt).toLocaleDateString()}
+              Ngày đăng ký: {new Date(customer.createdAt).toLocaleDateString()}
             </Typography>
           </Box>
         </CardContent>
@@ -109,10 +110,10 @@ export const CustomerDetails: React.FC<CustomerDetailsProps> = ({ customer }) =>
         variant="scrollable"
         scrollButtons="auto"
       >
-        <Tab icon={<MdPerson />} iconPosition="start" label="Profile Info" />
-        <Tab icon={<MdPeople />} iconPosition="start" label={`Visitors (${associatedVisitors.length})`} />
-        <Tab icon={<MdShoppingBag />} iconPosition="start" label="Bookings & Sales" />
-        <Tab icon={<MdHistory />} iconPosition="start" label="Activity Log" />
+        <Tab icon={<MdPerson />} iconPosition="start" label="Thông tin cá nhân" />
+        <Tab icon={<MdPeople />} iconPosition="start" label={`Khách tham quan (${associatedVisitors.length})`} />
+        <Tab icon={<MdShoppingBag />} iconPosition="start" label="Đơn đặt vé & Chi tiêu" />
+        <Tab icon={<MdHistory />} iconPosition="start" label="Nhật ký hoạt động" />
       </Tabs>
 
       {/* Tab Panels */}
@@ -122,41 +123,43 @@ export const CustomerDetails: React.FC<CustomerDetailsProps> = ({ customer }) =>
             <Card variant="outlined" sx={{ borderRadius: 3, height: '100%' }}>
               <CardContent>
                 <Typography variant="subtitle1" fontWeight="bold" display="flex" alignItems="center" gap={1} mb={2}>
-                  <MdContactPhone /> Personal Details
+                  <MdContactPhone /> Chi tiết thông tin cá nhân
                 </Typography>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
-                    <Typography variant="caption" color="text.secondary">Email Address</Typography>
+                    <Typography variant="caption" color="text.secondary">Địa chỉ Email</Typography>
                     <Typography variant="body2" fontWeight={500}>{customer.email}</Typography>
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <Typography variant="caption" color="text.secondary">Phone Number</Typography>
+                    <Typography variant="caption" color="text.secondary">Số điện thoại</Typography>
                     <Typography variant="body2" fontWeight={500}>{customer.phone}</Typography>
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <Typography variant="caption" color="text.secondary">Birth Date</Typography>
-                    <Typography variant="body2" fontWeight={500}>{customer.birthDate || 'Not Provided'}</Typography>
+                    <Typography variant="caption" color="text.secondary">Ngày sinh</Typography>
+                    <Typography variant="body2" fontWeight={500}>{customer.birthDate || 'Chưa cung cấp'}</Typography>
                   </Grid>
                   <Grid item xs={12} sm={6}>
-                    <Typography variant="caption" color="text.secondary">Gender</Typography>
-                    <Typography variant="body2" fontWeight={500}>{customer.gender || 'Not Provided'}</Typography>
+                    <Typography variant="caption" color="text.secondary">Giới tính</Typography>
+                    <Typography variant="body2" fontWeight={500}>
+                      {customer.gender === 'MALE' ? 'Nam' : customer.gender === 'FEMALE' ? 'Nữ' : customer.gender || 'Chưa cung cấp'}
+                    </Typography>
                   </Grid>
                   <Grid item xs={12}>
-                    <Typography variant="caption" color="text.secondary">Address</Typography>
-                    <Typography variant="body2" fontWeight={500}>{customer.address || 'Not Provided'}</Typography>
+                    <Typography variant="caption" color="text.secondary">Địa chỉ</Typography>
+                    <Typography variant="body2" fontWeight={500}>{customer.address || 'Chưa cung cấp'}</Typography>
                   </Grid>
                 </Grid>
                 <Divider sx={{ my: 2 }} />
                 <Typography variant="subtitle2" fontWeight="bold" color="text.secondary" gutterBottom>
-                  Account Audit Info
+                  Thông tin kiểm toán tài khoản
                 </Typography>
                 <Grid container spacing={2}>
                   <Grid item xs={6}>
-                    <Typography variant="caption" color="text.secondary">Created Date</Typography>
+                    <Typography variant="caption" color="text.secondary">Ngày tạo</Typography>
                     <Typography variant="body2">{new Date(customer.createdAt).toLocaleString()}</Typography>
                   </Grid>
                   <Grid item xs={6}>
-                    <Typography variant="caption" color="text.secondary">Last Updated</Typography>
+                    <Typography variant="caption" color="text.secondary">Cập nhật lần cuối</Typography>
                     <Typography variant="body2">{new Date(customer.updatedAt).toLocaleString()}</Typography>
                   </Grid>
                 </Grid>
@@ -173,22 +176,22 @@ export const CustomerDetails: React.FC<CustomerDetailsProps> = ({ customer }) =>
         <Card variant="outlined" sx={{ borderRadius: 3 }}>
           <CardContent>
             <Typography variant="subtitle1" fontWeight="bold" display="flex" alignItems="center" gap={1} mb={2}>
-              <MdPeople /> Linked Visitors / Family Members
+              <MdPeople /> Khách tham quan liên kết / Thành viên gia đình
             </Typography>
             {associatedVisitors.length === 0 ? (
               <Typography variant="body2" color="text.secondary" align="center" sx={{ py: 4 }}>
-                No visitors registered for this customer.
+                Không có khách tham quan nào được đăng ký cho khách hàng này.
               </Typography>
             ) : (
               <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
                 <Table>
                   <TableHead>
                     <TableRow sx={{ bgcolor: 'action.hover' }}>
-                      <TableCell sx={{ fontWeight: 'bold' }}>Visitor Name</TableCell>
-                      <TableCell sx={{ fontWeight: 'bold' }}>Relationship</TableCell>
-                      <TableCell sx={{ fontWeight: 'bold' }}>Age / Gender</TableCell>
-                      <TableCell sx={{ fontWeight: 'bold' }}>Nationality</TableCell>
-                      <TableCell sx={{ fontWeight: 'bold' }}>ID Number</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold' }}>Tên khách tham quan</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold' }}>Mối quan hệ</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold' }}>Tuổi / Giới tính</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold' }}>Quốc tịch</TableCell>
+                      <TableCell sx={{ fontWeight: 'bold' }}>Số giấy tờ</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -196,9 +199,9 @@ export const CustomerDetails: React.FC<CustomerDetailsProps> = ({ customer }) =>
                       <TableRow key={v.id}>
                         <TableCell sx={{ fontWeight: 600 }}>{v.fullName}</TableCell>
                         <TableCell>
-                          <Chip label={v.relationship} size="small" variant="outlined" color="primary" />
+                          <Chip label={v.relationship === 'SELF' ? 'Bản thân' : v.relationship === 'SPOUSE' ? 'Vợ/Chồng' : v.relationship === 'CHILD' ? 'Con cái' : v.relationship} size="small" variant="outlined" color="primary" />
                         </TableCell>
-                        <TableCell>{v.age} yrs / {v.gender}</TableCell>
+                        <TableCell>{v.age} tuổi / {v.gender === 'MALE' ? 'Nam' : v.gender === 'FEMALE' ? 'Nữ' : v.gender}</TableCell>
                         <TableCell>{v.nationality}</TableCell>
                         <TableCell sx={{ fontFamily: 'monospace' }}>{v.identificationNumber}</TableCell>
                       </TableRow>
@@ -215,17 +218,17 @@ export const CustomerDetails: React.FC<CustomerDetailsProps> = ({ customer }) =>
         <Card variant="outlined" sx={{ borderRadius: 3 }}>
           <CardContent>
             <Typography variant="subtitle1" fontWeight="bold" display="flex" alignItems="center" gap={1} mb={2}>
-              <MdShoppingBag /> Sales & Booking Records
+              <MdShoppingBag /> Lịch sử đơn đặt vé & Doanh số
             </Typography>
             <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
               <Table>
                 <TableHead>
                   <TableRow sx={{ bgcolor: 'action.hover' }}>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Booking ID</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Visit Date</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Tickets Issued</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Total Spending</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Mã đặt vé</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Ngày tham quan</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Số vé đã xuất</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Tổng tiền</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Trạng thái</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -235,19 +238,19 @@ export const CustomerDetails: React.FC<CustomerDetailsProps> = ({ customer }) =>
                         {b.bookingCode}
                       </TableCell>
                       <TableCell>{b.date}</TableCell>
-                      <TableCell>{b.tickets} tickets</TableCell>
+                      <TableCell>{b.tickets} vé</TableCell>
                       <TableCell sx={{ fontWeight: 'bold', color: 'primary.main' }}>
-                        ${b.amount.toFixed(2)}
+                        {formatCurrency(b.amount)}
                       </TableCell>
                       <TableCell>
-                        <Chip label={b.status} size="small" color="success" sx={{ fontWeight: 'bold' }} />
+                        <Chip label={b.status === 'PAID' ? 'ĐÃ THANH TOÁN' : b.status} size="small" color="success" sx={{ fontWeight: 'bold' }} />
                       </TableCell>
                     </TableRow>
                   ))}
                   <TableRow sx={{ bgcolor: 'action.selected' }}>
-                    <TableCell colSpan={3} sx={{ fontWeight: 'bold' }}>Accumulated Total</TableCell>
+                    <TableCell colSpan={3} sx={{ fontWeight: 'bold' }}>Tổng cộng lũy kế</TableCell>
                     <TableCell colSpan={2} sx={{ fontWeight: 'bold', color: 'primary.main', fontSize: '1.05rem' }}>
-                      ${(customer.stats?.totalSpending || 380).toFixed(2)}
+                      {formatCurrency(customer.stats?.totalSpending || 3800000)}
                     </TableCell>
                   </TableRow>
                 </TableBody>
@@ -261,7 +264,7 @@ export const CustomerDetails: React.FC<CustomerDetailsProps> = ({ customer }) =>
         <Card variant="outlined" sx={{ borderRadius: 3 }}>
           <CardContent>
             <Typography variant="subtitle1" fontWeight="bold" display="flex" alignItems="center" gap={1} mb={3}>
-              <MdBadge /> CRM Action Audit Logs
+              <MdBadge /> Nhật ký hoạt động CRM
             </Typography>
             <CustomerTimeline activities={mockCustomerActivities[customer.id] || []} />
           </CardContent>

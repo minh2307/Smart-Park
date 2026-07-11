@@ -28,19 +28,19 @@ export const BookingFilterPanel: React.FC<BookingFilterPanelProps> = ({
   const venues = venuesData?.content || [];
 
   const bookingStatuses = [
-    { value: '0', label: 'Pending' },
-    { value: '1', label: 'Paid' },
-    { value: '2', label: 'Cancelled' },
-    { value: 'EXPIRED', label: 'Expired' },
-    { value: 'REFUNDED', label: 'Refunded' },
-    { value: 'COMPLETED', label: 'Completed' },
+    { value: '0', label: 'Chờ thanh toán' },
+    { value: '1', label: 'Đã thanh toán' },
+    { value: '2', label: 'Đã hủy' },
+    { value: 'EXPIRED', label: 'Hết hạn' },
+    { value: 'REFUNDED', label: 'Đã hoàn tiền' },
+    { value: 'COMPLETED', label: 'Hoàn thành' },
   ];
 
   return (
     <Box display="flex" flexWrap="wrap" gap={2} alignItems="center" width="100%">
       <TextField
         size="small"
-        placeholder="Search Order ID/Customer..."
+        placeholder="Tìm mã đơn/khách hàng..."
         value={search}
         onChange={(e) => onSearchChange(e.target.value)}
         InputProps={{
@@ -50,15 +50,15 @@ export const BookingFilterPanel: React.FC<BookingFilterPanelProps> = ({
       />
 
       <FormControl size="small" sx={{ width: { xs: '100%', sm: 160 } }}>
-        <InputLabel id="booking-status-filter-label">Order Status</InputLabel>
+        <InputLabel id="booking-status-filter-label">Trạng thái đơn</InputLabel>
         <Select
           labelId="booking-status-filter-label"
           id="booking-status-filter"
           value={status}
-          label="Order Status"
+          label="Trạng thái đơn"
           onChange={(e) => onStatusChange(e.target.value)}
         >
-          <MenuItem value="">All Statuses</MenuItem>
+          <MenuItem value="">Tất cả trạng thái</MenuItem>
           {bookingStatuses.map((s) => (
             <MenuItem key={s.value} value={s.value}>
               {s.label}
@@ -68,15 +68,15 @@ export const BookingFilterPanel: React.FC<BookingFilterPanelProps> = ({
       </FormControl>
 
       <FormControl size="small" sx={{ width: { xs: '100%', sm: 200 } }}>
-        <InputLabel id="booking-venue-filter-label">Venue</InputLabel>
+        <InputLabel id="booking-venue-filter-label">Địa điểm</InputLabel>
         <Select
           labelId="booking-venue-filter-label"
           id="booking-venue-filter"
           value={venueId}
-          label="Venue"
+          label="Địa điểm"
           onChange={(e) => onVenueChange(e.target.value as number | '')}
         >
-          <MenuItem value="">All Venues</MenuItem>
+          <MenuItem value="">Tất cả địa điểm</MenuItem>
           {venues.map((v) => (
             <MenuItem key={v.id} value={v.id}>
               {v.name}
@@ -94,9 +94,9 @@ export const BookingFilterPanel: React.FC<BookingFilterPanelProps> = ({
           size="small"
           sx={{ flexGrow: { xs: 1, sm: 0 } }}
         >
-          Reset
+          Đặt lại
         </Button>
-        <IconButton onClick={onRefresh} title="Refresh Data" color="primary" sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2 }}>
+        <IconButton onClick={onRefresh} title="Làm mới dữ liệu" color="primary" sx={{ border: '1px solid', borderColor: 'divider', borderRadius: 2 }}>
           <MdRefresh size={20} />
         </IconButton>
       </Box>

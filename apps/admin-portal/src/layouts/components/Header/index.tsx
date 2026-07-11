@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   AppBar,
   Toolbar,
@@ -33,6 +34,7 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user, logout } = useAuth();
   const themeMode = useSelector((state: RootState) => state.theme.mode);
 
@@ -90,25 +92,25 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
         </Box>
 
         <Box display="flex" alignItems="center" gap={0.5}>
-          <Tooltip title="Search">
+          <Tooltip title="Tìm kiếm">
             <IconButton color="inherit" size="small">
               <MdSearch size={20} />
             </IconButton>
           </Tooltip>
 
-          <Tooltip title={themeMode === 'light' ? 'Dark mode' : 'Light mode'}>
+          <Tooltip title={themeMode === 'light' ? 'Giao diện tối' : 'Giao diện sáng'}>
             <IconButton color="inherit" size="small" onClick={handleThemeToggle}>
               {themeMode === 'light' ? <MdDarkMode size={20} /> : <MdLightMode size={20} />}
             </IconButton>
           </Tooltip>
 
-          <Tooltip title={isFullscreen ? 'Exit fullscreen' : 'Fullscreen'}>
+          <Tooltip title={isFullscreen ? 'Thoát toàn màn hình' : 'Toàn màn hình'}>
             <IconButton color="inherit" size="small" onClick={handleToggleFullscreen}>
               {isFullscreen ? <MdFullscreenExit size={20} /> : <MdFullscreen size={20} />}
             </IconButton>
           </Tooltip>
 
-          <Tooltip title="Notifications">
+          <Tooltip title="Thông báo">
             <IconButton color="inherit" size="small">
               <Badge badgeContent={4} color="error">
                 <MdNotifications size={20} />
@@ -181,7 +183,14 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
               </Typography>
             </Box>
             <Divider sx={{ my: 0.5 }} />
-            <MenuItem onClick={handleProfileMenuClose}>Profile settings</MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleProfileMenuClose();
+                navigate('/admin/profile');
+              }}
+            >
+              Hồ sơ cá nhân
+            </MenuItem>
             <MenuItem
               onClick={() => {
                 handleProfileMenuClose();
@@ -189,7 +198,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
               }}
               sx={{ color: 'error.main' }}
             >
-              Sign out
+              Đăng xuất
             </MenuItem>
           </Menu>
         </Box>

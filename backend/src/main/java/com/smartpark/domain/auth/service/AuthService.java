@@ -31,6 +31,7 @@ public class AuthService {
     private final StringRedisTemplate redisTemplate;
     private final SecurityAuditService securityAuditService;
     private final UserDetailsService userDetailsService;
+    private final com.smartpark.domain.employee.repository.EmployeeRepository employeeRepository;
 
     private static final int MAX_FAILED_ATTEMPTS = 5;
     private static final int LOCK_TIME_DURATION = 15; // minutes
@@ -109,6 +110,7 @@ public class AuthService {
         response.setStatus(saved.getStatus().name());
         response.setRole("CUSTOMER");
         response.setFullName(saved.getUsername());
+        response.setAvatarUrl(saved.getAvatarUrl());
         response.setPermissions(java.util.Collections.emptyList());
         return response;
     }
@@ -123,27 +125,36 @@ public class AuthService {
         response.setUsername(user.getUsername());
         response.setEmail(user.getEmail());
         response.setStatus(user.getStatus().name());
+        response.setAvatarUrl(user.getAvatarUrl());
         
         // Map role code to frontend expectation
         String mappedRole = "CUSTOMER";
         if (user.getRoles() != null && !user.getRoles().isEmpty()) {
             String dbRole = user.getRoles().iterator().next().getCode();
-            if ("SYSTEM_ADMIN".equals(dbRole)) {
+            if ("SYSTEM_ADMIN".equals(dbRole) || "ADMIN".equals(dbRole)) {
                 mappedRole = "ADMIN";
-            } else if ("QUAN_LY".equals(dbRole)) {
+            } else if ("PARK_MANAGER".equals(dbRole) || "QUAN_LY".equals(dbRole) || "MANAGER".equals(dbRole)) {
                 mappedRole = "MANAGER";
-            } else if ("NHAN_VIEN".equals(dbRole)) {
+            } else if ("GATE_STAFF".equals(dbRole) || "NHAN_VIEN".equals(dbRole)) {
                 mappedRole = "NHAN_VIEN";
             }
         }
         response.setRole(mappedRole);
         
-        // Set a friendly display full name
-        String fullName = user.getUsername();
-        if ("sys_admin".equals(fullName)) {
-            fullName = "Nguyen Son Minh (Admin)";
-        } else {
-            fullName = fullName.substring(0, 1).toUpperCase() + fullName.substring(1);
+        // Try to fetch full name from employees table
+        String fullName = null;
+        var empOpt = employeeRepository.findByUserId(user.getId());
+        if (empOpt.isPresent()) {
+            fullName = empOpt.get().getFullName();
+        }
+        
+        if (fullName == null || fullName.trim().isEmpty()) {
+            fullName = user.getUsername();
+            if ("sys_admin".equals(fullName)) {
+                fullName = "Nguyen Son Minh (Admin)";
+            } else {
+                fullName = fullName.substring(0, 1).toUpperCase() + fullName.substring(1);
+            }
         }
         response.setFullName(fullName);
         
@@ -246,6 +257,34 @@ public class AuthService {
 
         securityAuditService.logAudit(user.getId(), "PASSWORD_CHANGE");
         log.info("[PASSWORD CHANGED] username={}", username);
+    }
+
+    @Transactional
+    public AuthDto.UserResponse updateProfile(String username, AuthDto.UpdateProfileRequest request) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("User", username));
+
+        if (!user.getEmail().equalsIgnoreCase(request.getEmail()) && userRepository.existsByEmail(request.getEmail())) {
+            throw new BusinessException("ERR-USER-002", "Email đã được sử dụng bởi tài khoản khác.");
+        }
+
+        user.setEmail(request.getEmail());
+        if (request.getAvatarUrl() != null) {
+            user.setAvatarUrl(request.getAvatarUrl());
+        }
+        userRepository.save(user);
+
+        // Update corresponding employee record if exists
+        var empOpt = employeeRepository.findByUserId(user.getId());
+        if (empOpt.isPresent()) {
+            var employee = empOpt.get();
+            employee.setFullName(request.getFullName());
+            employee.setPhone(request.getPhone());
+            employee.setEmail(request.getEmail());
+            employeeRepository.save(employee);
+        }
+
+        return getMe(username);
     }
 
 }

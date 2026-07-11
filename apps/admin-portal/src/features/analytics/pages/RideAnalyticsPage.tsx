@@ -39,7 +39,7 @@ export const RideAnalyticsPage: React.FC = () => {
         axisPointer: { type: 'cross' },
       },
       legend: {
-        data: ['Riders Count', 'Avg Wait (min)'],
+        data: ['Lượt khách', 'Thời gian chờ TB (phút)'],
         textStyle: { color: mode === 'dark' ? '#cbd5e1' : '#1e293b' },
       },
       grid: { left: '3%', right: '4%', bottom: '3%', containLabel: true },
@@ -53,26 +53,26 @@ export const RideAnalyticsPage: React.FC = () => {
       yAxis: [
         {
           type: 'value',
-          name: 'Riders',
+          name: 'Khách đi',
           min: 0,
           axisLabel: { formatter: '{value}' },
         },
         {
           type: 'value',
-          name: 'Wait Time',
+          name: 'Thời gian chờ',
           min: 0,
-          axisLabel: { formatter: '{value} min' },
+          axisLabel: { formatter: '{value} phút' },
         },
       ],
       series: [
         {
-          name: 'Riders Count',
+          name: 'Lượt khách',
           type: 'bar',
           data: rideData.peakHours.map((h) => h.averageRiders),
           itemStyle: { color: '#3b82f6' },
         },
         {
-          name: 'Avg Wait (min)',
+          name: 'Thời gian chờ TB (phút)',
           type: 'line',
           yAxisIndex: 1,
           smooth: true,
@@ -93,7 +93,7 @@ export const RideAnalyticsPage: React.FC = () => {
     return buildBarChartOption(
       mode,
       categories,
-      [{ name: 'Utilization (%)', data: values, color: '#10b981' }],
+      [{ name: 'Tỷ lệ khai thác (%)', data: values, color: '#10b981' }],
       true,
       'percentage'
     );
@@ -114,10 +114,10 @@ export const RideAnalyticsPage: React.FC = () => {
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
         <Box>
           <Typography variant="h4" sx={{ fontWeight: 800, letterSpacing: '-0.02em' }}>
-            Ride Analytics
+            Phân tích trò chơi
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Ridership volumes, queue durations, availability rates, downtime root causes, and safety logs
+            Lượt khách, thời gian chờ xếp hàng, tỷ lệ khả dụng, nguyên nhân sự cố và nhật ký an toàn
           </Typography>
         </Box>
       </Box>
@@ -130,13 +130,13 @@ export const RideAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Avg Queue Duration
+                Thời gian xếp hàng TB
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5, color: 'error.main' }}>
-                {rideData?.averageQueueTime || 0} min
+                {rideData?.averageQueueTime || 0} phút
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                Wait time: {rideData?.averageWaitingTime || 0} min
+                Thời gian chờ: {rideData?.averageWaitingTime || 0} phút
               </Typography>
             </CardContent>
           </Card>
@@ -145,13 +145,13 @@ export const RideAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Pending Maintenance
+                Lịch bảo trì tồn đọng
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5, color: 'warning.main' }}>
-                {rideData?.maintenanceStats.pendingCount || 0} rides
+                {rideData?.maintenanceStats.pendingCount || 0} trò chơi
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                Resolution avg: {rideData?.maintenanceStats.averageResolutionHours || 0}h
+                Thời gian xử lý TB: {rideData?.maintenanceStats.averageResolutionHours || 0}h
               </Typography>
             </CardContent>
           </Card>
@@ -160,13 +160,13 @@ export const RideAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Active Engineering Crews
+                Đội kỹ thuật hoạt động
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5 }}>
-                {rideData?.maintenanceStats.scheduledCount || 0} scheduled
+                {rideData?.maintenanceStats.scheduledCount || 0} đã lên lịch
               </Typography>
               <Typography variant="caption" color="success.main">
-                Safety compliance: 100%
+                Tuân thủ an toàn: 100%
               </Typography>
             </CardContent>
           </Card>
@@ -176,35 +176,35 @@ export const RideAnalyticsPage: React.FC = () => {
       {/* Visual Analytics */}
       <Grid container spacing={2.5} sx={{ mb: 4 }}>
         <Grid item xs={12}>
-          <DashboardCard title="Hourly Waiting Times vs Riders Density" subtitle="Co-relation of wait times (in Red) vs ridership counts (in Blue)">
+          <DashboardCard title="Thời gian chờ hàng giờ so với mật độ du khách" subtitle="Mối liên hệ giữa thời gian chờ (màu Đỏ) so với số lượng khách đi (màu Xanh)">
             <ChartContainer option={hourlyWaitRidersOption} height={320} loading={isLoading} />
           </DashboardCard>
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <DashboardCard title="Mechanical Utilization" subtitle="Percentage of operating hours active vs idle time">
+          <DashboardCard title="Hiệu suất vận hành cơ khí" subtitle="Tỷ lệ phần trăm thời gian hoạt động so với thời gian nhàn rỗi">
             <ChartContainer option={utilizationOption} height={300} loading={isLoading} />
           </DashboardCard>
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <DashboardCard title="Safety Availability Rates" subtitle="Availability percentages factoring downtime">
+          <DashboardCard title="Tỷ lệ sẵn sàng an toàn" subtitle="Tỷ lệ sẵn sàng sau khi tính thời gian dừng hoạt động">
             <ChartContainer option={availabilityOption} height={300} loading={isLoading} />
           </DashboardCard>
         </Grid>
 
         {/* Ride Popularity list */}
         <Grid item xs={12} lg={7}>
-          <DashboardCard title="Ridership & Revenue Rankings" subtitle="Ranking of rides by total passengers and ticket sales">
+          <DashboardCard title="Xếp hạng lượt khách & doanh thu" subtitle="Xếp hạng trò chơi theo tổng lượng hành khách và doanh số bán vé">
             <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
               <Table size="medium">
                 <TableHead sx={{ backgroundColor: 'action.hover' }}>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Ride Name</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Total Riders</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Rating</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Growth Trend</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Generated Revenue</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Tên trò chơi</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Tổng lượt khách</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Đánh giá</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Xu hướng tăng trưởng</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Doanh thu tạo ra</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -235,26 +235,26 @@ export const RideAnalyticsPage: React.FC = () => {
 
         {/* Maintenance Log list */}
         <Grid item xs={12} lg={5}>
-          <DashboardCard title="Upcoming Maintenance Schedule" subtitle="Engineering tasks planned for execution">
+          <DashboardCard title="Lịch bảo trì sắp tới" subtitle="Các nhiệm vụ kỹ thuật đã lên kế hoạch thực hiện">
             <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
               <Table size="medium">
                 <TableHead sx={{ backgroundColor: 'action.hover' }}>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Ride</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Date</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Type</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Trò chơi</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Ngày</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Loại</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Trạng thái</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {rideData?.maintenanceStats.upcomingMaintenance.map((m, idx) => (
                     <TableRow key={idx} hover>
                       <TableCell sx={{ fontWeight: 600 }}>{m.rideName}</TableCell>
-                      <TableCell>{new Date(m.scheduledDate).toLocaleDateString()}</TableCell>
+                      <TableCell>{new Date(m.scheduledDate).toLocaleDateString('vi-VN')}</TableCell>
                       <TableCell sx={{ textTransform: 'capitalize' }}>{m.type}</TableCell>
                       <TableCell>
                         <StatusChip
-                          label={m.status.replace('_', ' ')}
+                          label={m.status === 'completed' ? 'Hoàn thành' : 'Đang chờ'}
                           status={m.status === 'completed' ? 'active' : 'pending'}
                         />
                       </TableCell>

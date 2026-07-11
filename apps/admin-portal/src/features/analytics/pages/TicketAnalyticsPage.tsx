@@ -38,7 +38,7 @@ export const TicketAnalyticsPage: React.FC = () => {
     return buildLineChartOption(
       mode,
       categories,
-      [{ name: 'Tickets Sold', data: dataValues, color: '#f59e0b', areaStyle: true }],
+      [{ name: 'Vé đã bán', data: dataValues, color: '#f59e0b', areaStyle: true }],
       'number'
     );
   }, [ticketData, mode]);
@@ -61,7 +61,7 @@ export const TicketAnalyticsPage: React.FC = () => {
     return buildBarChartOption(
       mode,
       categories,
-      [{ name: 'Scans Count', data: dataValues, color: '#10b981' }],
+      [{ name: 'Lượt quét', data: dataValues, color: '#10b981' }],
       false,
       'number'
     );
@@ -72,10 +72,10 @@ export const TicketAnalyticsPage: React.FC = () => {
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
         <Box>
           <Typography variant="h4" sx={{ fontWeight: 800, letterSpacing: '-0.02em' }}>
-            Ticket Analytics
+            Phân tích vé
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Sales, validation checkpoints performance, ride allocations, and ticket product comparison
+            Doanh thu bán vé, hiệu suất trạm kiểm soát, phân bổ trò chơi và so sánh sản phẩm vé
           </Typography>
         </Box>
       </Box>
@@ -88,13 +88,13 @@ export const TicketAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Total Tickets Sold
+                Tổng số vé đã bán
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5 }}>
                 {ticketData?.totalTicketsSold.toLocaleString() || 0}
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                Cumulative sales
+                Doanh số tích lũy
               </Typography>
             </CardContent>
           </Card>
@@ -103,13 +103,13 @@ export const TicketAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Ticket Revenue
+                Doanh thu bán vé
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5, color: 'primary.main' }}>
                 {formatCurrency(ticketData?.ticketRevenue || 0)}
               </Typography>
               <Typography variant="caption" color="success.main">
-                Top: {ticketData?.mostPopularTicket.name}
+                Bán chạy nhất: {ticketData?.mostPopularTicket.name}
               </Typography>
             </CardContent>
           </Card>
@@ -118,13 +118,13 @@ export const TicketAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Usage & Expiration Rate
+                Tỷ lệ sử dụng & Hết hạn
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5 }}>
                 {ticketData?.usageRate || 0}% / {ticketData?.expirationRate || 0}%
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                Expired unused: {ticketData?.expirationRate || 0}%
+                Hết hạn chưa dùng: {ticketData?.expirationRate || 0}%
               </Typography>
             </CardContent>
           </Card>
@@ -133,13 +133,13 @@ export const TicketAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Validation Success Rate
+                Tỷ lệ soát vé thành công
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5, color: 'success.main' }}>
                 {ticketData?.validationSuccess || 0}%
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                Access control telemetry
+                Trạng thái kiểm soát ra vào
               </Typography>
             </CardContent>
           </Card>
@@ -149,36 +149,36 @@ export const TicketAnalyticsPage: React.FC = () => {
       {/* Visual Dashboards */}
       <Grid container spacing={2.5} sx={{ mb: 4 }}>
         <Grid item xs={12} lg={8}>
-          <DashboardCard title="Daily Tickets Sales Trend" subtitle="Volume of tickets sold over time">
+          <DashboardCard title="Xu hướng bán vé hàng ngày" subtitle="Số lượng vé đã bán theo thời gian">
             <ChartContainer option={salesOption} height={320} loading={isLoading} />
           </DashboardCard>
         </Grid>
 
         <Grid item xs={12} lg={4}>
-          <DashboardCard title="Ride Admission Shares" subtitle="Ticket scans allocated to specific rides">
+          <DashboardCard title="Tỷ lệ soát vé theo trò chơi" subtitle="Lượt quét vé được phân bổ cho các trò chơi cụ thể">
             <ChartContainer option={rideUsageOption} height={320} loading={isLoading} />
           </DashboardCard>
         </Grid>
 
         <Grid item xs={12}>
-          <DashboardCard title="Admission Scans by Venue" subtitle="Checkpoints activity load across different park areas">
+          <DashboardCard title="Lượt quét vé theo địa điểm" subtitle="Tải trọng hoạt động của các trạm soát vé tại các khu vực khác nhau">
             <ChartContainer option={venueUsageOption} height={280} loading={isLoading} />
           </DashboardCard>
         </Grid>
 
         {/* Ticket Type Table */}
         <Grid item xs={12}>
-          <DashboardCard title="Ticket Product Matrix" subtitle="Detailed performance comparison by ticket product type">
+          <DashboardCard title="Danh mục sản phẩm vé" subtitle="So sánh hiệu suất chi tiết theo từng loại sản phẩm vé">
             <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
               <Table size="medium">
                 <TableHead sx={{ backgroundColor: 'action.hover' }}>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Ticket Product</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Unit Price</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Units Sold</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Total Revenue</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Usage Rate</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Return/Refund Rate</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Sản phẩm vé</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Đơn giá</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Số lượng bán</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Tổng doanh thu</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Tỷ lệ sử dụng</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Tỷ lệ trả/hoàn tiền</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

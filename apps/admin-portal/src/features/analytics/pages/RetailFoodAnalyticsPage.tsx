@@ -30,13 +30,13 @@ export const RetailFoodAnalyticsPage: React.FC = () => {
   // 1. Line Chart: Daily Restaurant vs Shop Revenue
   const trendOption = useMemo(() => {
     if (!retailData?.dailyTrend.length) return null;
-    const categories = retailData.dailyTrend.map((d) => new Date(d.date).toLocaleDateString());
+    const categories = retailData.dailyTrend.map((d) => new Date(d.date).toLocaleDateString('vi-VN'));
     return buildLineChartOption(
       mode,
       categories,
       [
-        { name: 'Restaurant (F&B) Revenue', data: retailData.dailyTrend.map((d) => d.restaurantRevenue) },
-        { name: 'Retail Shops Revenue', data: retailData.dailyTrend.map((d) => d.shopRevenue), color: '#3b82f6' },
+        { name: 'Doanh thu Nhà hàng (Ẩm thực)', data: retailData.dailyTrend.map((d) => d.restaurantRevenue) },
+        { name: 'Doanh thu Cửa hàng Bán lẻ', data: retailData.dailyTrend.map((d) => d.shopRevenue), color: '#3b82f6' },
       ],
       'currency'
     );
@@ -57,10 +57,10 @@ export const RetailFoodAnalyticsPage: React.FC = () => {
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
         <Box>
           <Typography variant="h4" sx={{ fontWeight: 800, letterSpacing: '-0.02em' }}>
-            Retail & F&B Analytics
+            Phân tích Bán lẻ & Ẩm thực
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Food Court yields, retail shop sales performance, inventory turn rates, and supplier KPIs
+            Doanh thu khu ẩm thực, hiệu suất bán hàng của cửa hàng bán lẻ, tỷ lệ quay vòng hàng tồn kho và KPI nhà cung cấp
           </Typography>
         </Box>
       </Box>
@@ -73,13 +73,13 @@ export const RetailFoodAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Restaurant (F&B) Sales
+                Doanh số Nhà hàng (Ẩm thực)
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5, color: 'primary.main' }}>
                 {formatCurrency(retailData?.restaurantRevenue || 0)}
               </Typography>
               <Typography variant="caption" color="success.main">
-                Food Court operations
+                Hoạt động khu ẩm thực
               </Typography>
             </CardContent>
           </Card>
@@ -88,13 +88,13 @@ export const RetailFoodAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Retail Shop Sales
+                Doanh số Cửa hàng Bán lẻ
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5, color: 'primary.main' }}>
                 {formatCurrency(retailData?.shopRevenue || 0)}
               </Typography>
               <Typography variant="caption" color="success.main">
-                Souvenirs & Apparel
+                Quà lưu niệm & Trang phục
               </Typography>
             </CardContent>
           </Card>
@@ -103,13 +103,13 @@ export const RetailFoodAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Average Order Value
+                Giá trị đơn hàng trung bình
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5 }}>
                 {formatCurrency(retailData?.averageOrderValue || 0)}
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                Per checkout receipt
+                Trên mỗi hóa đơn thanh toán
               </Typography>
             </CardContent>
           </Card>
@@ -118,13 +118,13 @@ export const RetailFoodAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Total F&B / Retail Gross
+                Tổng doanh thu Ẩm thực & Bán lẻ
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5 }}>
                 {formatCurrency((retailData?.restaurantRevenue || 0) + (retailData?.shopRevenue || 0))}
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                Combined aux sales
+                Doanh thu phụ trợ kết hợp
               </Typography>
             </CardContent>
           </Card>
@@ -134,29 +134,29 @@ export const RetailFoodAnalyticsPage: React.FC = () => {
       {/* Visual Analytics */}
       <Grid container spacing={2.5} sx={{ mb: 4 }}>
         <Grid item xs={12} lg={8}>
-          <DashboardCard title="F&B vs Retail Revenue Trend" subtitle="Daily revenue tracking comparison (₫)">
+          <DashboardCard title="Xu hướng doanh thu Ẩm thực so với Bán lẻ" subtitle="So sánh theo dõi doanh thu hàng ngày (₫)">
             <ChartContainer option={trendOption} height={320} loading={isLoading} />
           </DashboardCard>
         </Grid>
 
         <Grid item xs={12} lg={4}>
-          <DashboardCard title="Revenue Share by Category" subtitle="Top performing product category breakdowns">
+          <DashboardCard title="Tỷ lệ doanh thu theo ngành hàng" subtitle="Chi tiết các ngành hàng sản phẩm đạt hiệu suất cao nhất">
             <ChartContainer option={categoriesOption} height={320} loading={isLoading} />
           </DashboardCard>
         </Grid>
 
         {/* Product performance Lists */}
         <Grid item xs={12} lg={6}>
-          <DashboardCard title="Best Selling Products" subtitle="Top ranked products by sales volumes and revenue">
+          <DashboardCard title="Sản phẩm bán chạy nhất" subtitle="Xếp hạng sản phẩm hàng đầu theo sản lượng bán ra và doanh thu">
             <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
               <Table size="medium">
                 <TableHead sx={{ backgroundColor: 'action.hover' }}>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Product</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Category</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Units Sold</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Sales Revenue</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Shop Location</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Sản phẩm</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Danh mục</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Số lượng bán</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Doanh thu bán hàng</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Vị trí cửa hàng</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -176,16 +176,16 @@ export const RetailFoodAnalyticsPage: React.FC = () => {
         </Grid>
 
         <Grid item xs={12} lg={6}>
-          <DashboardCard title="Underperforming Products" subtitle="Products with lowest traction requiring attention">
+          <DashboardCard title="Sản phẩm doanh số thấp" subtitle="Các sản phẩm có lượng mua thấp nhất cần chú ý">
             <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
               <Table size="medium">
                 <TableHead sx={{ backgroundColor: 'action.hover' }}>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Product</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Category</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Units Sold</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Sales Revenue</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Shop Location</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Sản phẩm</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Danh mục</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Số lượng bán</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Doanh thu bán hàng</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Vị trí cửa hàng</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -206,16 +206,16 @@ export const RetailFoodAnalyticsPage: React.FC = () => {
 
         {/* Inventory turnover table */}
         <Grid item xs={12} lg={7}>
-          <DashboardCard title="Inventory Turnover Rates" subtitle="Active stock levels and replenishment reorder alerts">
+          <DashboardCard title="Tốc độ quay vòng hàng tồn kho" subtitle="Mức tồn kho thực tế và cảnh báo đặt thêm hàng">
             <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
               <Table size="medium">
                 <TableHead sx={{ backgroundColor: 'action.hover' }}>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Product Name</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Turnover Rate</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Stock Level</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Reorder Point</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Tên sản phẩm</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Tỷ lệ quay vòng</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Mức tồn kho</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Điểm đặt hàng</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Trạng thái</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -227,7 +227,7 @@ export const RetailFoodAnalyticsPage: React.FC = () => {
                       <TableCell>{item.reorderPoint}</TableCell>
                       <TableCell>
                         <StatusChip
-                          label={item.stockLevel <= item.reorderPoint ? 'Low Stock' : 'In Stock'}
+                          label={item.stockLevel <= item.reorderPoint ? 'Sắp hết hàng' : 'Còn hàng'}
                           status={item.stockLevel <= item.reorderPoint ? 'error' : 'active'}
                         />
                       </TableCell>
@@ -241,15 +241,15 @@ export const RetailFoodAnalyticsPage: React.FC = () => {
 
         {/* Supplier Scorecard */}
         <Grid item xs={12} lg={5}>
-          <DashboardCard title="Supplier Performance Scorecard" subtitle="On-time rates and product quality index by vendor">
+          <DashboardCard title="Thẻ điểm hiệu suất nhà cung cấp" subtitle="Tỷ lệ đúng hạn và chỉ số chất lượng sản phẩm theo nhà cung cấp">
             <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
               <Table size="medium">
                 <TableHead sx={{ backgroundColor: 'action.hover' }}>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Supplier Vendor</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>On-Time</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Quality Score</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Orders</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Nhà cung cấp</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Đúng hạn</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Điểm chất lượng</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Đơn hàng</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>

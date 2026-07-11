@@ -18,6 +18,7 @@ import {
 import { MdVisibility, MdEdit, MdDelete } from 'react-icons/md';
 import { Customer } from '../types';
 import { MembershipBadge } from './MembershipBadge';
+import { formatCurrency } from '../../analytics/utils/numberFormatters';
 
 interface CustomerTableProps {
   data: Customer[];
@@ -66,7 +67,7 @@ export const CustomerTable: React.FC<CustomerTableProps> = ({
     const isSuspended = status === 'SUSPENDED';
     return (
       <Chip
-        label={status}
+        label={status === 'ACTIVE' ? 'HOẠT ĐỘNG' : status === 'SUSPENDED' ? 'TẠM KHÓA' : status}
         size="small"
         color={isSuspended ? 'error' : 'success'}
         variant="outlined"
@@ -81,13 +82,13 @@ export const CustomerTable: React.FC<CustomerTableProps> = ({
         <Table sx={{ minWidth: 800 }}>
           <TableHead>
             <TableRow sx={{ bgcolor: 'action.hover' }}>
-              <TableCell sx={{ fontWeight: 'bold' }}>Customer Code / Name</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Contact Information</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Membership Level</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Purchases</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Total Spending</TableCell>
-              <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
-              <TableCell align="right" sx={{ fontWeight: 'bold' }}>Actions</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Mã / Tên khách hàng</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Thông tin liên hệ</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Hạng thành viên</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Lượt mua</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Tổng chi tiêu</TableCell>
+              <TableCell sx={{ fontWeight: 'bold' }}>Trạng thái</TableCell>
+              <TableCell align="right" sx={{ fontWeight: 'bold' }}>Hành động</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -115,7 +116,7 @@ export const CustomerTable: React.FC<CustomerTableProps> = ({
               <TableRow>
                 <TableCell colSpan={7} align="center" sx={{ py: 6 }}>
                   <Typography variant="body1" color="text.secondary">
-                    No customers found matching filters.
+                    Không tìm thấy khách hàng nào khớp với bộ lọc.
                   </Typography>
                 </TableCell>
               </TableRow>
@@ -154,15 +155,15 @@ export const CustomerTable: React.FC<CustomerTableProps> = ({
                   </TableCell>
                   <TableCell>
                     <Typography variant="body2" fontWeight={600}>
-                      {row.stats?.totalOrders || 0} orders
+                      {row.stats?.totalOrders || 0} đơn hàng
                     </Typography>
                     <Typography variant="caption" color="text.secondary">
-                      {row.stats?.totalTickets || 0} tickets
+                      {row.stats?.totalTickets || 0} vé
                     </Typography>
                   </TableCell>
                   <TableCell>
                     <Typography variant="body2" fontWeight="bold" color="primary.main">
-                      ${(row.stats?.totalSpending || 0).toFixed(2)}
+                      {formatCurrency(row.stats?.totalSpending || 0)}
                     </Typography>
                   </TableCell>
                   <TableCell>{renderStatus(row.status)}</TableCell>

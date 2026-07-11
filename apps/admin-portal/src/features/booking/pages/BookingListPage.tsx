@@ -17,6 +17,7 @@ import { Booking } from '../types';
 import { BookingInput } from '../schemas/bookingSchema';
 import { PermissionWrapper } from '../../../shared/components/PermissionWrapper';
 import { MdAdd, MdReceipt, MdShoppingBag, MdCancel } from 'react-icons/md';
+import { formatCurrency } from '../../analytics/utils/numberFormatters';
 
 export const BookingListPage: React.FC = () => {
   const [page, setPage] = useState(0);
@@ -85,7 +86,7 @@ export const BookingListPage: React.FC = () => {
         paymentMethod: formData.paymentMethod,
         status: 0, // Pending
         createdAt: new Date().toISOString(),
-        customer: mockCustomers.find(c => c.id === formData.customerId) || { id: 1, fullName: 'Walk-in Customer', email: 'c@g.com' },
+        customer: mockCustomers.find(c => c.id === formData.customerId) || { id: 1, fullName: 'Khách vãng lai', email: 'c@g.com' },
         items: formData.items.map((i: any) => ({
           ticketTypeId: i.ticketTypeId,
           quantity: i.quantity,
@@ -99,7 +100,7 @@ export const BookingListPage: React.FC = () => {
   };
 
   const handleCancelConfirm = async (booking: Booking) => {
-    if (window.confirm(`Are you sure you want to cancel booking BK-${String(booking.id).padStart(4, '0')}?`)) {
+    if (window.confirm(`Bạn có chắc chắn muốn hủy đơn đặt vé BK-${String(booking.id).padStart(4, '0')} không?`)) {
       try {
         await cancelBooking(booking.id).unwrap();
       } catch (err) {
@@ -163,9 +164,9 @@ export const BookingListPage: React.FC = () => {
   ];
 
   const mockTicketTypes = [
-    { id: 1, name: 'General Admission', price: 45.00 },
-    { id: 2, name: 'VIP Fast Pass', price: 95.00 },
-    { id: 3, name: 'Two-Day Combo Pass', price: 80.00 },
+    { id: 1, name: 'Vé vào cổng phổ thông', price: 450000 },
+    { id: 2, name: 'Vé VIP nhanh', price: 950000 },
+    { id: 3, name: 'Vé Combo 2 ngày', price: 800000 },
   ];
 
   const mockBookings: Booking[] = [
@@ -173,38 +174,38 @@ export const BookingListPage: React.FC = () => {
       id: 1,
       customerId: 1,
       venueId: 1,
-      totalAmount: 45.00,
+      totalAmount: 450000,
       paymentMethod: 'CHUYEN_KHOAN_QR',
       status: 1,
       createdAt: '2026-07-09T08:15:30Z',
       customer: { id: 1, fullName: 'John Doe', email: 'john.doe@gmail.com', phone: '+123456789' },
-      venue: { id: 1, name: 'Smart Park East Wing' },
-      items: [{ ticketTypeId: 1, quantity: 1, ticketType: { id: 1, name: 'General Admission', price: 45.00 } }],
+      venue: { id: 1, name: 'Smart Park Phân khu Phía Đông' },
+      items: [{ ticketTypeId: 1, quantity: 1, ticketType: { id: 1, name: 'Vé vào cổng phổ thông', price: 450000 } }],
       tickets: [{ id: 1, ticketCode: 'TKT-7829-109', status: 'SOLD', validDate: '2026-12-31', createdAt: '2026-07-09T08:15:30Z', maxUses: 1, remainingUses: 1, usageCount: 0 }]
     },
     {
       id: 2,
       customerId: 2,
       venueId: 1,
-      totalAmount: 95.00,
+      totalAmount: 950000,
       paymentMethod: 'TIEN_MAT',
       status: 0,
       createdAt: '2026-07-09T10:00:00Z',
       customer: { id: 2, fullName: 'Jane Smith', email: 'jane.smith@yahoo.com', phone: '+987654321' },
-      venue: { id: 1, name: 'Smart Park East Wing' },
-      items: [{ ticketTypeId: 2, quantity: 1, ticketType: { id: 2, name: 'VIP Fast Pass', price: 95.00 } }],
+      venue: { id: 1, name: 'Smart Park Phân khu Phía Đông' },
+      items: [{ ticketTypeId: 2, quantity: 1, ticketType: { id: 2, name: 'Vé VIP nhanh', price: 950000 } }],
     },
     {
       id: 3,
       customerId: 3,
       venueId: 2,
-      totalAmount: 160.00,
+      totalAmount: 1600000,
       paymentMethod: 'CHUYEN_KHOAN_QR',
       status: 2,
       createdAt: '2026-07-08T14:22:15Z',
       customer: { id: 3, fullName: 'Robert Johnson', email: 'robert.j@outlook.com', phone: '+447911123' },
-      venue: { id: 2, name: 'Water World Pavilion' },
-      items: [{ ticketTypeId: 3, quantity: 2, ticketType: { id: 3, name: 'Two-Day Combo Pass', price: 80.00 } }],
+      venue: { id: 2, name: 'Nhà triển lãm Thế giới Nước' },
+      items: [{ ticketTypeId: 3, quantity: 2, ticketType: { id: 3, name: 'Vé Combo 2 ngày', price: 800000 } }],
     }
   ];
 
@@ -217,7 +218,7 @@ export const BookingListPage: React.FC = () => {
 
   return (
     <PageContainer
-      title="Booking & Sales Registry"
+      title="Đăng ký & Đặt vé bán hàng"
       toolbar={
         <PermissionWrapper requiredPermission="write:bookings">
           <Button
@@ -225,7 +226,7 @@ export const BookingListPage: React.FC = () => {
             startIcon={<MdAdd />}
             onClick={() => setCreateOpen(true)}
           >
-            Create Booking
+            Tạo đơn đặt vé
           </Button>
         </PermissionWrapper>
       }
@@ -240,7 +241,7 @@ export const BookingListPage: React.FC = () => {
                   <MdShoppingBag size={26} />
                 </Box>
                 <Box>
-                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Awaiting Payment</Typography>
+                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Đang chờ thanh toán</Typography>
                   <Typography variant="h5" fontWeight="bold">{countPending}</Typography>
                 </Box>
               </CardContent>
@@ -253,7 +254,7 @@ export const BookingListPage: React.FC = () => {
                   <MdReceipt size={26} />
                 </Box>
                 <Box>
-                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Completed Sales</Typography>
+                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Doanh thu hoàn tất</Typography>
                   <Typography variant="h5" fontWeight="bold">{countPaid}</Typography>
                 </Box>
               </CardContent>
@@ -266,7 +267,7 @@ export const BookingListPage: React.FC = () => {
                   <MdCancel size={26} />
                 </Box>
                 <Box>
-                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Cancelled Bookings</Typography>
+                  <Typography variant="caption" color="text.secondary" fontWeight={500}>Đơn đặt vé đã hủy</Typography>
                   <Typography variant="h5" fontWeight="bold">{countCancelled}</Typography>
                 </Box>
               </CardContent>
@@ -290,7 +291,7 @@ export const BookingListPage: React.FC = () => {
 
         {isError && (
           <Alert severity="warning" sx={{ borderRadius: 2 }}>
-            Failed to connect to backend order service. Showing offline local records.
+            Không thể kết nối đến dịch vụ đơn hàng. Đang hiển thị bản ghi cục bộ ngoại tuyến.
           </Alert>
         )}
 
@@ -315,7 +316,7 @@ export const BookingListPage: React.FC = () => {
         <Modal
           open={detailsOpen}
           onClose={() => setDetailsOpen(false)}
-          title="Booking Sales Receipt Info"
+          title="Thông tin hóa đơn đặt vé"
           maxWidth="md"
         >
           {selectedBooking && (
@@ -330,7 +331,7 @@ export const BookingListPage: React.FC = () => {
         <Modal
           open={createOpen}
           onClose={() => setCreateOpen(false)}
-          title="Initialize New Booking"
+          title="Khởi tạo đơn đặt vé mới"
           maxWidth="md"
         >
           <BookingForm onSubmit={handleCreateSubmit} loading={isCreating} />
@@ -338,15 +339,15 @@ export const BookingListPage: React.FC = () => {
 
         {/* Payment QR Modal */}
         <Dialog open={payQROpen} onClose={() => setPayQROpen(false)} maxWidth="xs" fullWidth>
-          <DialogTitle sx={{ fontWeight: 'bold', align: 'center' }}>Scan to Complete Purchase</DialogTitle>
+          <DialogTitle sx={{ fontWeight: 'bold', align: 'center' }}>Quét mã để hoàn tất giao dịch</DialogTitle>
           <DialogContent sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: 2 }}>
             {selectedBooking && (
               <>
                 <Typography variant="body1" fontWeight="bold" gutterBottom>
-                  Total Amount: ${selectedBooking.totalAmount.toFixed(2)}
+                  Tổng tiền: {formatCurrency(selectedBooking.totalAmount)}
                 </Typography>
                 <Typography variant="body2" color="text.secondary" align="center" mb={2}>
-                  Scan the QR code below via banking/e-wallet application to initiate payment.
+                  Quét mã QR bên dưới qua ứng dụng ngân hàng hoặc ví điện tử để thực hiện thanh toán.
                 </Typography>
                 
                 {payUrl ? (
@@ -367,7 +368,7 @@ export const BookingListPage: React.FC = () => {
                     <img src={payUrl} alt="VietQR Link" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
                   </Box>
                 ) : (
-                  <Typography variant="caption">Generating payment URL...</Typography>
+                  <Typography variant="caption">Đang tạo đường dẫn thanh toán...</Typography>
                 )}
                 
                 <Typography variant="caption" sx={{ mt: 2, fontFamily: 'monospace', fontWeight: 'bold' }}>
@@ -378,10 +379,10 @@ export const BookingListPage: React.FC = () => {
           </DialogContent>
           <DialogActions sx={{ justifyContent: 'center', pb: 2 }}>
             <Button onClick={handlePaySuccessSimulated} variant="contained" color="success">
-              Simulate Successful Payment
+              Giả lập thanh toán thành công
             </Button>
             <Button onClick={() => setPayQROpen(false)} variant="outlined" color="inherit">
-              Cancel
+              Hủy bỏ
             </Button>
           </DialogActions>
         </Dialog>

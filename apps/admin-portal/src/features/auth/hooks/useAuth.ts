@@ -24,7 +24,7 @@ export const useAuth = () => {
       dispatch(setCredentials({ user, accessToken: response.accessToken }));
       return { success: true };
     } catch (err: any) {
-      const errMsg = err?.data?.detail || err?.data?.title || 'Authentication failed';
+      const errMsg = err?.data?.detail || err?.data?.title || 'Đăng nhập không thành công';
       dispatch(setError(errMsg));
       return { success: false, error: errMsg };
     } finally {

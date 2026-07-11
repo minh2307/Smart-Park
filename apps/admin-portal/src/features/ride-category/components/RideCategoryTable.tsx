@@ -38,11 +38,11 @@ export const RideCategoryTable: React.FC<RideCategoryTableProps> = ({
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Code / Name</TableCell>
-              <TableCell>Description</TableCell>
-              <TableCell>Number of Rides</TableCell>
-              <TableCell>Status</TableCell>
-              <TableCell align="right">Actions</TableCell>
+              <TableCell>Mã / Tên danh mục</TableCell>
+              <TableCell>Mô tả</TableCell>
+              <TableCell>Số lượng trò chơi</TableCell>
+              <TableCell>Trạng thái</TableCell>
+              <TableCell align="right">Thao tác</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -65,7 +65,7 @@ export const RideCategoryTable: React.FC<RideCategoryTableProps> = ({
     return (
       <Paper variant="outlined" sx={{ p: 4, textAlign: 'center', borderRadius: 3 }}>
         <Typography variant="body1" color="text.secondary">
-          No ride categories found matching the search criteria.
+          Không tìm thấy danh mục trò chơi nào phù hợp với bộ lọc tìm kiếm.
         </Typography>
       </Paper>
     );
@@ -76,11 +76,11 @@ export const RideCategoryTable: React.FC<RideCategoryTableProps> = ({
       <Table>
         <TableHead>
           <TableRow>
-            <TableCell>Code / Name</TableCell>
-            <TableCell>Description</TableCell>
-            <TableCell>Number of Rides</TableCell>
-            <TableCell>Status</TableCell>
-            <TableCell align="right">Actions</TableCell>
+            <TableCell>Mã / Tên danh mục</TableCell>
+            <TableCell>Mô tả</TableCell>
+            <TableCell>Số lượng trò chơi</TableCell>
+            <TableCell>Trạng thái</TableCell>
+            <TableCell align="right">Thao tác</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -103,7 +103,7 @@ export const RideCategoryTable: React.FC<RideCategoryTableProps> = ({
               </TableCell>
               <TableCell>
                 <Chip
-                  label={`${cat.rideCount} rides`}
+                  label={`${cat.rideCount} trò chơi`}
                   size="small"
                   variant="outlined"
                   sx={{ fontWeight: 'medium' }}
@@ -111,7 +111,7 @@ export const RideCategoryTable: React.FC<RideCategoryTableProps> = ({
               </TableCell>
               <TableCell>
                 <Chip
-                  label={cat.status}
+                  label={cat.status === 'ACTIVE' ? 'Hoạt động' : 'Ngưng hoạt động'}
                   size="small"
                   color={cat.status === 'ACTIVE' ? 'success' : 'default'}
                   sx={{ fontWeight: 'bold', borderRadius: '6px' }}

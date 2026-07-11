@@ -39,7 +39,7 @@ export const UserDetailsPage: React.FC = () => {
     if (isError || !user) {
       return (
         <Box display="flex" flexDirection="column" gap={2}>
-          <ErrorMessage message="Could not find the requested user on the backend database. Showing demo details instead." />
+          <ErrorMessage message="Không thể tìm thấy người dùng được yêu cầu trên hệ thống. Đang hiển thị thông tin chi tiết mẫu thay thế." />
           <UserDetails user={mockUser} />
         </Box>
       );
@@ -49,10 +49,10 @@ export const UserDetailsPage: React.FC = () => {
 
   return (
     <PageContainer
-      title="User Details"
+      title="Chi tiết người dùng"
       toolbar={
         <Button startIcon={<MdArrowBack />} onClick={handleBack} variant="outlined">
-          Back to List
+          Quay lại danh sách
         </Button>
       }
     >

@@ -78,7 +78,7 @@ export const ReportsPage: React.FC = () => {
       const row: Record<string, any> = {};
       activeTemplateConfig?.defaultColumns.forEach((col) => {
         if (col.key === 'date' || col.key === 'createdAt' || col.key === 'soldDate' || col.key === 'transactionDate' || col.key === 'timestamp' || col.key === 'reportedAt') {
-          row[col.key] = new Date(Date.now() - index * 86400000).toLocaleDateString();
+          row[col.key] = new Date(Date.now() - index * 86400000).toLocaleDateString('vi-VN');
         } else if (col.dataType === 'currency') {
           row[col.key] = 1200000 + Math.floor(Math.random() * 5000000);
         } else if (col.dataType === 'percentage') {
@@ -86,14 +86,14 @@ export const ReportsPage: React.FC = () => {
         } else if (col.dataType === 'number') {
           row[col.key] = Math.floor(10 + Math.random() * 200);
         } else if (col.key === 'venue') {
-          row[col.key] = index % 2 === 0 ? 'Smart Park East Wing' : 'Water World Pavilion';
+          row[col.key] = index % 2 === 0 ? 'Khu phía Đông Smart Park' : 'Khu vực thế giới nước';
         } else if (col.key === 'status') {
-          row[col.key] = index % 3 === 0 ? 'Completed' : 'Active';
+          row[col.key] = index % 3 === 0 ? 'Đã hoàn thành' : 'Đang hoạt động';
         } else if (col.key === 'customer' || col.key === 'fullName' || col.key === 'memberName') {
-          const names = ['Tran Minh', 'Le Hoa', 'Nguyen Hung', 'Phan Binh', 'Vu Son', 'Doan Thu', 'Dinh Nam', 'Ngo Lan'];
+          const names = ['Trần Minh', 'Lê Hoa', 'Nguyễn Hùng', 'Phan Bình', 'Vũ Sơn', 'Đoàn Thư', 'Đinh Nam', 'Ngô Lan'];
           row[col.key] = names[index % names.length];
         } else {
-          row[col.key] = `Mock Record #${index + 1}`;
+          row[col.key] = `Bản ghi giả lập #${index + 1}`;
         }
       });
       return row;
@@ -104,17 +104,17 @@ export const ReportsPage: React.FC = () => {
     setActiveStep(2);
   };
 
-  const steps = ['Select Template Category', 'Customize Layout & Aggregations', 'Report Live Preview'];
+  const steps = ['Chọn danh mục mẫu', 'Tùy chỉnh bố cục & tổng hợp', 'Xem trước báo cáo trực tiếp'];
 
   return (
     <Box>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
         <Box>
           <Typography variant="h4" sx={{ fontWeight: 800, letterSpacing: '-0.02em' }}>
-            Report Center & Custom Builder
+            Trung tâm Báo cáo & Bộ tạo Tùy chỉnh
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Select predefined system templates, configure custom pivot columns, apply aggregations, and preview reports
+            Chọn các mẫu hệ thống được định nghĩa trước, cấu hình các cột tổng hợp tùy chỉnh, áp dụng các phép tổng hợp và xem trước báo cáo
           </Typography>
         </Box>
       </Box>
@@ -137,16 +137,16 @@ export const ReportsPage: React.FC = () => {
             <Card variant="outlined" sx={{ borderRadius: 3 }}>
               <CardContent>
                 <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 2, display: 'flex', alignItems: 'center', gap: 1 }}>
-                  <MdSettings /> Report Configuration
+                  <MdSettings /> Cấu hình Báo cáo
                 </Typography>
 
                 {/* Category select */}
                 <FormControl fullWidth size="small" sx={{ mb: 2 }}>
-                  <InputLabel id="category-select-label">Report Category</InputLabel>
+                  <InputLabel id="category-select-label">Danh mục Báo cáo</InputLabel>
                   <Select
                     labelId="category-select-label"
                     value={selectedCategory}
-                    label="Report Category"
+                    label="Danh mục Báo cáo"
                     onChange={(e) => setSelectedCategory(e.target.value as ReportCategory)}
                   >
                     {templates?.map((t) => (
@@ -159,23 +159,23 @@ export const ReportsPage: React.FC = () => {
 
                 {/* Time range option */}
                 <FormControl fullWidth size="small" sx={{ mb: 3 }}>
-                  <InputLabel id="period-select-label">Reporting Period</InputLabel>
+                  <InputLabel id="period-select-label">Kỳ báo cáo</InputLabel>
                   <Select
                     labelId="period-select-label"
                     value={selectedPeriod}
-                    label="Reporting Period"
+                    label="Kỳ báo cáo"
                     onChange={(e) => setSelectedPeriod(e.target.value)}
                   >
                     {REPORT_PERIOD_OPTIONS.map((opt) => (
                       <MenuItem key={opt.value} value={opt.value}>
-                        {opt.label}
+                        {opt.label === 'Daily' ? 'Hàng ngày' : opt.label === 'Weekly' ? 'Hàng tuần' : opt.label === 'Monthly' ? 'Hàng tháng' : opt.label === 'Quarterly' ? 'Hàng quý' : opt.label === 'Yearly' ? 'Hàng năm' : opt.label}
                       </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
 
                 <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 700, mb: 1, display: 'block' }}>
-                  SELECT DISPLAY COLUMNS
+                  CHỌN CÁC CỘT HIỂN THỊ
                 </Typography>
                 <FormGroup sx={{ mb: 3 }}>
                   {activeTemplateConfig?.defaultColumns.map((col) => (
@@ -196,49 +196,49 @@ export const ReportsPage: React.FC = () => {
                 </FormGroup>
 
                 <Typography variant="caption" color="text.secondary" sx={{ fontWeight: 700, mb: 1, display: 'block' }}>
-                  GROUPING & AGGREGATIONS
+                  NHÓM & TỔNG HỢP
                 </Typography>
                 <FormControl fullWidth size="small" sx={{ mb: 2 }}>
-                  <InputLabel id="group-select-label">Group By Dimension</InputLabel>
+                  <InputLabel id="group-select-label">Nhóm theo chiều</InputLabel>
                   <Select
                     labelId="group-select-label"
                     value={groupByField}
-                    label="Group By Dimension"
+                    label="Nhóm theo chiều"
                     onChange={(e) => setGroupByField(e.target.value)}
                   >
-                    <MenuItem value="none">No Grouping</MenuItem>
-                    <MenuItem value="date">Date</MenuItem>
-                    <MenuItem value="venue">Venue</MenuItem>
-                    <MenuItem value="status">Status</MenuItem>
+                    <MenuItem value="none">Không nhóm</MenuItem>
+                    <MenuItem value="date">Ngày</MenuItem>
+                    <MenuItem value="venue">Khu vui chơi</MenuItem>
+                    <MenuItem value="status">Trạng thái</MenuItem>
                   </Select>
                 </FormControl>
 
                 <Grid container spacing={1} sx={{ mb: 3 }}>
                   <Grid item xs={6}>
                     <FormControl fullWidth size="small">
-                      <InputLabel id="agg-func-label">Function</InputLabel>
+                      <InputLabel id="agg-func-label">Hàm</InputLabel>
                       <Select
                         labelId="agg-func-label"
                         value={aggFunction}
-                        label="Function"
+                        label="Hàm"
                         onChange={(e) => setAggFunction(e.target.value)}
                       >
-                        <MenuItem value="sum">Sum</MenuItem>
-                        <MenuItem value="avg">Avg</MenuItem>
-                        <MenuItem value="count">Count</MenuItem>
+                        <MenuItem value="sum">Tổng (Sum)</MenuItem>
+                        <MenuItem value="avg">Trung bình (Avg)</MenuItem>
+                        <MenuItem value="count">Số lượng (Count)</MenuItem>
                       </Select>
                     </FormControl>
                   </Grid>
                   <Grid item xs={6}>
                     <FormControl fullWidth size="small">
-                      <InputLabel id="agg-field-label">Target Field</InputLabel>
+                      <InputLabel id="agg-field-label">Trường mục tiêu</InputLabel>
                       <Select
                         labelId="agg-field-label"
                         value={aggField}
-                        label="Target Field"
+                        label="Trường mục tiêu"
                         onChange={(e) => setAggField(e.target.value)}
                       >
-                        <MenuItem value="none">No Aggregation</MenuItem>
+                        <MenuItem value="none">Không tổng hợp</MenuItem>
                         {numericColumns.map((c) => (
                           <MenuItem key={c.key} value={c.key}>
                             {c.label}
@@ -256,7 +256,7 @@ export const ReportsPage: React.FC = () => {
                   disabled={isGenerating}
                   startIcon={<MdPlayArrow />}
                 >
-                  {isGenerating ? 'Compiling data...' : 'Compile & Build Preview'}
+                  {isGenerating ? 'Đang biên dịch dữ liệu...' : 'Biên dịch & Tạo bản xem trước'}
                 </Button>
               </CardContent>
             </Card>
@@ -266,14 +266,14 @@ export const ReportsPage: React.FC = () => {
         {/* Step 3 Preview Workspace */}
         <Grid item xs={12} lg={activeStep < 2 ? 8 : 12}>
           <DashboardCard
-            title={activeTemplateConfig?.label || 'Custom Report Preview'}
-            subtitle={activeTemplateConfig?.description || 'Custom compiled spreadsheet view'}
+            title={activeTemplateConfig?.label || 'Xem trước báo cáo tùy chỉnh'}
+            subtitle={activeTemplateConfig?.description || 'Bản xem trang tính được biên dịch tùy chỉnh'}
           >
             {isGenerating && (
               <Box sx={{ p: 4, textAlign: 'center' }}>
                 <LinearProgress sx={{ mb: 2 }} />
                 <Typography variant="body2" color="text.secondary">
-                  Compiling, grouping, and aggregating transaction records...
+                  Đang biên dịch, nhóm và tổng hợp các bản ghi giao dịch...
                 </Typography>
               </Box>
             )}
@@ -281,10 +281,10 @@ export const ReportsPage: React.FC = () => {
             {!isGenerating && generatedPreviewRows.length === 0 && (
               <Box sx={{ p: 6, textAlign: 'center', color: 'text.secondary' }}>
                 <Typography variant="body1" sx={{ fontWeight: 600, mb: 1 }}>
-                  No compiled preview active
+                  Chưa có bản xem trước nào được biên dịch
                 </Typography>
                 <Typography variant="body2" sx={{ mb: 2 }}>
-                  Set up your configuration filters, select active fields in layout, and click 'Compile & Build Preview' to render live records spreadsheet.
+                  Thiết lập các bộ lọc cấu hình, chọn các trường hoạt động trong bố cục và nhấp vào 'Biên dịch & Tạo bản xem trước' để kết xuất bảng tính.
                 </Typography>
               </Box>
             )}
@@ -293,7 +293,7 @@ export const ReportsPage: React.FC = () => {
               <Box>
                 {generationSuccess && (
                   <Alert severity="success" sx={{ mb: 2, borderRadius: 2 }} icon={<MdCheckCircle size={20} />}>
-                    Report generated successfully with <strong>{generatedPreviewRows.length}</strong> compiled rows.
+                    Đã tạo báo cáo thành công với <strong>{generatedPreviewRows.length}</strong> dòng dữ liệu.
                   </Alert>
                 )}
 
@@ -301,7 +301,7 @@ export const ReportsPage: React.FC = () => {
                 {aggField !== 'none' && (
                   <Box sx={{ mb: 2, p: 2, backgroundColor: 'action.hover', borderRadius: 2, borderLeft: '4px solid', borderColor: 'primary.main' }}>
                     <Typography variant="caption" color="text.secondary" fontWeight={700}>
-                      COMPUTED AGGREGATION ({aggFunction.toUpperCase()})
+                      TỔNG HỢP ĐÃ TÍNH TOÁN ({aggFunction.toUpperCase()})
                     </Typography>
                     <Typography variant="subtitle1" fontWeight={800}>
                       {aggField.toLowerCase().includes('revenue') || aggField.toLowerCase().includes('amount') || aggField.toLowerCase().includes('spent') || aggField.toLowerCase().includes('spending')
@@ -344,9 +344,9 @@ export const ReportsPage: React.FC = () => {
 
                 <Box sx={{ display: 'flex', gap: 1, mt: 3, justifyContent: 'flex-end' }}>
                   <Button variant="outlined" startIcon={<MdSave />}>
-                    Save template
+                    Lưu mẫu
                   </Button>
-                  <Button variant="contained">Export File</Button>
+                  <Button variant="contained">Xuất tệp</Button>
                 </Box>
               </Box>
             )}

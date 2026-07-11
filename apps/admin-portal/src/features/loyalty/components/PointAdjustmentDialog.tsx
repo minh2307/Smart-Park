@@ -15,10 +15,10 @@ import {
 } from '@mui/material';
 
 const pointAdjustmentSchema = z.object({
-  customerId: z.number({ required_error: 'Please select a customer' }),
-  type: z.enum(['ADD', 'DEDUCT'], { required_error: 'Adjustment type is required' }),
-  points: z.number({ required_error: 'Points value is required' }).min(1, 'Points must be at least 1'),
-  reason: z.string({ required_error: 'Reason is required' }).min(5, 'Reason must be at least 5 characters'),
+  customerId: z.number({ required_error: 'Vui lòng chọn khách hàng' }),
+  type: z.enum(['ADD', 'DEDUCT'], { required_error: 'Vui lòng chọn loại điều chỉnh' }),
+  points: z.number({ required_error: 'Vui lòng nhập số điểm' }).min(1, 'Số điểm phải tối thiểu là 1'),
+  reason: z.string({ required_error: 'Vui lòng nhập lý do' }).min(5, 'Lý do phải có ít nhất 5 ký tự'),
 });
 
 type PointAdjustmentFormValues = z.infer<typeof pointAdjustmentSchema>;
@@ -60,7 +60,7 @@ export const PointAdjustmentDialog: React.FC<PointAdjustmentDialogProps> = ({
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth PaperProps={{ sx: { borderRadius: 3 } }}>
-      <DialogTitle fontWeight="bold">Request Loyalty Point Adjustment</DialogTitle>
+      <DialogTitle fontWeight="bold">Yêu cầu điều chỉnh điểm tích lũy</DialogTitle>
       <Box component="form" onSubmit={handleSubmit(handleFormSubmit)}>
         <DialogContent>
           <Grid container spacing={3}>
@@ -72,7 +72,7 @@ export const PointAdjustmentDialog: React.FC<PointAdjustmentDialogProps> = ({
                   <TextField
                     {...field}
                     select
-                    label="Select Customer"
+                    label="Chọn khách hàng"
                     fullWidth
                     onChange={(e) => field.onChange(Number(e.target.value))}
                     error={!!errors.customerId}
@@ -96,13 +96,13 @@ export const PointAdjustmentDialog: React.FC<PointAdjustmentDialogProps> = ({
                   <TextField
                     {...field}
                     select
-                    label="Adjustment Type"
+                    label="Loại điều chỉnh"
                     fullWidth
                     error={!!errors.type}
                     helperText={errors.type?.message}
                   >
-                    <MenuItem value="ADD">Add Points (+)</MenuItem>
-                    <MenuItem value="DEDUCT">Deduct Points (-)</MenuItem>
+                    <MenuItem value="ADD">Cộng điểm (+)</MenuItem>
+                    <MenuItem value="DEDUCT">Trừ điểm (-)</MenuItem>
                   </TextField>
                 )}
               />
@@ -116,7 +116,7 @@ export const PointAdjustmentDialog: React.FC<PointAdjustmentDialogProps> = ({
                   <TextField
                     {...field}
                     type="number"
-                    label="Points Count"
+                    label="Số điểm"
                     fullWidth
                     onChange={(e) => field.onChange(Number(e.target.value))}
                     error={!!errors.points}
@@ -133,7 +133,7 @@ export const PointAdjustmentDialog: React.FC<PointAdjustmentDialogProps> = ({
                 render={({ field }) => (
                   <TextField
                     {...field}
-                    label="Reason / Explanation for Audit"
+                    label="Lý do / Giải trình để kiểm toán"
                     fullWidth
                     multiline
                     rows={3}
@@ -147,10 +147,10 @@ export const PointAdjustmentDialog: React.FC<PointAdjustmentDialogProps> = ({
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 3 }}>
           <Button onClick={onClose} color="secondary" variant="outlined" disabled={isSubmitting}>
-            Cancel
+            Hủy bỏ
           </Button>
           <Button type="submit" color="primary" variant="contained" disabled={isSubmitting}>
-            Submit Request
+            Gửi yêu cầu
           </Button>
         </DialogActions>
       </Box>

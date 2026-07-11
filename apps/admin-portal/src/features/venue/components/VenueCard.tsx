@@ -67,7 +67,17 @@ export const VenueCard: React.FC<VenueCardProps> = ({ venue }) => {
         />
         {/* Status badge on image */}
         <Chip
-          label={statusStr}
+          label={
+            statusStr === 'ACTIVE'
+              ? 'Hoạt động'
+              : statusStr === 'INACTIVE'
+              ? 'Ngưng hoạt động'
+              : statusStr === 'UNDER_MAINTENANCE'
+              ? 'Đang bảo trì'
+              : statusStr === 'CLOSED'
+              ? 'Đã đóng cửa'
+              : statusStr
+          }
           color={statusColors[statusStr] || 'default'}
           size="small"
           sx={{

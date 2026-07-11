@@ -6,6 +6,7 @@ import { BookingTimeline } from './BookingTimeline';
 import { QRCodeViewer } from '../../ticket/components/QRCodeViewer';
 import { MdPerson, MdReceipt, MdOutlineConfirmationNumber, MdQrCode } from 'react-icons/md';
 import dayjs from 'dayjs';
+import { formatCurrency } from '../../analytics/utils/numberFormatters';
 
 interface BookingDetailsProps {
   booking: Booking;
@@ -26,20 +27,20 @@ export const BookingDetails: React.FC<BookingDetailsProps> = ({
 
   const timelineSteps = [
     {
-      title: 'Booking Created',
-      description: `Order initialized. ID: BK-${String(booking.id).padStart(4, '0')}`,
+      title: 'Đã tạo đơn hàng',
+      description: `Đơn hàng được khởi tạo. Mã: BK-${String(booking.id).padStart(4, '0')}`,
       timestamp: dayjs(booking.createdAt).format('YYYY-MM-DD HH:mm:ss'),
       status: 'done' as const,
     },
     {
-      title: 'Payment Awaiting',
-      description: `Method: ${booking.paymentMethod === 'CHUYEN_KHOAN_QR' ? 'QR Banking Transfer' : 'Cash Counter'}`,
+      title: 'Chờ thanh toán',
+      description: `Phương thức: ${booking.paymentMethod === 'CHUYEN_KHOAN_QR' ? 'Chuyển khoản Ngân hàng qua QR' : 'Tiền mặt tại quầy'}`,
       timestamp: dayjs(booking.createdAt).format('YYYY-MM-DD HH:mm:ss'),
       status: (isPaid || isCancelled) ? 'done' as const : 'active' as const,
     },
     {
-      title: isCancelled ? 'Booking Cancelled' : 'Payment Confirmed & Completed',
-      description: isCancelled ? 'This order was cancelled.' : 'Payment confirmed. Digital ticket passes activated.',
+      title: isCancelled ? 'Đơn hàng đã hủy' : 'Thanh toán đã xác nhận & Hoàn tất',
+      description: isCancelled ? 'Đơn hàng này đã bị hủy.' : 'Xác nhận thanh toán thành công. Các thẻ vé kỹ thuật số đã được kích hoạt.',
       timestamp: isPaid ? dayjs(booking.createdAt).add(5, 'minute').format('YYYY-MM-DD HH:mm:ss') : undefined,
       status: isPaid ? 'done' as const : (isCancelled ? 'failed' as const : 'pending' as const),
     },
@@ -54,26 +55,26 @@ export const BookingDetails: React.FC<BookingDetailsProps> = ({
           <Paper variant="outlined" sx={{ p: 3, borderRadius: 2 }}>
             <Box display="flex" justifyContent="space-between" alignItems="center" mb={2}>
               <Typography variant="h6" fontWeight="bold" display="flex" alignItems="center" gap={1}>
-                <MdPerson /> Customer Contact Info
+                <MdPerson /> Thông tin liên hệ Khách hàng
               </Typography>
               <StatusChip status={String(booking.status)} type="booking" />
             </Box>
             <Divider sx={{ mb: 2 }} />
             <Grid container spacing={2}>
               <Grid item xs={12} sm={4}>
-                <Typography variant="caption" color="text.secondary">Customer Name</Typography>
+                <Typography variant="caption" color="text.secondary">Tên khách hàng</Typography>
                 <Typography variant="body1" fontWeight={500}>
-                  {booking.customer?.fullName || 'Walk-in Guest'}
+                  {booking.customer?.fullName || 'Khách vãng lai'}
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={4}>
-                <Typography variant="caption" color="text.secondary">Email Address</Typography>
+                <Typography variant="caption" color="text.secondary">Địa chỉ Email</Typography>
                 <Typography variant="body1" fontWeight={500}>
                   {booking.customer?.email || 'N/A'}
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={4}>
-                <Typography variant="caption" color="text.secondary">Phone Number</Typography>
+                <Typography variant="caption" color="text.secondary">Số điện thoại</Typography>
                 <Typography variant="body1" fontWeight={500}>
                   {booking.customer?.phone || 'N/A'}
                 </Typography>
@@ -84,7 +85,7 @@ export const BookingDetails: React.FC<BookingDetailsProps> = ({
           {/* Tickets list */}
           <Paper variant="outlined" sx={{ p: 3, borderRadius: 2 }}>
             <Typography variant="h6" fontWeight="bold" gutterBottom display="flex" alignItems="center" gap={1}>
-              <MdOutlineConfirmationNumber /> Ticket Items ({totalTicketsCount})
+              <MdOutlineConfirmationNumber /> Các loại vé ({totalTicketsCount})
             </Typography>
             <Divider sx={{ mb: 2 }} />
             
@@ -94,13 +95,13 @@ export const BookingDetails: React.FC<BookingDetailsProps> = ({
                   <Box key={idx} display="flex" justifyContent="space-between" alignItems="center" p={1.5} sx={{ bgcolor: 'action.hover', borderRadius: 1.5 }}>
                     <Box>
                       <Typography variant="body2" fontWeight={600}>
-                        {item.ticketType?.name || 'Admission Entry'}
+                        {item.ticketType?.name || 'Vé vào cửa'}
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
-                        Price: ${item.ticketType?.price?.toFixed(2) || '0.00'} each
+                        Đơn giá: {formatCurrency(item.ticketType?.price || 0)} / vé
                       </Typography>
                     </Box>
-                    <Chip label={`Qty: ${item.quantity}`} size="small" color="primary" />
+                    <Chip label={`SL: ${item.quantity}`} size="small" color="primary" />
                   </Box>
                 ))}
               </Stack>
@@ -113,7 +114,7 @@ export const BookingDetails: React.FC<BookingDetailsProps> = ({
                         {t.ticketCode}
                       </Typography>
                       <Typography variant="caption" color="text.secondary" display="block">
-                        Type: {t.ticketType?.name || 'General Admission'} | Max Uses: {t.maxUses}
+                        Loại: {t.ticketType?.name || 'Vé phổ thông'} | Lượt dùng tối đa: {t.maxUses}
                       </Typography>
                     </Box>
                     <Box display="flex" gap={1.5} alignItems="center">
@@ -137,7 +138,7 @@ export const BookingDetails: React.FC<BookingDetailsProps> = ({
           {booking.visitors && booking.visitors.length > 0 && (
             <Paper variant="outlined" sx={{ p: 3, borderRadius: 2 }}>
               <Typography variant="h6" fontWeight="bold" gutterBottom>
-                Registered Visitors Details
+                Thông tin khách tham quan đã đăng ký
               </Typography>
               <Divider sx={{ mb: 2 }} />
               <Stack spacing={1.5}>
@@ -145,15 +146,15 @@ export const BookingDetails: React.FC<BookingDetailsProps> = ({
                   <Box key={v.id || idx} p={1.5} sx={{ bgcolor: 'background.paper', border: '1px solid', borderColor: 'divider', borderRadius: 1.5 }}>
                     <Grid container spacing={1}>
                       <Grid item xs={4}>
-                        <Typography variant="caption" color="text.secondary">Full Name</Typography>
+                        <Typography variant="caption" color="text.secondary">Họ và tên</Typography>
                         <Typography variant="body2" fontWeight={600}>{v.fullName}</Typography>
                       </Grid>
                       <Grid item xs={4}>
-                        <Typography variant="caption" color="text.secondary">Phone Number</Typography>
+                        <Typography variant="caption" color="text.secondary">Số điện thoại</Typography>
                         <Typography variant="body2">{v.phone || 'N/A'}</Typography>
                       </Grid>
                       <Grid item xs={4}>
-                        <Typography variant="caption" color="text.secondary">ID Card / Passport</Typography>
+                        <Typography variant="caption" color="text.secondary">CCCD / Hộ chiếu</Typography>
                         <Typography variant="body2">{v.idCard || 'N/A'}</Typography>
                       </Grid>
                     </Grid>
@@ -169,32 +170,32 @@ export const BookingDetails: React.FC<BookingDetailsProps> = ({
           {/* Payment info */}
           <Paper variant="outlined" sx={{ p: 3, borderRadius: 2 }}>
             <Typography variant="h6" fontWeight="bold" gutterBottom display="flex" alignItems="center" gap={1}>
-              <MdReceipt /> Order Receipt
+              <MdReceipt /> Hóa đơn đơn hàng
             </Typography>
             <Divider sx={{ mb: 2 }} />
             
             <Stack spacing={1.5}>
               <Box display="flex" justifyContent="space-between">
-                <Typography variant="body2" color="text.secondary">Subtotal Amount</Typography>
-                <Typography variant="body2" fontWeight={600}>${booking.totalAmount.toFixed(2)}</Typography>
+                <Typography variant="body2" color="text.secondary">Tạm tính</Typography>
+                <Typography variant="body2" fontWeight={600}>{formatCurrency(booking.totalAmount)}</Typography>
               </Box>
               {booking.membershipDiscount && booking.membershipDiscount > 0 ? (
                 <Box display="flex" justifyContent="space-between">
-                  <Typography variant="body2" color="text.secondary">Membership Discount</Typography>
-                  <Typography variant="body2" fontWeight={600} color="success.main">-${booking.membershipDiscount.toFixed(2)}</Typography>
+                  <Typography variant="body2" color="text.secondary">Giảm giá Thành viên</Typography>
+                  <Typography variant="body2" fontWeight={600} color="success.main">-{formatCurrency(booking.membershipDiscount)}</Typography>
                 </Box>
               ) : null}
               {booking.promotions ? (
                 <Box display="flex" justifyContent="space-between">
-                  <Typography variant="body2" color="text.secondary">Promo ({booking.promotions.code})</Typography>
-                  <Typography variant="body2" fontWeight={600} color="success.main">-${booking.promotions.discountAmount.toFixed(2)}</Typography>
+                  <Typography variant="body2" color="text.secondary">Khuyến mãi ({booking.promotions.code})</Typography>
+                  <Typography variant="body2" fontWeight={600} color="success.main">-{formatCurrency(booking.promotions.discountAmount)}</Typography>
                 </Box>
               ) : null}
               <Divider />
               <Box display="flex" justifyContent="space-between">
-                <Typography variant="subtitle1" fontWeight="bold">Total Amount</Typography>
+                <Typography variant="subtitle1" fontWeight="bold">Tổng tiền</Typography>
                 <Typography variant="subtitle1" fontWeight="bold" color="primary.main">
-                  ${booking.totalAmount.toFixed(2)}
+                  {formatCurrency(booking.totalAmount)}
                 </Typography>
               </Box>
               
@@ -207,7 +208,7 @@ export const BookingDetails: React.FC<BookingDetailsProps> = ({
                   onClick={() => onPayQR(booking)}
                   sx={{ mt: 1 }}
                 >
-                  Pay via QR Link
+                  Thanh toán qua liên kết QR
                 </Button>
               )}
             </Stack>
@@ -216,7 +217,7 @@ export const BookingDetails: React.FC<BookingDetailsProps> = ({
           {/* Timeline */}
           <Paper variant="outlined" sx={{ p: 3, borderRadius: 2 }}>
             <Typography variant="h6" fontWeight="bold" gutterBottom>
-              Order Timeline
+              Tiến trình đơn hàng
             </Typography>
             <Divider sx={{ mb: 2 }} />
             <BookingTimeline steps={timelineSteps} />
@@ -226,12 +227,12 @@ export const BookingDetails: React.FC<BookingDetailsProps> = ({
           {selectedTicketCode && (
             <Paper variant="outlined" sx={{ p: 3, borderRadius: 2 }}>
               <Typography variant="subtitle2" fontWeight="bold" align="center" mb={1.5}>
-                Ticket QR Code
+                Mã QR Vé
               </Typography>
               <QRCodeViewer value={selectedTicketCode} size={150} label={selectedTicketCode} />
               <Box display="flex" justifyContent="center" sx={{ mt: 1.5 }}>
                 <Button size="small" color="inherit" onClick={() => setSelectedTicketCode(null)}>
-                  Close Preview
+                  Đóng xem trước
                 </Button>
               </Box>
             </Paper>

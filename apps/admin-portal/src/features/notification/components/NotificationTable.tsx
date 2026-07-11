@@ -45,6 +45,23 @@ export const getChannelChipColor = (channel: NotificationChannel) => {
   }
 };
 
+export const getChannelLabel = (channel: NotificationChannel) => {
+  switch (channel) {
+    case 'IN_APP':
+      return 'Trong ứng dụng';
+    case 'EMAIL':
+      return 'Email';
+    case 'SMS':
+      return 'SMS';
+    case 'PUSH':
+      return 'Đẩy (Push)';
+    case 'WEB':
+      return 'Web';
+    default:
+      return channel;
+  }
+};
+
 export const getPriorityChipColor = (priority: NotificationPriority) => {
   switch (priority) {
     case 'LOW':
@@ -58,6 +75,23 @@ export const getPriorityChipColor = (priority: NotificationPriority) => {
       return 'error';
     default:
       return 'default';
+  }
+};
+
+export const getPriorityLabel = (priority: NotificationPriority) => {
+  switch (priority) {
+    case 'LOW':
+      return 'Thấp';
+    case 'NORMAL':
+      return 'Thường';
+    case 'HIGH':
+      return 'Cao';
+    case 'CRITICAL':
+      return 'Khẩn cấp';
+    case 'EMERGENCY':
+      return 'Nguy cấp';
+    default:
+      return priority;
   }
 };
 
@@ -75,6 +109,23 @@ export const getStatusChipColor = (status: NotificationStatus) => {
       return 'primary';
     default:
       return 'default';
+  }
+};
+
+export const getStatusLabel = (status: NotificationStatus) => {
+  switch (status) {
+    case 'DRAFT':
+      return 'Bản nháp';
+    case 'SCHEDULED':
+      return 'Đã lập lịch';
+    case 'SENT':
+      return 'Đã gửi';
+    case 'FAILED':
+      return 'Thất bại';
+    case 'SENDING':
+      return 'Đang gửi';
+    default:
+      return status;
   }
 };
 
@@ -154,14 +205,14 @@ export const NotificationTable: React.FC<NotificationTableProps> = ({
                     </Typography>
                   </TableCell>
                   <TableCell>
-                    <Chip label={item.channel} size="small" color={getChannelChipColor(item.channel)} variant="outlined" />
+                    <Chip label={getChannelLabel(item.channel)} size="small" color={getChannelChipColor(item.channel)} variant="outlined" />
                   </TableCell>
                   <TableCell>
-                    <Chip label={item.priority} size="small" color={getPriorityChipColor(item.priority)} />
+                    <Chip label={getPriorityLabel(item.priority)} size="small" color={getPriorityChipColor(item.priority)} />
                   </TableCell>
                   <TableCell>{getRecipientLabel(item.recipientType)}</TableCell>
                   <TableCell>
-                    <Chip label={item.status} size="small" color={getStatusChipColor(item.status)} variant="filled" />
+                    <Chip label={getStatusLabel(item.status)} size="small" color={getStatusChipColor(item.status)} variant="filled" />
                   </TableCell>
                   <TableCell>
                     <Typography variant="caption" display="block">
@@ -200,6 +251,7 @@ export const NotificationTable: React.FC<NotificationTableProps> = ({
         page={page}
         onPageChange={(_, newPage) => onPageChange(newPage)}
         onRowsPerPageChange={(e) => onSizeChange(parseInt(e.target.value, 10))}
+        labelRowsPerPage="Số dòng mỗi trang:"
       />
     </Paper>
   );

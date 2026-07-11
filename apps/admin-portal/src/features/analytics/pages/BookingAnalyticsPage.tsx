@@ -38,8 +38,8 @@ export const BookingAnalyticsPage: React.FC = () => {
       mode,
       categories,
       [
-        { name: 'Bookings Count', data: bookingData.bookingsPerDay.map((b) => b.count) },
-        { name: 'Revenue generated (₫)', data: bookingData.bookingsPerDay.map((b) => b.revenue / 1000000), color: '#10b981' },
+        { name: 'Số lượng đặt vé', data: bookingData.bookingsPerDay.map((b) => b.count) },
+        { name: 'Doanh thu tạo ra (Triệu ₫)', data: bookingData.bookingsPerDay.map((b) => b.revenue / 1000000), color: '#10b981' },
       ],
       'number'
     );
@@ -61,7 +61,7 @@ export const BookingAnalyticsPage: React.FC = () => {
       },
       series: [
         {
-          name: 'Conversion Funnel',
+          name: 'Phễu chuyển đổi',
           type: 'funnel',
           left: '10%',
           top: 60,
@@ -115,7 +115,7 @@ export const BookingAnalyticsPage: React.FC = () => {
     return buildBarChartOption(
       mode,
       categories,
-      [{ name: 'Bookings Volume', data: countValues, color: '#6366f1' }],
+      [{ name: 'Số lượng đặt vé', data: countValues, color: '#6366f1' }],
       false,
       'number'
     );
@@ -136,10 +136,10 @@ export const BookingAnalyticsPage: React.FC = () => {
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
         <Box>
           <Typography variant="h4" sx={{ fontWeight: 800, letterSpacing: '-0.02em' }}>
-            Booking Analytics
+            Phân tích đặt vé
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Analysis of reservations, booking channels, times, conversion drop-off, and refunds
+            Phân tích lượt đặt chỗ, kênh đặt vé, thời gian đặt, tỷ lệ chuyển đổi và hoàn tiền
           </Typography>
         </Box>
       </Box>
@@ -152,13 +152,13 @@ export const BookingAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Total Bookings Today
+                Tổng đặt vé hôm nay
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5, color: 'primary.main' }}>
                 {bookingData?.totalBookings || 0}
               </Typography>
               <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.5 }}>
-                Avg Tickets/Booking: {bookingData?.averageTicketsPerBooking || 0}
+                Số vé TB/Lượt đặt: {bookingData?.averageTicketsPerBooking || 0}
               </Typography>
             </CardContent>
           </Card>
@@ -167,13 +167,13 @@ export const BookingAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Average Reservation Value
+                Giá trị đặt vé trung bình
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5 }}>
                 {formatCurrency(bookingData?.averageBookingValue || 0)}
               </Typography>
               <Typography variant="caption" color="success.main" sx={{ display: 'block', mt: 0.5 }}>
-                Funnel conversion: {bookingData?.bookingConversion.overallConversion || 0}%
+                Chuyển đổi phễu: {bookingData?.bookingConversion.overallConversion || 0}%
               </Typography>
             </CardContent>
           </Card>
@@ -182,13 +182,13 @@ export const BookingAnalyticsPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Cancellation & Refund Rate
+                Tỷ lệ hủy & hoàn tiền
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5, color: 'error.main' }}>
                 {bookingData?.cancellationRate || 0}% / {bookingData?.refundRate || 0}%
               </Typography>
               <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.5 }}>
-                Healthy refund thresholds
+                Ngưỡng hoàn tiền an toàn
               </Typography>
             </CardContent>
           </Card>
@@ -198,31 +198,31 @@ export const BookingAnalyticsPage: React.FC = () => {
       {/* Visual Dashboards */}
       <Grid container spacing={2.5}>
         <Grid item xs={12}>
-          <DashboardCard title="Booking Volume & Revenue Trend" subtitle="Daily reservations counts vs generated revenues (in Millions ₫)">
+          <DashboardCard title="Xu hướng đặt vé & doanh thu" subtitle="Số lượt đặt vé hàng ngày so với doanh thu tạo ra (tính bằng Triệu ₫)">
             <ChartContainer option={trendOption} height={350} loading={isLoading} />
           </DashboardCard>
         </Grid>
 
         <Grid item xs={12} md={7}>
-          <DashboardCard title="Booking Conversion Funnel" subtitle="Drop-off percentage from discovery to successful payment">
+          <DashboardCard title="Phễu chuyển đổi đặt vé" subtitle="Tỷ lệ hao hụt từ khi tìm kiếm đến khi thanh toán thành công">
             <ChartContainer option={funnelOption} height={320} loading={isLoading} />
           </DashboardCard>
         </Grid>
 
         <Grid item xs={12} md={5}>
-          <DashboardCard title="Acquisition Channels" subtitle="Origin channels for ticket reservation orders">
+          <DashboardCard title="Kênh bán hàng" subtitle="Kênh nguồn tạo các đơn hàng đặt vé">
             <ChartContainer option={sourcesOption} height={320} loading={isLoading} />
           </DashboardCard>
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <DashboardCard title="Peak Hours Activity" subtitle="Hourly density of reservation creation">
+          <DashboardCard title="Hoạt động giờ cao điểm" subtitle="Mật độ tạo đặt chỗ theo giờ">
             <ChartContainer option={hourlyOption} height={300} loading={isLoading} />
           </DashboardCard>
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <DashboardCard title="Order Status Distribution" subtitle="Active, pending and cancelled status breakdown">
+          <DashboardCard title="Phân bổ trạng thái đơn hàng" subtitle="Chi tiết các trạng thái: Hoạt động, chờ xử lý và đã hủy">
             <ChartContainer option={statusOption} height={300} loading={isLoading} />
           </DashboardCard>
         </Grid>

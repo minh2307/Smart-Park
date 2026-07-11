@@ -36,14 +36,24 @@ public class SmartParkUserDetailsService implements UserDetailsService {
                 .findFirst()
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
-        var authorities = user.getRoles().stream()
+        java.util.List<SimpleGrantedAuthority> authorities = user.getRoles().stream()
                 .flatMap(role -> {
-                    var roleAuthority = new SimpleGrantedAuthority("ROLE_" + role.getCode());
-                    var permAuthorities = role.getPermissions().stream()
-                            .map(p -> new SimpleGrantedAuthority(p.getCode()));
-                    return java.util.stream.Stream.concat(java.util.stream.Stream.of(roleAuthority), permAuthorities);
+                    java.util.List<SimpleGrantedAuthority> list = new java.util.ArrayList<>();
+                    list.add(new SimpleGrantedAuthority("ROLE_" + role.getCode()));
+                    if ("SYSTEM_ADMIN".equals(role.getCode())) {
+                        list.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+                        list.add(new SimpleGrantedAuthority("ADMIN"));
+                    } else if ("PARK_MANAGER".equals(role.getCode())) {
+                        list.add(new SimpleGrantedAuthority("ROLE_MANAGER"));
+                        list.add(new SimpleGrantedAuthority("MANAGER"));
+                    } else if ("GATE_STAFF".equals(role.getCode())) {
+                        list.add(new SimpleGrantedAuthority("ROLE_NHAN_VIEN"));
+                        list.add(new SimpleGrantedAuthority("NHAN_VIEN"));
+                    }
+                    role.getPermissions().forEach(p -> list.add(new SimpleGrantedAuthority(p.getCode())));
+                    return list.stream();
                 })
-                .collect(Collectors.toSet());
+                .collect(Collectors.toList());
 
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUsername())

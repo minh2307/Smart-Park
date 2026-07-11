@@ -18,7 +18,7 @@ export const OperationalDashboardPage: React.FC = () => {
   const [simulationAlert, setSimulationAlert] = useState<string | null>(null);
 
   const handleSimulateIncident = () => {
-    setSimulationAlert('Simulation triggered: Auto-diagnostic sensor alert dispatched to Thunder Coaster engineering crew.');
+    setSimulationAlert('Kích hoạt giả lập: Cảnh báo cảm biến tự động chẩn đoán đã được gửi tới đội ngũ kỹ thuật tàu lượn Thunder Coaster.');
     setTimeout(() => {
       setSimulationAlert(null);
     }, 5000);
@@ -29,10 +29,10 @@ export const OperationalDashboardPage: React.FC = () => {
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
         <Box>
           <Typography variant="h4" sx={{ fontWeight: 800, letterSpacing: '-0.02em' }}>
-            Operations Pulsar Dashboard
+            Bảng điều khiển vận hành thời gian thực
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Real-time status monitoring, gate validation flow, scanner heartbeats, active incidents, and weather impact
+            Theo dõi trạng thái thời gian thực, lưu lượng soát vé ở cổng, tín hiệu kết nối thiết bị quét, các sự cố hiện tại và ảnh hưởng của thời tiết
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', gap: 1 }}>
@@ -43,7 +43,7 @@ export const OperationalDashboardPage: React.FC = () => {
             color="warning"
             startIcon={<MdWarning />}
           >
-            Simulate Device Ping
+            Giả lập Ping thiết bị
           </Button>
           <Button
             variant="contained"
@@ -51,7 +51,7 @@ export const OperationalDashboardPage: React.FC = () => {
             onClick={() => refetch()}
             startIcon={<MdRefresh />}
           >
-            Refetch Status
+            Tải lại trạng thái
           </Button>
         </Box>
       </Box>
@@ -68,13 +68,13 @@ export const OperationalDashboardPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Active Incidents
+                Sự cố đang hoạt động
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5, color: 'error.main' }}>
-                {opData?.incidents.filter((i) => i.status !== 'resolved').length || 0} Open
+                {opData?.incidents.filter((i) => i.status !== 'resolved').length || 0} Đang xử lý
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                Resolved today: {opData?.incidents.filter((i) => i.status === 'resolved').length || 0}
+                Đã giải quyết hôm nay: {opData?.incidents.filter((i) => i.status === 'resolved').length || 0}
               </Typography>
             </CardContent>
           </Card>
@@ -83,13 +83,13 @@ export const OperationalDashboardPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Smart Lockers Capacity
+                Sức chứa tủ khóa thông minh
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5 }}>
                 {opData?.lockerStatus.inUse || 0} / {opData?.lockerStatus.totalLockers || 0}
               </Typography>
               <Typography variant="caption" color="success.main">
-                Available: {opData?.lockerStatus.available || 0}
+                Còn trống: {opData?.lockerStatus.available || 0}
               </Typography>
             </CardContent>
           </Card>
@@ -98,13 +98,13 @@ export const OperationalDashboardPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Support Desk Tickets
+                Yêu cầu hỗ trợ (Tickets)
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5, color: 'warning.main' }}>
-                {opData?.supportTickets.open || 0} Open
+                {opData?.supportTickets.open || 0} Đang mở
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                Resolution average: {opData?.supportTickets.averageResolutionHours || 0}h
+                Thời gian giải quyết TB: {opData?.supportTickets.averageResolutionHours || 0} giờ
               </Typography>
             </CardContent>
           </Card>
@@ -113,13 +113,13 @@ export const OperationalDashboardPage: React.FC = () => {
           <Card variant="outlined" sx={{ borderRadius: 3 }}>
             <CardContent>
               <Typography variant="caption" color="text.secondary" fontWeight={600}>
-                Weather Impact Index
+                Chỉ số ảnh hưởng thời tiết
               </Typography>
               <Typography variant="h4" sx={{ fontWeight: 800, mt: 0.5, color: 'success.main', display: 'flex', alignItems: 'center', gap: 1 }}>
                 <MdCloud size={24} /> {opData?.weatherImpact.currentTemp}°C
               </Typography>
               <Typography variant="caption" color="text.secondary" sx={{ textTransform: 'capitalize' }}>
-                Forecast: {opData?.weatherImpact.condition} ({opData?.weatherImpact.visitorImpact} effect)
+                Dự báo: {opData?.weatherImpact.condition} (ảnh hưởng: {opData?.weatherImpact.visitorImpact})
               </Typography>
             </CardContent>
           </Card>
@@ -130,15 +130,15 @@ export const OperationalDashboardPage: React.FC = () => {
       <Grid container spacing={2.5}>
         {/* Ride Status List */}
         <Grid item xs={12} md={6}>
-          <DashboardCard title="Rides Telemetry Heartbeat" subtitle="Real-time occupancy levels, queue wait times, and mechanical status">
+          <DashboardCard title="Dữ liệu đo lường trò chơi" subtitle="Tỷ lệ lấp đầy, thời gian chờ xếp hàng và trạng thái cơ khí thời gian thực">
             <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
               <Table size="medium">
                 <TableHead sx={{ backgroundColor: 'action.hover' }}>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Ride Name</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Capacity Load</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Wait Time</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Tên trò chơi</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Mức lấp đầy</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Thời gian chờ</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Trạng thái</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -147,11 +147,11 @@ export const OperationalDashboardPage: React.FC = () => {
                       <TableCell sx={{ fontWeight: 600 }}>{ride.name}</TableCell>
                       <TableCell>{ride.currentLoad} / {ride.maxCapacity} ({((ride.currentLoad / (ride.maxCapacity || 1)) * 100).toFixed(0)}%)</TableCell>
                       <TableCell sx={{ fontWeight: 'bold', color: ride.waitTimeMinutes > 20 ? 'error.main' : 'text.primary' }}>
-                        {ride.waitTimeMinutes} min
+                        {ride.waitTimeMinutes} phút
                       </TableCell>
                       <TableCell>
                         <StatusChip
-                          label={ride.status}
+                          label={ride.status === 'active' ? 'Hoạt động' : ride.status === 'maintenance' ? 'Bảo trì' : 'Ngoại tuyến'}
                           status={ride.status === 'active' ? 'active' : ride.status === 'maintenance' ? 'pending' : 'error'}
                         />
                       </TableCell>
@@ -165,26 +165,26 @@ export const OperationalDashboardPage: React.FC = () => {
 
         {/* Access Gates Status */}
         <Grid item xs={12} md={6}>
-          <DashboardCard title="Entrance Checkpoints Telemetry" subtitle="Live scanner state, daily checks completed, and last activity timestamps">
+          <DashboardCard title="Dữ liệu đo lường cổng kiểm soát" subtitle="Trạng thái thiết bị quét trực tiếp, lượt quét thành công trong ngày và mốc thời gian hoạt động cuối">
             <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
               <Table size="medium">
                 <TableHead sx={{ backgroundColor: 'action.hover' }}>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Gate ID</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Validation Count</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Last Checkin</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Mã cổng</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Số lượt soát vé</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Lượt vào cuối</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Trạng thái</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {opData?.gateStatus.map((gate) => (
                     <TableRow key={gate.id} hover>
                       <TableCell sx={{ fontWeight: 600 }}>{gate.name}</TableCell>
-                      <TableCell>{gate.scansToday.toLocaleString()} checkins</TableCell>
-                      <TableCell>{new Date(gate.lastScan).toLocaleTimeString()}</TableCell>
+                      <TableCell>{gate.scansToday.toLocaleString()} lượt</TableCell>
+                      <TableCell>{new Date(gate.lastScan).toLocaleTimeString('vi-VN')}</TableCell>
                       <TableCell>
                         <StatusChip
-                          label={gate.status}
+                          label={gate.status === 'open' ? 'Mở' : gate.status === 'maintenance' ? 'Bảo trì' : 'Đóng'}
                           status={gate.status === 'open' ? 'active' : gate.status === 'maintenance' ? 'pending' : 'error'}
                         />
                       </TableCell>
@@ -198,15 +198,15 @@ export const OperationalDashboardPage: React.FC = () => {
 
         {/* Operational Staff Shift status */}
         <Grid item xs={12} lg={4}>
-          <DashboardCard title="On-duty Operators" subtitle="Security and crew shift tracking">
+          <DashboardCard title="Nhân viên vận hành trực ca" subtitle="Theo dõi ca trực của nhân viên bảo vệ và kỹ thuật">
             <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
               <Table size="small">
                 <TableHead sx={{ backgroundColor: 'action.hover' }}>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Operator</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Assigned Area</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Shift</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Nhân viên</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Khu vực phân công</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Ca trực</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Trạng thái</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -217,7 +217,7 @@ export const OperationalDashboardPage: React.FC = () => {
                       <TableCell>{op.shiftStart} - {op.shiftEnd}</TableCell>
                       <TableCell>
                         <StatusChip
-                          label={op.status}
+                          label={op.status === 'active' ? 'Hoạt động' : op.status === 'break' ? 'Nghỉ ca' : 'Ngoại tuyến'}
                           status={op.status === 'active' ? 'active' : op.status === 'break' ? 'pending' : 'error'}
                         />
                       </TableCell>
@@ -231,14 +231,14 @@ export const OperationalDashboardPage: React.FC = () => {
 
         {/* Active Incident Feed */}
         <Grid item xs={12} lg={4}>
-          <DashboardCard title="Active Incident Feed" subtitle="Logged anomalies, hazards, and customer care alerts">
+          <DashboardCard title="Nguồn cấp sự cố đang hoạt động" subtitle="Nhật ký các điểm bất thường, mối nguy hiểm và cảnh báo dịch vụ khách hàng">
             <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
               <Table size="small">
                 <TableHead sx={{ backgroundColor: 'action.hover' }}>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Incident Details</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Severity</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Chi tiết sự cố</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Mức độ</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Trạng thái</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -246,7 +246,7 @@ export const OperationalDashboardPage: React.FC = () => {
                     <TableRow key={inc.id} hover>
                       <TableCell>
                         <Typography variant="body2" sx={{ fontWeight: 600 }}>{inc.title}</Typography>
-                        <Typography variant="caption" color="text.secondary">{inc.location} • {new Date(inc.reportedAt).toLocaleTimeString()}</Typography>
+                        <Typography variant="caption" color="text.secondary">{inc.location} • {new Date(inc.reportedAt).toLocaleTimeString('vi-VN')}</Typography>
                       </TableCell>
                       <TableCell>
                         <Typography
@@ -257,12 +257,12 @@ export const OperationalDashboardPage: React.FC = () => {
                             textTransform: 'uppercase',
                           }}
                         >
-                          {inc.severity}
+                          {inc.severity === 'critical' ? 'Rất nghiêm trọng' : inc.severity === 'high' ? 'Nghiêm trọng' : inc.severity === 'medium' ? 'Trung bình' : 'Thấp'}
                         </Typography>
                       </TableCell>
                       <TableCell>
                         <StatusChip
-                          label={inc.status}
+                          label={inc.status === 'resolved' ? 'Đã giải quyết' : inc.status === 'investigating' ? 'Đang điều tra' : 'Đang xử lý'}
                           status={inc.status === 'resolved' ? 'active' : inc.status === 'investigating' ? 'pending' : 'error'}
                         />
                       </TableCell>
@@ -276,14 +276,14 @@ export const OperationalDashboardPage: React.FC = () => {
 
         {/* Scheduled Maintenance list */}
         <Grid item xs={12} lg={4}>
-          <DashboardCard title="Safety Maintenance queue" subtitle="Routine repairs and audits">
+          <DashboardCard title="Danh sách bảo trì an toàn" subtitle="Các hoạt động sửa chữa định kỳ và kiểm toán an toàn">
             <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
               <Table size="small">
                 <TableHead sx={{ backgroundColor: 'action.hover' }}>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Target</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Priority</TableCell>
-                    <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Mục tiêu</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Độ ưu tiên</TableCell>
+                    <TableCell sx={{ fontWeight: 'bold' }}>Trạng thái</TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -291,7 +291,7 @@ export const OperationalDashboardPage: React.FC = () => {
                     <TableRow key={item.id} hover>
                       <TableCell>
                         <Typography variant="body2" sx={{ fontWeight: 600 }}>{item.targetName}</Typography>
-                        <Typography variant="caption" color="text.secondary">Assigned: {item.assignedTo}</Typography>
+                        <Typography variant="caption" color="text.secondary">Phân công: {item.assignedTo}</Typography>
                       </TableCell>
                       <TableCell>
                         <Typography
@@ -302,12 +302,12 @@ export const OperationalDashboardPage: React.FC = () => {
                             textTransform: 'uppercase',
                           }}
                         >
-                          {item.priority}
+                          {item.priority === 'high' ? 'Cao' : item.priority === 'medium' ? 'Trung bình' : 'Thấp'}
                         </Typography>
                       </TableCell>
                       <TableCell>
                         <StatusChip
-                          label={item.status.replace('_', ' ')}
+                          label={item.status === 'completed' ? 'Hoàn thành' : item.status === 'in_progress' ? 'Đang tiến hành' : 'Chờ xử lý'}
                           status={item.status === 'completed' ? 'active' : item.status === 'in_progress' ? 'pending' : 'error'}
                         />
                       </TableCell>

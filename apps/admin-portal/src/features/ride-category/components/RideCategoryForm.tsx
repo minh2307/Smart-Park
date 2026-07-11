@@ -52,8 +52,8 @@ export const RideCategoryForm: React.FC<RideCategoryFormProps> = ({
                 {...field}
                 required
                 fullWidth
-                label="Category Name"
-                placeholder="e.g. Roller Coasters"
+                label="Tên danh mục"
+                placeholder="VD: Tàu lượn"
                 error={!!errors.name}
                 helperText={errors.name?.message}
                 disabled={loading}
@@ -71,10 +71,10 @@ export const RideCategoryForm: React.FC<RideCategoryFormProps> = ({
                 {...field}
                 required
                 fullWidth
-                label="Category Code"
-                placeholder="e.g. CAT-COASTER"
+                label="Mã danh mục"
+                placeholder="VD: CAT-COASTER"
                 error={!!errors.code}
-                helperText={errors.code?.message || 'Uppercase alphanumeric with hyphens/underscores'}
+                helperText={errors.code?.message || 'Chữ viết hoa và số, có thể dùng dấu gạch ngang/gạch dưới'}
                 disabled={loading || !!initialData}
               />
             )}
@@ -87,14 +87,14 @@ export const RideCategoryForm: React.FC<RideCategoryFormProps> = ({
             control={control}
             render={({ field }) => (
               <FormControl fullWidth error={!!errors.status} disabled={loading}>
-                <InputLabel id="ride-cat-status-label">Status *</InputLabel>
+                <InputLabel id="ride-cat-status-label">Trạng thái *</InputLabel>
                 <Select
                   {...field}
                   labelId="ride-cat-status-label"
-                  label="Status *"
+                  label="Trạng thái *"
                 >
-                  <MenuItem value="ACTIVE">Active</MenuItem>
-                  <MenuItem value="INACTIVE">Inactive</MenuItem>
+                  <MenuItem value="ACTIVE">Hoạt động</MenuItem>
+                  <MenuItem value="INACTIVE">Ngưng hoạt động</MenuItem>
                 </Select>
                 {errors.status && <FormHelperText>{errors.status.message}</FormHelperText>}
               </FormControl>
@@ -112,8 +112,8 @@ export const RideCategoryForm: React.FC<RideCategoryFormProps> = ({
                 fullWidth
                 multiline
                 rows={4}
-                label="Description"
-                placeholder="Brief description of category features and restrictions"
+                label="Mô tả"
+                placeholder="Mô tả ngắn gọn về đặc điểm và giới hạn của danh mục"
                 error={!!errors.description}
                 helperText={errors.description?.message}
                 disabled={loading}
@@ -125,7 +125,7 @@ export const RideCategoryForm: React.FC<RideCategoryFormProps> = ({
 
       <Box display="flex" justifyContent="flex-end" gap={2} mt={3}>
         <Button type="submit" variant="contained" loading={loading}>
-          {initialData ? 'Update Category' : 'Register Category'}
+          {initialData ? 'Cập nhật danh mục' : 'Đăng ký danh mục'}
         </Button>
       </Box>
     </Box>

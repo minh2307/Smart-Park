@@ -35,8 +35,8 @@ export const ExecutiveDashboardPage: React.FC = () => {
       mode,
       categories,
       [
-        { name: 'Revenue', data: mockRevenueTrend.map((p: { revenue: number }) => p.revenue), areaStyle: true },
-        { name: 'Profit', data: mockRevenueTrend.map((p: { profit: number }) => p.profit), color: '#22c55e', areaStyle: true },
+        { name: 'Doanh thu', data: mockRevenueTrend.map((p: { revenue: number }) => p.revenue), areaStyle: true },
+        { name: 'Lợi nhuận', data: mockRevenueTrend.map((p: { profit: number }) => p.profit), color: '#22c55e', areaStyle: true },
       ],
       'currency'
     );
@@ -47,7 +47,7 @@ export const ExecutiveDashboardPage: React.FC = () => {
     return buildLineChartOption(
       mode,
       categories,
-      [{ name: 'Visitors', data: mockVisitorFlow.hourly.map((h: { count: number }) => h.count), color: '#0ea5e9', areaStyle: true }],
+      [{ name: 'Lượt khách', data: mockVisitorFlow.hourly.map((h: { count: number }) => h.count), color: '#0ea5e9', areaStyle: true }],
       'number'
     );
   }, [mode]);
@@ -62,10 +62,10 @@ export const ExecutiveDashboardPage: React.FC = () => {
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
         <Box>
           <Typography variant="h4" sx={{ fontWeight: 800, letterSpacing: '-0.02em' }}>
-            Executive Dashboard
+            Tổng quan điều hành
           </Typography>
           <Typography variant="body2" color="text.secondary">
-            Real-time overview of park operations and performance
+            Tổng quan thời gian thực về hoạt động và hiệu suất của công viên
           </Typography>
         </Box>
       </Box>
@@ -85,7 +85,7 @@ export const ExecutiveDashboardPage: React.FC = () => {
                 icon={kpiDef.icon}
                 color={kpiDef.color}
                 sparklineData={data?.sparkline}
-                compareLabel="vs last period"
+                compareLabel="so với kỳ trước"
                 loading={isLoading}
               />
             </Grid>
@@ -96,13 +96,13 @@ export const ExecutiveDashboardPage: React.FC = () => {
       {/* Charts Row */}
       <Grid container spacing={2.5}>
         <Grid item xs={12} lg={7}>
-          <DashboardCard title="Revenue Trend" subtitle="Revenue and profit over time" onRefresh={refetch}>
+          <DashboardCard title="Xu hướng doanh thu" subtitle="Doanh thu và lợi nhuận theo thời gian" onRefresh={refetch}>
             <ChartContainer option={revenueTrendOption} height={320} loading={isLoading} />
           </DashboardCard>
         </Grid>
 
         <Grid item xs={12} lg={5}>
-          <DashboardCard title="Visitor Flow" subtitle="Hourly visitor count today">
+          <DashboardCard title="Lưu lượng khách tham quan" subtitle="Số lượng khách tham quan theo giờ hôm nay">
             <ChartContainer option={visitorFlowOption} height={320} loading={isLoading} />
           </DashboardCard>
         </Grid>

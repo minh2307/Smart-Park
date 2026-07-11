@@ -57,13 +57,13 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
 
       {showVenue && venues.length > 0 && (
         <FormControl size="small" sx={{ minWidth: 160 }}>
-          <InputLabel>Venue</InputLabel>
+          <InputLabel>Địa điểm</InputLabel>
           <Select
             value={selectedVenueId || ''}
-            label="Venue"
+            label="Địa điểm"
             onChange={(e) => dispatch(setSelectedVenue(e.target.value ? Number(e.target.value) : null))}
           >
-            <MenuItem value="">All Venues</MenuItem>
+            <MenuItem value="">Tất cả địa điểm</MenuItem>
             {venues.map((v) => (
               <MenuItem key={v.id} value={v.id}>{v.name}</MenuItem>
             ))}
@@ -88,26 +88,26 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
             },
           }}
         >
-          <ToggleButton value="day">Day</ToggleButton>
-          <ToggleButton value="week">Week</ToggleButton>
-          <ToggleButton value="month">Month</ToggleButton>
-          <ToggleButton value="quarter">Quarter</ToggleButton>
-          <ToggleButton value="year">Year</ToggleButton>
+          <ToggleButton value="day">Ngày</ToggleButton>
+          <ToggleButton value="week">Tuần</ToggleButton>
+          <ToggleButton value="month">Tháng</ToggleButton>
+          <ToggleButton value="quarter">Quý</ToggleButton>
+          <ToggleButton value="year">Năm</ToggleButton>
         </ToggleButtonGroup>
       )}
 
       {showCompare && (
         <FormControl size="small" sx={{ minWidth: 140 }}>
-          <InputLabel>Compare</InputLabel>
+          <InputLabel>So sánh</InputLabel>
           <Select
             value={compareWith}
-            label="Compare"
+            label="So sánh"
             onChange={(e) => dispatch(setCompareWith(e.target.value as any))}
             startAdornment={<MdCompareArrows size={14} style={{ marginRight: 4 }} />}
           >
-            <MenuItem value="none">No Comparison</MenuItem>
-            <MenuItem value="previous_period">Previous Period</MenuItem>
-            <MenuItem value="previous_year">Previous Year</MenuItem>
+            <MenuItem value="none">Không so sánh</MenuItem>
+            <MenuItem value="previous_period">Kỳ trước</MenuItem>
+            <MenuItem value="previous_year">Năm trước</MenuItem>
           </Select>
         </FormControl>
       )}
@@ -115,7 +115,7 @@ export const FilterPanel: React.FC<FilterPanelProps> = ({
       <Box sx={{ flex: 1 }} />
 
       {onRefresh && (
-        <Tooltip title="Refresh Data">
+        <Tooltip title="Làm mới dữ liệu">
           <IconButton onClick={onRefresh} size="small" color="primary">
             <MdRefresh size={18} />
           </IconButton>

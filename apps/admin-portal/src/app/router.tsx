@@ -16,6 +16,7 @@ const LoginPage = lazy(() => import('../features/auth/pages/LoginPage').then(m =
 // User
 const UserListPage = lazy(() => import('../features/user/pages/UserListPage').then(m => ({ default: m.UserListPage })));
 const UserDetailsPage = lazy(() => import('../features/user/pages/UserDetailsPage').then(m => ({ default: m.UserDetailsPage })));
+const ProfilePage = lazy(() => import('../features/user/pages/ProfilePage').then(m => ({ default: m.ProfilePage })));
 
 // Venue
 const VenueListPage = lazy(() => import('../features/venue/pages/VenueListPage').then(m => ({ default: m.VenueListPage })));
@@ -467,6 +468,14 @@ export const router = createBrowserRouter([
             element: (
               <RoleGuard allowedRoles={['ADMIN']}>
                 <ExportPage />
+              </RoleGuard>
+            ),
+          },
+          {
+            path: 'profile',
+            element: (
+              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
+                <ProfilePage />
               </RoleGuard>
             ),
           },

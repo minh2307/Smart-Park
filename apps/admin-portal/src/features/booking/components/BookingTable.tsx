@@ -6,6 +6,7 @@ import { Booking } from '../types';
 import { StatusChip } from '../../ticket/components/StatusChip';
 import { PermissionWrapper } from '../../../shared/components/PermissionWrapper';
 import dayjs from 'dayjs';
+import { formatCurrency } from '../../analytics/utils/numberFormatters';
 
 interface BookingTableProps {
   data: Booking[];
@@ -35,7 +36,7 @@ export const BookingTable: React.FC<BookingTableProps> = ({
   const columns = [
     {
       id: 'id' as any,
-      label: 'Booking ID',
+      label: 'Mã đặt vé',
       sortable: true,
       render: (row: Booking) => (
         <Typography variant="body2" fontWeight={600} fontFamily="monospace">
@@ -45,11 +46,11 @@ export const BookingTable: React.FC<BookingTableProps> = ({
     },
     {
       id: 'customer' as any,
-      label: 'Customer',
+      label: 'Khách hàng',
       render: (row: Booking) => (
         <Box>
           <Typography variant="body2" fontWeight={500}>
-            {row.customer?.fullName || 'Walk-in Guest'}
+            {row.customer?.fullName || 'Khách vãng lai'}
           </Typography>
           <Typography variant="caption" color="text.secondary">
             {row.customer?.email || 'N/A'}
@@ -59,7 +60,7 @@ export const BookingTable: React.FC<BookingTableProps> = ({
     },
     {
       id: 'createdAt' as any,
-      label: 'Booking Date',
+      label: 'Ngày đặt',
       sortable: true,
       render: (row: Booking) => (
         <Typography variant="body2">
@@ -69,7 +70,7 @@ export const BookingTable: React.FC<BookingTableProps> = ({
     },
     {
       id: 'visitDate' as any,
-      label: 'Visit Date',
+      label: 'Ngày tham quan',
       sortable: true,
       render: (row: Booking) => (
         <Typography variant="body2">
@@ -79,7 +80,7 @@ export const BookingTable: React.FC<BookingTableProps> = ({
     },
     {
       id: 'ticketCount' as any,
-      label: 'Tickets',
+      label: 'Số vé',
       render: (row: Booking) => {
         const count = row.items?.reduce((sum, item) => sum + item.quantity, 0) || row.tickets?.length || 1;
         return (
@@ -91,17 +92,17 @@ export const BookingTable: React.FC<BookingTableProps> = ({
     },
     {
       id: 'totalAmount' as any,
-      label: 'Total Amount',
+      label: 'Tổng tiền',
       sortable: true,
       render: (row: Booking) => (
         <Typography variant="body2" fontWeight={600} color="primary.main">
-          ${row.totalAmount?.toFixed(2) || '0.00'}
+          {formatCurrency(row.totalAmount || 0)}
         </Typography>
       ),
     },
     {
       id: 'status' as any,
-      label: 'Status',
+      label: 'Trạng thái',
       sortable: true,
       render: (row: Booking) => (
         <StatusChip status={String(row.status)} type="booking" />
@@ -109,12 +110,12 @@ export const BookingTable: React.FC<BookingTableProps> = ({
     },
     {
       id: 'actions' as any,
-      label: 'Actions',
+      label: 'Hành động',
       render: (row: Booking) => {
         const isPending = row.status === 0 || String(row.status).toUpperCase() === 'PENDING';
         return (
           <Box display="flex" gap={0.5}>
-            <Tooltip title="View Details">
+            <Tooltip title="Xem chi tiết">
               <IconButton onClick={() => onViewDetails(row)} color="info" size="small">
                 <MdVisibility size={18} />
               </IconButton>
@@ -122,13 +123,13 @@ export const BookingTable: React.FC<BookingTableProps> = ({
 
             {isPending && (
               <>
-                <Tooltip title="Pay via QR Code">
+                <Tooltip title="Thanh toán qua mã QR">
                   <IconButton onClick={() => onPayQR(row)} color="success" size="small">
                     <MdQrCode size={18} />
                   </IconButton>
                 </Tooltip>
                 <PermissionWrapper requiredPermission="write:bookings">
-                  <Tooltip title="Cancel Booking">
+                  <Tooltip title="Hủy đặt vé">
                     <IconButton onClick={() => onCancel(row)} color="error" size="small">
                       <MdClose size={18} />
                     </IconButton>

@@ -36,68 +36,74 @@ export const VenueTable: React.FC<VenueTableProps> = ({
   const columns = [
     {
       id: 'venueCode' as any,
-      label: 'Venue Code',
+      label: 'Mã địa điểm',
       sortable: true,
       render: (row: Venue) => <Chip label={row.venueCode} size="small" sx={{ fontWeight: 'bold' }} />,
     },
     {
       id: 'name' as any,
-      label: 'Venue Name',
+      label: 'Tên địa điểm',
       sortable: true,
     },
     {
       id: 'address' as any,
-      label: 'Address',
+      label: 'Địa chỉ',
     },
     {
       id: 'city' as any,
-      label: 'City',
+      label: 'Thành phố',
       sortable: true,
     },
     {
       id: 'country' as any,
-      label: 'Country',
+      label: 'Quốc gia',
       sortable: true,
     },
     {
       id: 'manager' as any,
-      label: 'Manager',
+      label: 'Quản lý',
     },
     {
       id: 'status' as any,
-      label: 'Status',
+      label: 'Trạng thái',
       sortable: true,
       render: (row: Venue) => {
         const statusStr = typeof row.status === 'number' ? (row.status === 1 ? 'ACTIVE' : 'INACTIVE') : row.status;
+        const statusMap: Record<string, string> = {
+          ACTIVE: 'Hoạt động',
+          INACTIVE: 'Ngưng hoạt động',
+          UNDER_MAINTENANCE: 'Đang bảo trì',
+          CLOSED: 'Đã đóng cửa',
+        };
         const colorMap: Record<string, 'success' | 'default' | 'warning' | 'error'> = {
           ACTIVE: 'success',
           INACTIVE: 'default',
           UNDER_MAINTENANCE: 'warning',
           CLOSED: 'error',
         };
-        return <Chip label={statusStr} color={colorMap[statusStr] || 'default'} size="small" variant="outlined" />;
+        return <Chip label={statusMap[statusStr] || statusStr} color={colorMap[statusStr] || 'default'} size="small" variant="outlined" />;
       },
     },
     {
       id: 'openingHours' as any,
-      label: 'Opening Hours',
+      label: 'Giờ mở cửa',
       render: (row: Venue) => `${row.openingTime || '08:00'} - ${row.closingTime || '22:00'}`,
     },
     {
       id: 'actions' as any,
-      label: 'Actions',
+      label: 'Thao tác',
       render: (row: Venue) => (
         <Box display="flex" gap={1}>
-          <IconButton onClick={() => navigate(`/admin/venues/${row.id}`)} color="info" size="small" title="View Details">
+          <IconButton onClick={() => navigate(`/admin/venues/${row.id}`)} color="info" size="small" title="Xem chi tiết">
             <MdVisibility size={18} />
           </IconButton>
           <PermissionWrapper requiredPermission="write:venues">
-            <IconButton onClick={() => onEdit(row)} color="primary" size="small" title="Edit Venue">
+            <IconButton onClick={() => onEdit(row)} color="primary" size="small" title="Chỉnh sửa địa điểm">
               <MdEdit size={18} />
             </IconButton>
           </PermissionWrapper>
           <PermissionWrapper requiredPermission="delete:venues">
-            <IconButton onClick={() => onDelete(row)} color="error" size="small" title="Delete Venue">
+            <IconButton onClick={() => onDelete(row)} color="error" size="small" title="Xóa địa điểm">
               <MdDelete size={18} />
             </IconButton>
           </PermissionWrapper>

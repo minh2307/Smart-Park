@@ -119,7 +119,7 @@ export const MembershipTierForm: React.FC<MembershipTierFormProps> = ({
             render={({ field }) => (
               <TextField
                 {...field}
-                label="Tier Name"
+                label="Tên phân hạng"
                 fullWidth
                 error={!!errors.name}
                 helperText={errors.name?.message}
@@ -134,7 +134,7 @@ export const MembershipTierForm: React.FC<MembershipTierFormProps> = ({
             render={({ field }) => (
               <TextField
                 {...field}
-                label="Tier Code (uppercase)"
+                label="Mã phân hạng (chữ in hoa)"
                 fullWidth
                 disabled={!!initialValues}
                 error={!!errors.code}
@@ -152,7 +152,7 @@ export const MembershipTierForm: React.FC<MembershipTierFormProps> = ({
               <TextField
                 {...field}
                 type="number"
-                label="Discount Percentage"
+                label="Tỷ lệ giảm giá (%)"
                 fullWidth
                 onChange={(e) => field.onChange(Number(e.target.value))}
                 error={!!errors.discountPercentage}
@@ -169,7 +169,7 @@ export const MembershipTierForm: React.FC<MembershipTierFormProps> = ({
               <TextField
                 {...field}
                 type="number"
-                label="Points Multiplier"
+                label="Hệ số nhân điểm"
                 fullWidth
                 inputProps={{ step: 0.05 }}
                 onChange={(e) => field.onChange(Number(e.target.value))}
@@ -187,7 +187,7 @@ export const MembershipTierForm: React.FC<MembershipTierFormProps> = ({
               <TextField
                 {...field}
                 type="number"
-                label="Minimum Spend ($)"
+                label="Chi tiêu tối thiểu ($)"
                 fullWidth
                 onChange={(e) => field.onChange(Number(e.target.value))}
                 error={!!errors.minSpend}
@@ -200,7 +200,7 @@ export const MembershipTierForm: React.FC<MembershipTierFormProps> = ({
         <Grid item xs={12}>
           <Divider sx={{ my: 1 }} />
           <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
-            Point Progression & Rules
+            Quy tắc tích lũy & Thăng hạng điểm
           </Typography>
         </Grid>
 
@@ -212,7 +212,7 @@ export const MembershipTierForm: React.FC<MembershipTierFormProps> = ({
               <TextField
                 {...field}
                 type="number"
-                label="Upgrade Point Threshold"
+                label="Ngưỡng điểm thăng hạng"
                 fullWidth
                 onChange={(e) => field.onChange(Number(e.target.value))}
                 error={!!errors.pointRules?.upgradeThreshold}
@@ -229,7 +229,7 @@ export const MembershipTierForm: React.FC<MembershipTierFormProps> = ({
               <TextField
                 {...field}
                 type="number"
-                label="Downgrade Point Threshold"
+                label="Ngưỡng điểm hạ hạng"
                 fullWidth
                 onChange={(e) => field.onChange(Number(e.target.value))}
                 error={!!errors.pointRules?.downgradeThreshold}
@@ -246,7 +246,7 @@ export const MembershipTierForm: React.FC<MembershipTierFormProps> = ({
               <TextField
                 {...field}
                 type="number"
-                label="Point Expiration Period (Months)"
+                label="Thời hạn hết hạn điểm (Tháng)"
                 fullWidth
                 onChange={(e) => field.onChange(Number(e.target.value))}
                 error={!!errors.pointRules?.expirationMonths}
@@ -263,7 +263,7 @@ export const MembershipTierForm: React.FC<MembershipTierFormProps> = ({
               <TextField
                 {...field}
                 type="number"
-                label="Renewal Bonus Points"
+                label="Điểm thưởng gia hạn"
                 fullWidth
                 onChange={(e) => field.onChange(Number(e.target.value))}
                 error={!!errors.pointRules?.renewalPoints}
@@ -276,7 +276,7 @@ export const MembershipTierForm: React.FC<MembershipTierFormProps> = ({
         <Grid item xs={12}>
           <Divider sx={{ my: 1 }} />
           <Typography variant="subtitle2" fontWeight="bold" gutterBottom>
-            Configure Benefit Privileges
+            Cấu hình quyền lợi ưu đãi
           </Typography>
         </Grid>
 
@@ -288,7 +288,7 @@ export const MembershipTierForm: React.FC<MembershipTierFormProps> = ({
               <TextField
                 {...field}
                 type="number"
-                label="Ticket Discount %"
+                label="Giảm giá vé %"
                 fullWidth
                 onChange={(e) => field.onChange(Number(e.target.value))}
               />
@@ -303,7 +303,7 @@ export const MembershipTierForm: React.FC<MembershipTierFormProps> = ({
               <TextField
                 {...field}
                 type="number"
-                label="F&B Discount %"
+                label="Giảm giá ẩm thực %"
                 fullWidth
                 onChange={(e) => field.onChange(Number(e.target.value))}
               />
@@ -318,7 +318,7 @@ export const MembershipTierForm: React.FC<MembershipTierFormProps> = ({
               <TextField
                 {...field}
                 type="number"
-                label="Shop Discount %"
+                label="Giảm giá cửa hàng %"
                 fullWidth
                 onChange={(e) => field.onChange(Number(e.target.value))}
               />
@@ -333,7 +333,7 @@ export const MembershipTierForm: React.FC<MembershipTierFormProps> = ({
               <TextField
                 {...field}
                 type="number"
-                label="Parking Discount %"
+                label="Giảm giá đỗ xe %"
                 fullWidth
                 onChange={(e) => field.onChange(Number(e.target.value))}
               />
@@ -348,7 +348,7 @@ export const MembershipTierForm: React.FC<MembershipTierFormProps> = ({
             render={({ field }) => (
               <FormControlLabel
                 control={<Checkbox checked={field.value} onChange={field.onChange} />}
-                label="Priority Queue Access"
+                label="Lối đi ưu tiên (Priority Queue)"
               />
             )}
           />
@@ -360,7 +360,7 @@ export const MembershipTierForm: React.FC<MembershipTierFormProps> = ({
             render={({ field }) => (
               <FormControlLabel
                 control={<Checkbox checked={field.value} onChange={field.onChange} />}
-                label="Fast Pass Privileges"
+                label="Đặc quyền Fast Pass"
               />
             )}
           />
@@ -372,7 +372,7 @@ export const MembershipTierForm: React.FC<MembershipTierFormProps> = ({
             render={({ field }) => (
               <FormControlLabel
                 control={<Checkbox checked={field.value} onChange={field.onChange} />}
-                label="VIP Lounge Access"
+                label="Phòng chờ VIP"
               />
             )}
           />
@@ -384,7 +384,7 @@ export const MembershipTierForm: React.FC<MembershipTierFormProps> = ({
             render={({ field }) => (
               <FormControlLabel
                 control={<Checkbox checked={field.value} onChange={field.onChange} />}
-                label="Free Parking"
+                label="Miễn phí đỗ xe"
               />
             )}
           />
@@ -396,7 +396,7 @@ export const MembershipTierForm: React.FC<MembershipTierFormProps> = ({
             render={({ field }) => (
               <FormControlLabel
                 control={<Checkbox checked={field.value} onChange={field.onChange} />}
-                label="Free Locker Rental"
+                label="Miễn phí thuê tủ đồ"
               />
             )}
           />
@@ -408,7 +408,7 @@ export const MembershipTierForm: React.FC<MembershipTierFormProps> = ({
             render={({ field }) => (
               <FormControlLabel
                 control={<Checkbox checked={field.value} onChange={field.onChange} />}
-                label="Early Park Entry"
+                label="Vào cổng sớm"
               />
             )}
           />
@@ -417,10 +417,10 @@ export const MembershipTierForm: React.FC<MembershipTierFormProps> = ({
 
       <Box display="flex" justifyContent="flex-end" gap={2} sx={{ mt: 4 }}>
         <Button onClick={onCancel} variant="outlined" color="secondary">
-          Cancel
+          Hủy
         </Button>
         <Button type="submit" variant="contained" color="primary" disabled={isSubmitting}>
-          {initialValues ? 'Save Changes' : 'Create Tier'}
+          {initialValues ? 'Lưu thay đổi' : 'Tạo phân hạng'}
         </Button>
       </Box>
     </Box>
@@ -490,7 +490,7 @@ export const MembershipForm: React.FC<MembershipFormProps> = ({
             render={({ field }) => (
               <TextField
                 {...field}
-                label="Customer Full Name"
+                label="Họ và tên khách hàng"
                 fullWidth
                 error={!!errors.customerName}
                 helperText={errors.customerName?.message}
@@ -505,10 +505,10 @@ export const MembershipForm: React.FC<MembershipFormProps> = ({
             render={({ field }) => (
               <TextField
                 {...field}
-                label="Membership Code"
+                label="Mã thẻ thành viên"
                 fullWidth
                 error={!!errors.membershipCode}
-                helperText={errors.membershipCode?.message || 'Unique code identifying member card'}
+                helperText={errors.membershipCode?.message || 'Mã duy nhất xác định thẻ thành viên'}
               />
             )}
           />
@@ -521,7 +521,7 @@ export const MembershipForm: React.FC<MembershipFormProps> = ({
             render={({ field }) => (
               <TextField
                 {...field}
-                label="Email Address"
+                label="Địa chỉ email"
                 fullWidth
                 error={!!errors.customerEmail}
                 helperText={errors.customerEmail?.message}
@@ -536,7 +536,7 @@ export const MembershipForm: React.FC<MembershipFormProps> = ({
             render={({ field }) => (
               <TextField
                 {...field}
-                label="Phone Number"
+                label="Số điện thoại"
                 fullWidth
                 error={!!errors.customerPhone}
                 helperText={errors.customerPhone?.message}
@@ -553,7 +553,7 @@ export const MembershipForm: React.FC<MembershipFormProps> = ({
               <TextField
                 {...field}
                 select
-                label="Membership Tier"
+                label="Hạng thành viên"
                 fullWidth
                 onChange={(e) => field.onChange(Number(e.target.value))}
                 error={!!errors.tierId}
@@ -561,7 +561,7 @@ export const MembershipForm: React.FC<MembershipFormProps> = ({
               >
                 {tiers.map((t) => (
                   <MenuItem key={t.id} value={t.id}>
-                    {t.name} (Discount: {t.discountPercentage}%)
+                    {t.name} (Giảm giá: {t.discountPercentage}%)
                   </MenuItem>
                 ))}
               </TextField>
@@ -577,7 +577,7 @@ export const MembershipForm: React.FC<MembershipFormProps> = ({
               <TextField
                 {...field}
                 type="number"
-                label="Loyalty Points Balance"
+                label="Số dư điểm tích lũy"
                 fullWidth
                 onChange={(e) => field.onChange(Number(e.target.value))}
                 error={!!errors.points}
@@ -595,7 +595,7 @@ export const MembershipForm: React.FC<MembershipFormProps> = ({
               <TextField
                 {...field}
                 type="date"
-                label="Join Date"
+                label="Ngày tham gia"
                 fullWidth
                 InputLabelProps={{ shrink: true }}
                 error={!!errors.joinDate}
@@ -613,7 +613,7 @@ export const MembershipForm: React.FC<MembershipFormProps> = ({
               <TextField
                 {...field}
                 type="date"
-                label="Expiration Date"
+                label="Ngày hết hạn"
                 fullWidth
                 InputLabelProps={{ shrink: true }}
                 error={!!errors.expirationDate}
@@ -631,15 +631,15 @@ export const MembershipForm: React.FC<MembershipFormProps> = ({
               <TextField
                 {...field}
                 select
-                label="Status"
+                label="Trạng thái"
                 fullWidth
                 error={!!errors.status}
                 helperText={errors.status?.message}
               >
-                <MenuItem value="ACTIVE">Active</MenuItem>
-                <MenuItem value="EXPIRED">Expired</MenuItem>
-                <MenuItem value="CANCELLED">Cancelled</MenuItem>
-                <MenuItem value="SUSPENDED">Suspended</MenuItem>
+                <MenuItem value="ACTIVE">Hoạt động</MenuItem>
+                <MenuItem value="EXPIRED">Hết hạn</MenuItem>
+                <MenuItem value="CANCELLED">Đã hủy</MenuItem>
+                <MenuItem value="SUSPENDED">Tạm ngưng</MenuItem>
               </TextField>
             )}
           />
@@ -648,10 +648,10 @@ export const MembershipForm: React.FC<MembershipFormProps> = ({
 
       <Box display="flex" justifyContent="flex-end" gap={2} sx={{ mt: 4 }}>
         <Button onClick={onCancel} variant="outlined" color="secondary">
-          Cancel
+          Hủy
         </Button>
         <Button type="submit" variant="contained" color="primary" disabled={isSubmitting}>
-          {initialValues ? 'Save Changes' : 'Assign Membership'}
+          {initialValues ? 'Lưu thay đổi' : 'Cấp thẻ thành viên'}
         </Button>
       </Box>
     </Box>

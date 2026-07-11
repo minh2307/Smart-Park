@@ -42,7 +42,7 @@ export const VenueDetailsPage: React.FC = () => {
     if (isError || !venue) {
       return (
         <Box display="flex" flexDirection="column" gap={2}>
-          <ErrorMessage message="Could not fetch detailed venue info from backend. Displaying template details as fallback." />
+          <ErrorMessage message="Không thể lấy thông tin chi tiết địa điểm từ hệ thống. Đang hiển thị thông tin chi tiết mẫu thay thế." />
           <VenueDetails venue={mockVenue} />
         </Box>
       );
@@ -52,10 +52,10 @@ export const VenueDetailsPage: React.FC = () => {
 
   return (
     <PageContainer
-      title="Venue Details"
+      title="Chi tiết địa điểm"
       toolbar={
         <Button startIcon={<MdArrowBack />} onClick={handleBack} variant="outlined">
-          Back to List
+          Quay lại danh sách
         </Button>
       }
     >

@@ -229,7 +229,7 @@ export const RideListPage: React.FC = () => {
 
   return (
     <PageContainer
-      title="Ride Attraction Directory"
+      title="Danh mục trò chơi"
       toolbar={
         <PermissionWrapper requiredPermission="write:rides">
           <Button
@@ -240,7 +240,7 @@ export const RideListPage: React.FC = () => {
               setFormOpen(true);
             }}
           >
-            Add Ride Specs
+            Thêm thông số trò chơi
           </Button>
         </PermissionWrapper>
       }
@@ -262,21 +262,21 @@ export const RideListPage: React.FC = () => {
               <TextField
                 fullWidth
                 size="small"
-                label="Search Attractions"
-                placeholder="Ride Name, Code..."
+                label="Tìm kiếm trò chơi"
+                placeholder="Tên trò chơi, Mã trò chơi..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <FormControl fullWidth size="small">
-                <InputLabel>Category</InputLabel>
+                <InputLabel>Danh mục</InputLabel>
                 <Select
                   value={categoryId}
-                  label="Category"
+                  label="Danh mục"
                   onChange={(e) => setCategoryId(e.target.value)}
                 >
-                  <MenuItem value=""><em>All Categories</em></MenuItem>
+                  <MenuItem value=""><em>Tất cả danh mục</em></MenuItem>
                   {mockRideCategories.map((c) => (
                     <MenuItem key={c.id} value={c.id}>
                       {c.name}
@@ -287,24 +287,24 @@ export const RideListPage: React.FC = () => {
             </Grid>
             <Grid item xs={12} sm={6} md={3}>
               <FormControl fullWidth size="small">
-                <InputLabel>Operating Status</InputLabel>
+                <InputLabel>Trạng thái vận hành</InputLabel>
                 <Select
                   value={status}
-                  label="Operating Status"
+                  label="Trạng thái vận hành"
                   onChange={(e) => setStatus(e.target.value)}
                 >
-                  <MenuItem value=""><em>All Statuses</em></MenuItem>
-                  <MenuItem value="OPERATING">Operating</MenuItem>
-                  <MenuItem value="CLOSED">Closed</MenuItem>
-                  <MenuItem value="MAINTENANCE">Maintenance</MenuItem>
-                  <MenuItem value="TEMPORARILY_CLOSED">Temporarily Closed</MenuItem>
-                  <MenuItem value="EMERGENCY_STOP">Emergency Stop</MenuItem>
+                  <MenuItem value=""><em>Tất cả trạng thái</em></MenuItem>
+                  <MenuItem value="OPERATING">Đang vận hành</MenuItem>
+                  <MenuItem value="CLOSED">Đã đóng cửa</MenuItem>
+                  <MenuItem value="MAINTENANCE">Đang bảo trì</MenuItem>
+                  <MenuItem value="TEMPORARILY_CLOSED">Tạm đóng cửa</MenuItem>
+                  <MenuItem value="EMERGENCY_STOP">Dừng khẩn cấp</MenuItem>
                 </Select>
               </FormControl>
             </Grid>
             <Grid item xs={12} md={2}>
               <Button fullWidth variant="outlined" onClick={handleResetFilters}>
-                Reset
+                Thiết lập lại
               </Button>
             </Grid>
           </Grid>
@@ -312,7 +312,7 @@ export const RideListPage: React.FC = () => {
 
         {isError && (
           <Alert severity="warning" sx={{ borderRadius: 3 }}>
-            Failed to fetch active rides. Switched to offline database sync.
+            Không thể tải dữ liệu trò chơi từ hệ thống. Đã chuyển sang dữ liệu cục bộ ngoại tuyến.
           </Alert>
         )}
 
@@ -336,8 +336,11 @@ export const RideListPage: React.FC = () => {
         {/* Details Dialog */}
         <Modal
           open={detailsOpen}
-          onClose={() => setSelectedRide(null)}
-          title="Attraction Profile Card"
+          onClose={() => {
+            setDetailsOpen(false);
+            setSelectedRide(null);
+          }}
+          title="Thông tin chi tiết trò chơi"
           maxWidth="md"
         >
           {selectedRide && <RideDetails ride={selectedRide} />}
@@ -347,7 +350,7 @@ export const RideListPage: React.FC = () => {
         <Modal
           open={formOpen}
           onClose={() => setFormOpen(false)}
-          title={editingRide ? 'Update Ride Specifications' : 'Register New Attraction'}
+          title={editingRide ? 'Cập nhật thông số trò chơi' : 'Đăng ký trò chơi mới'}
           maxWidth="md"
         >
           <RideForm
@@ -362,10 +365,10 @@ export const RideListPage: React.FC = () => {
           open={deleteConfirmOpen}
           onClose={() => setDeleteConfirmOpen(false)}
           type="error"
-          title="Remove Ride Specification"
-          message={`Are you sure you want to delete the ride profile for "${deleteTarget?.name}"? This action cannot be undone.`}
+          title="Xóa thông tin trò chơi"
+          message={`Bạn có chắc chắn muốn xóa thông tin trò chơi "${deleteTarget?.name}" không? Hành động này không thể hoàn tác.`}
           onConfirm={handleDeleteConfirm}
-          confirmText="Yes, Delete Ride"
+          confirmText="Có, Xóa trò chơi"
         />
       </Box>
     </PageContainer>

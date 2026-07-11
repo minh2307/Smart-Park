@@ -18,6 +18,7 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material';
+import { StatusChip } from '../../../shared/components/StatusChip';
 import {
   MdPerson,
   MdContactPhone,
@@ -38,10 +39,31 @@ export const VisitorDetails: React.FC<VisitorDetailsProps> = ({ visitor }) => {
     return cust ? cust.fullName : `CUST-${String(customerId).padStart(4, '0')}`;
   };
 
+  const getGenderLabel = (g: string) => {
+    switch (g) {
+      case 'MALE': return 'Nam';
+      case 'FEMALE': return 'Nữ';
+      case 'OTHER': return 'Khác';
+      default: return g;
+    }
+  };
+
+  const getRelationshipLabel = (r: string) => {
+    switch (r) {
+      case 'SELF': return 'Bản thân';
+      case 'SPOUSE': return 'Vợ/Chồng';
+      case 'CHILD': return 'Con cái';
+      case 'PARENT': return 'Cha mẹ';
+      case 'FRIEND': return 'Bạn bè';
+      case 'OTHER': return 'Khác';
+      default: return r;
+    }
+  };
+
   // Mock scan history check-ins for the visitor
   const mockVisitHistory = [
-    { id: 1, location: 'Water World Gate A', time: '2026-07-01T10:15:30Z', gate: 'Gate 02' },
-    { id: 2, location: 'Theme Park East Wing', time: '2026-06-15T09:40:00Z', gate: 'Gate 05' },
+    { id: 1, location: 'Cổng A Công viên nước', time: '2026-07-01T10:15:30Z', gate: 'Cổng 02' },
+    { id: 2, location: 'Phân khu phía Đông Công viên chủ đề', time: '2026-06-15T09:40:00Z', gate: 'Cổng 05' },
   ];
 
   return (
@@ -54,27 +76,27 @@ export const VisitorDetails: React.FC<VisitorDetailsProps> = ({ visitor }) => {
             <Card variant="outlined" sx={{ borderRadius: 3 }}>
               <CardContent>
                 <Typography variant="subtitle1" fontWeight="bold" display="flex" alignItems="center" gap={1} mb={2}>
-                  <MdPerson /> Profile Details
+                  <MdPerson /> Chi tiết hồ sơ
                 </Typography>
                 <Grid container spacing={2}>
                   <Grid item xs={12}>
-                    <Typography variant="caption" color="text.secondary">Full Name</Typography>
+                    <Typography variant="caption" color="text.secondary">Họ và tên</Typography>
                     <Typography variant="body1" fontWeight={600}>{visitor.fullName}</Typography>
                   </Grid>
                   <Grid item xs={6}>
-                    <Typography variant="caption" color="text.secondary">Age</Typography>
-                    <Typography variant="body2">{visitor.age} years old</Typography>
+                    <Typography variant="caption" color="text.secondary">Tuổi</Typography>
+                    <Typography variant="body2">{visitor.age} tuổi</Typography>
                   </Grid>
                   <Grid item xs={6}>
-                    <Typography variant="caption" color="text.secondary">Gender</Typography>
-                    <Typography variant="body2">{visitor.gender}</Typography>
+                    <Typography variant="caption" color="text.secondary">Giới tính</Typography>
+                    <Typography variant="body2">{getGenderLabel(visitor.gender)}</Typography>
                   </Grid>
                   <Grid item xs={6}>
-                    <Typography variant="caption" color="text.secondary">Nationality</Typography>
+                    <Typography variant="caption" color="text.secondary">Quốc tịch</Typography>
                     <Typography variant="body2">{visitor.nationality}</Typography>
                   </Grid>
                   <Grid item xs={6}>
-                    <Typography variant="caption" color="text.secondary">Identity / Passport</Typography>
+                    <Typography variant="caption" color="text.secondary">Giấy tờ tùy thân / Hộ chiếu</Typography>
                     <Typography variant="body2" sx={{ fontFamily: 'monospace' }}>
                       {visitor.identificationNumber}
                     </Typography>
@@ -83,13 +105,13 @@ export const VisitorDetails: React.FC<VisitorDetailsProps> = ({ visitor }) => {
                     <Divider sx={{ my: 1 }} />
                   </Grid>
                   <Grid item xs={6}>
-                    <Typography variant="caption" color="text.secondary">Relationship to Owner</Typography>
+                    <Typography variant="caption" color="text.secondary">Mối quan hệ với chủ tài khoản</Typography>
                     <Box mt={0.5}>
-                      <Chip label={visitor.relationship} size="small" color="primary" />
+                      <Chip label={getRelationshipLabel(visitor.relationship)} size="small" color="primary" />
                     </Box>
                   </Grid>
                   <Grid item xs={6}>
-                    <Typography variant="caption" color="text.secondary">Account Custodian</Typography>
+                    <Typography variant="caption" color="text.secondary">Tài khoản quản lý</Typography>
                     <Typography variant="body2" fontWeight={500}>
                       {getOwnerName(visitor.customerId)}
                     </Typography>
@@ -102,19 +124,19 @@ export const VisitorDetails: React.FC<VisitorDetailsProps> = ({ visitor }) => {
             <Card variant="outlined" sx={{ borderRadius: 3 }}>
               <CardContent>
                 <Typography variant="subtitle1" fontWeight="bold" display="flex" alignItems="center" gap={1} mb={2}>
-                  <MdContactPhone /> Emergency Contacts
+                  <MdContactPhone /> Liên hệ khẩn cấp
                 </Typography>
                 <Grid container spacing={2}>
                   <Grid item xs={6}>
-                    <Typography variant="caption" color="text.secondary">Contact Name</Typography>
+                    <Typography variant="caption" color="text.secondary">Tên người liên hệ</Typography>
                     <Typography variant="body2" fontWeight={500}>
-                      {visitor.emergencyContactName || 'N/A'}
+                      {visitor.emergencyContactName || 'Không có'}
                     </Typography>
                   </Grid>
                   <Grid item xs={6}>
-                    <Typography variant="caption" color="text.secondary">Contact Phone</Typography>
+                    <Typography variant="caption" color="text.secondary">Số điện thoại liên hệ</Typography>
                     <Typography variant="body2" fontWeight={500}>
-                      {visitor.emergencyContactPhone || 'N/A'}
+                      {visitor.emergencyContactPhone || 'Không có'}
                     </Typography>
                   </Grid>
                 </Grid>
@@ -131,7 +153,7 @@ export const VisitorDetails: React.FC<VisitorDetailsProps> = ({ visitor }) => {
             >
               <CardContent>
                 <Typography variant="subtitle1" fontWeight="bold" display="flex" alignItems="center" gap={1} mb={2}>
-                  <MdLocalHospital /> Dietary & Medical Notes
+                  <MdLocalHospital /> Lưu ý y tế & Chế độ ăn uống
                 </Typography>
                 <Box
                   p={1.5}
@@ -142,7 +164,7 @@ export const VisitorDetails: React.FC<VisitorDetailsProps> = ({ visitor }) => {
                   }}
                 >
                   <Typography variant="body2" sx={{ fontStyle: 'italic' }}>
-                    {visitor.medicalNotes || 'No special medical alerts, allergies, or physical restrictions reported.'}
+                    {visitor.medicalNotes || 'Không có báo cáo về cảnh báo y tế đặc biệt, dị ứng hoặc hạn chế thể chất.'}
                   </Typography>
                 </Box>
               </CardContent>
@@ -157,21 +179,21 @@ export const VisitorDetails: React.FC<VisitorDetailsProps> = ({ visitor }) => {
             <Card variant="outlined" sx={{ borderRadius: 3 }}>
               <CardContent>
                 <Typography variant="subtitle1" fontWeight="bold" display="flex" alignItems="center" gap={1} mb={2}>
-                  <MdConfirmationNumber /> Assigned Digital Tickets
+                  <MdConfirmationNumber /> Vé điện tử đã gán
                 </Typography>
                 {!visitor.assignedTickets || visitor.assignedTickets.length === 0 ? (
                   <Typography variant="body2" color="text.secondary" align="center" sx={{ py: 3 }}>
-                    No tickets assigned to this visitor profile.
+                    Chưa có vé nào được gán cho hồ sơ khách tham quan này.
                   </Typography>
                 ) : (
                   <TableContainer component={Paper} variant="outlined" sx={{ borderRadius: 2 }}>
                     <Table size="small">
                       <TableHead>
                         <TableRow sx={{ bgcolor: 'action.hover' }}>
-                          <TableCell sx={{ fontWeight: 'bold' }}>Ticket Code</TableCell>
-                          <TableCell sx={{ fontWeight: 'bold' }}>Type</TableCell>
-                          <TableCell sx={{ fontWeight: 'bold' }}>Valid Date</TableCell>
-                          <TableCell sx={{ fontWeight: 'bold' }}>Status</TableCell>
+                          <TableCell sx={{ fontWeight: 'bold' }}>Mã vé</TableCell>
+                          <TableCell sx={{ fontWeight: 'bold' }}>Loại vé</TableCell>
+                          <TableCell sx={{ fontWeight: 'bold' }}>Ngày hiệu lực</TableCell>
+                          <TableCell sx={{ fontWeight: 'bold' }}>Trạng thái</TableCell>
                         </TableRow>
                       </TableHead>
                       <TableBody>
@@ -180,13 +202,11 @@ export const VisitorDetails: React.FC<VisitorDetailsProps> = ({ visitor }) => {
                             <TableCell sx={{ fontWeight: 'bold', fontFamily: 'monospace' }}>
                               {t.ticketCode}
                             </TableCell>
-                            <TableCell>{t.ticketType?.name || 'Admission'}</TableCell>
+                            <TableCell>{t.ticketType?.name || 'Vào cổng'}</TableCell>
                             <TableCell>{t.validDate}</TableCell>
                             <TableCell>
-                              <Chip
-                                label={t.status}
-                                size="small"
-                                color={t.status === 'UNUSED' ? 'success' : 'default'}
+                              <StatusChip
+                                status={t.status}
                                 variant="outlined"
                                 sx={{ fontWeight: 'bold', fontSize: '0.7rem' }}
                               />
@@ -204,11 +224,11 @@ export const VisitorDetails: React.FC<VisitorDetailsProps> = ({ visitor }) => {
             <Card variant="outlined" sx={{ borderRadius: 3 }}>
               <CardContent>
                 <Typography variant="subtitle1" fontWeight="bold" display="flex" alignItems="center" gap={1} mb={2}>
-                  <MdHistory /> Physical Check-in Logs
+                  <MdHistory /> Nhật ký Check-in vật lý
                 </Typography>
                 {mockVisitHistory.length === 0 ? (
                   <Typography variant="body2" color="text.secondary" align="center" sx={{ py: 3 }}>
-                    No check-in logs recorded.
+                    Chưa ghi nhận nhật ký check-in nào.
                   </Typography>
                 ) : (
                   <List sx={{ p: 0 }}>
@@ -221,10 +241,10 @@ export const VisitorDetails: React.FC<VisitorDetailsProps> = ({ visitor }) => {
                             secondary={
                               <>
                                 <Typography component="span" variant="caption" color="text.disabled" sx={{ display: 'block', mt: 0.25 }}>
-                                  Gate Terminal: {log.gate}
+                                  Cổng kiểm soát: {log.gate}
                                 </Typography>
                                 <Typography component="span" variant="caption" color="text.secondary">
-                                  {new Date(log.time).toLocaleString()}
+                                  {new Date(log.time).toLocaleString('vi-VN')}
                                 </Typography>
                               </>
                             }
