@@ -51,4 +51,28 @@ public class PaymentController {
     public ResponseEntity<ApiResponse<Refund>> approveRefund(@PathVariable Long refundId) {
         return ResponseEntity.ok(ApiResponse.success(paymentService.approveRefund(refundId)));
     }
+
+    @GetMapping("/methods")
+    public ResponseEntity<ApiResponse<java.util.List<com.smartpark.domain.order.entity.PaymentMethod>>> getPaymentMethods() {
+        return ResponseEntity.ok(ApiResponse.success(paymentService.getActivePaymentMethods()));
+    }
+
+    @GetMapping("/vnpay-return")
+    public ResponseEntity<Void> vnpayReturn(@RequestParam Map<String, String> requestParams) {
+        StringBuilder redirectUrl = new StringBuilder("http://localhost:5173/checkout/payment-result?");
+        requestParams.forEach((key, value) -> {
+            try {
+                redirectUrl.append(key).append("=").append(java.net.URLEncoder.encode(value, java.nio.charset.StandardCharsets.UTF_8.toString())).append("&");
+            } catch (Exception e) {
+                // ignore
+            }
+        });
+        if (redirectUrl.length() > 0 && redirectUrl.charAt(redirectUrl.length() - 1) == '&') {
+            redirectUrl.setLength(redirectUrl.length() - 1);
+        }
+
+        org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
+        headers.setLocation(java.net.URI.create(redirectUrl.toString()));
+        return new ResponseEntity<>(headers, org.springframework.http.HttpStatus.FOUND);
+    }
 }

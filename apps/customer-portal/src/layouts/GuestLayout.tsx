@@ -1,10 +1,14 @@
 import { Outlet } from 'react-router-dom';
-import { Box, AppBar, Toolbar, Typography, Button, Container } from '@mui/material';
+import { Box, AppBar, Toolbar, Typography, Button, Container, Badge, IconButton } from '@mui/material';
+import { ShoppingCart } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '@shared/config';
+import { useAppSelector } from '../store/hooks';
+import { selectCartCount } from '../features/booking/store/bookingSelectors';
 
 export const GuestLayout = () => {
   const navigate = useNavigate();
+  const cartCount = useAppSelector(selectCartCount);
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
@@ -18,10 +22,17 @@ export const GuestLayout = () => {
           >
             Smart Park
           </Typography>
-          <Box>
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Button color="inherit" onClick={() => navigate(ROUTES.VENUES)} sx={{ mr: 2 }}>
               Công viên & Trò chơi
             </Button>
+            
+            <IconButton color="inherit" onClick={() => navigate('/cart')} sx={{ mr: 2 }}>
+              <Badge badgeContent={cartCount} color="error">
+                <ShoppingCart />
+              </Badge>
+            </IconButton>
+
             <Button variant="contained" color="primary" onClick={() => navigate(ROUTES.LOGIN)}>
               Đăng nhập
             </Button>

@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useMemo } from 'react';
 import {
   Container, Box, Grid, Typography, Stack, ToggleButtonGroup,
   ToggleButton, Pagination, Alert, Chip, alpha, useTheme,
@@ -9,14 +9,13 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import {
-  fetchVenues, fetchTicketTypes, setSelectedVenue, setViewMode, setPage, resetFilters, toggleCompare,
+  setSelectedVenue, setViewMode, setPage, resetFilters, toggleCompare,
 } from '../store/ticketSlice';
 import {
-  selectVenues, selectSelectedVenueId,
-  selectPaginatedTickets, selectFilteredTickets, selectTotalPages,
-  selectCurrentPage, selectViewMode, selectLoading, selectError,
-  selectCompareIds, selectFilters,
+  selectSelectedVenueId, selectViewMode, selectCurrentPage,
+  selectItemsPerPage, selectCompareIds, selectFilters,
 } from '../store/ticketSelectors';
+import { useGetVenuesQuery, useGetVenueTicketTypesQuery } from '../api/ticketApi';
 import { enrichTicket } from '../utils/enrichTicket';
 import { TicketCard, TicketCardSkeleton } from '../components/TicketCard';
 import { SearchBar } from '../components/SearchBar';
@@ -34,31 +33,81 @@ export const TicketListPage: React.FC = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [filterDrawerOpen, setFilterDrawerOpen] = React.useState(false);
 
-  const venues = useAppSelector(selectVenues);
+  // RTK Query hooks for server state
+  const { data: venues = [], isLoading: isLoadingVenues, error: venuesError } = useGetVenuesQuery();
+
   const selectedVenueId = useAppSelector(selectSelectedVenueId);
-  const rawTickets = useAppSelector(selectPaginatedTickets);
-  const filteredCount = useAppSelector(selectFilteredTickets).length;
-  const totalPages = useAppSelector(selectTotalPages);
-  const currentPage = useAppSelector(selectCurrentPage);
-  const viewMode = useAppSelector(selectViewMode);
-  const loading = useAppSelector(selectLoading);
-  const error = useAppSelector(selectError);
-  const compareIds = useAppSelector(selectCompareIds);
   const filters = useAppSelector(selectFilters);
+  const currentPage = useAppSelector(selectCurrentPage);
+  const itemsPerPage = useAppSelector(selectItemsPerPage);
+  const viewMode = useAppSelector(selectViewMode);
+  const compareIds = useAppSelector(selectCompareIds);
 
-  const tickets = rawTickets.map(enrichTicket);
+  const { data: rawTickets = [], isLoading: isLoadingTickets, error: ticketsError } = useGetVenueTicketTypesQuery(
+    selectedVenueId ?? 0,
+    { skip: !selectedVenueId }
+  );
 
-  // Load venues on mount
+  // Set default venue on first load
   useEffect(() => {
-    dispatch(fetchVenues());
-  }, [dispatch]);
-
-  // Load tickets when venue changes
-  useEffect(() => {
-    if (selectedVenueId) {
-      dispatch(fetchTicketTypes(selectedVenueId));
+    if (venues.length > 0 && !selectedVenueId) {
+      dispatch(setSelectedVenue(venues[0].id));
     }
-  }, [dispatch, selectedVenueId]);
+  }, [venues, selectedVenueId, dispatch]);
+
+  // Client-side filtering & sorting
+  const filteredTickets = useMemo(() => {
+    let result = rawTickets.map(enrichTicket);
+
+    // Search filter
+    if (filters.search.trim()) {
+      const q = filters.search.toLowerCase();
+      result = result.filter(
+        (t) =>
+          t.name.toLowerCase().includes(q) ||
+          (t.description ?? '').toLowerCase().includes(q)
+      );
+    }
+
+    // Category filter
+    if (filters.category !== 'ALL') {
+      result = result.filter((t) => t.category === filters.category);
+    }
+
+    // Price range filter
+    result = result.filter(
+      (t) => t.price >= filters.priceMin && t.price <= filters.priceMax
+    );
+
+    // Sort
+    switch (filters.sortBy) {
+      case 'price_asc':
+        result.sort((a, b) => a.price - b.price);
+        break;
+      case 'price_desc':
+        result.sort((a, b) => b.price - a.price);
+        break;
+      case 'name_asc':
+        result.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'popular':
+        result.sort((a, b) => (b.isPopular ? 1 : 0) - (a.isPopular ? 1 : 0));
+        break;
+    }
+    return result;
+  }, [rawTickets, filters]);
+
+  const filteredCount = filteredTickets.length;
+  const totalPages = Math.ceil(filteredCount / itemsPerPage);
+
+  const paginatedTickets = useMemo(() => {
+    const start = currentPage * itemsPerPage;
+    return filteredTickets.slice(start, start + itemsPerPage);
+  }, [filteredTickets, currentPage, itemsPerPage]);
+
+  const compareTickets = useMemo(() => {
+    return rawTickets.map(enrichTicket).filter((t) => compareIds.includes(t.id));
+  }, [rawTickets, compareIds]);
 
   const handleBuyNow = useCallback(
     (ticket: TicketType) => {
@@ -77,6 +126,10 @@ export const TicketListPage: React.FC = () => {
     filters.category !== 'ALL' ||
     filters.priceMin !== 0 ||
     filters.priceMax !== 5000000;
+
+  const error = venuesError || ticketsError;
+  const errorMsg = error ? ('status' in (error as any) ? `Error ${(error as any).status}` : 'Unknown network error') : null;
+  const isLoading = isLoadingVenues || isLoadingTickets;
 
   return (
     <>
@@ -149,9 +202,9 @@ export const TicketListPage: React.FC = () => {
       </Box>
 
       <Container maxWidth="xl" sx={{ py: 4 }}>
-        {error && (
+        {errorMsg && (
           <Alert severity="error" sx={{ mb: 3 }}>
-            {error} - Vui lòng thử lại.
+            {errorMsg} - Vui lòng thử lại.
           </Alert>
         )}
 
@@ -178,7 +231,7 @@ export const TicketListPage: React.FC = () => {
               <Stack direction="row" spacing={1} alignItems="center" flexShrink={0}>
                 {/* Result count */}
                 <Typography variant="body2" color="text.secondary" sx={{ whiteSpace: 'nowrap' }}>
-                  {loading.tickets ? '...' : `${filteredCount} vé`}
+                  {isLoading ? '...' : `${filteredCount} vé`}
                 </Typography>
 
                 {/* View toggle */}
@@ -199,7 +252,7 @@ export const TicketListPage: React.FC = () => {
             </Stack>
 
             {/* Ticket grid / list */}
-            {loading.tickets ? (
+            {isLoading ? (
               <Grid container spacing={2.5}>
                 {Array.from({ length: SKELETON_COUNT }).map((_, i) => (
                   <Grid item xs={12} sm={viewMode === 'grid' ? 6 : 12} lg={viewMode === 'grid' ? 4 : 12} key={i}>
@@ -207,7 +260,7 @@ export const TicketListPage: React.FC = () => {
                   </Grid>
                 ))}
               </Grid>
-            ) : tickets.length === 0 ? (
+            ) : paginatedTickets.length === 0 ? (
               <EmptyState
                 title={isFiltered ? 'Không có vé phù hợp' : 'Chưa có vé nào'}
                 description={
@@ -220,7 +273,7 @@ export const TicketListPage: React.FC = () => {
             ) : (
               <AnimatePresence mode="wait">
                 <Grid container spacing={2.5}>
-                  {tickets.map((ticket, i) => (
+                  {paginatedTickets.map((ticket, i) => (
                     <Grid
                       item
                       xs={12}
@@ -289,7 +342,7 @@ export const TicketListPage: React.FC = () => {
       )}
 
       {/* Comparison tray */}
-      <TicketComparison />
+      <TicketComparison tickets={compareTickets} />
     </>
   );
 };

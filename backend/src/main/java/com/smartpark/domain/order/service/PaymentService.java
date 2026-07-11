@@ -307,4 +307,11 @@ public class PaymentService {
         log.info("[REFUND APPROVED] refundId={} paymentId={}", refundId, payment.getId());
         return saved;
     }
+
+    @Transactional(readOnly = true)
+    public List<PaymentMethod> getActivePaymentMethods() {
+        return paymentMethodRepository.findAll().stream()
+                .filter(m -> m.getStatus() == PaymentMethod.PaymentMethodStatus.ACTIVE)
+                .toList();
+    }
 }

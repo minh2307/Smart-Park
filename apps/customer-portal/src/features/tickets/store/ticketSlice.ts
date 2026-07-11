@@ -1,42 +1,12 @@
-import { createSlice, createAsyncThunk, type PayloadAction } from '@reduxjs/toolkit';
-import { ticketApi } from '../api/ticketApi';
-import type { TicketType, TicketFilters, Venue, TicketCategory } from '../types/ticket.types';
-
-// ─── Async Thunks ────────────────────────────────────────────────────────────
-
-export const fetchVenues = createAsyncThunk('tickets/fetchVenues', async () => {
-  return ticketApi.getVenues();
-});
-
-export const fetchTicketTypes = createAsyncThunk(
-  'tickets/fetchTicketTypes',
-  async (venueId: number) => {
-    return ticketApi.getTicketTypesByVenue(venueId);
-  },
-);
-
-export const fetchTicketDetail = createAsyncThunk(
-  'tickets/fetchTicketDetail',
-  async ({ venueId, ticketId }: { venueId: number; ticketId: number }) => {
-    return ticketApi.getTicketTypeById(venueId, ticketId);
-  },
-);
+import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
+import type { TicketFilters, TicketCategory } from '../types/ticket.types';
 
 // ─── State ───────────────────────────────────────────────────────────────────
 
 interface TicketState {
-  venues: Venue[];
-  ticketTypes: TicketType[];
-  selectedDetail: TicketType | null;
   selectedVenueId: number | null;
   filters: TicketFilters;
   compareIds: number[];
-  loading: {
-    venues: boolean;
-    tickets: boolean;
-    detail: boolean;
-  };
-  error: string | null;
   viewMode: 'grid' | 'list';
   currentPage: number;
   itemsPerPage: number;
@@ -51,14 +21,9 @@ const initialFilters: TicketFilters = {
 };
 
 const initialState: TicketState = {
-  venues: [],
-  ticketTypes: [],
-  selectedDetail: null,
   selectedVenueId: null,
   filters: initialFilters,
   compareIds: [],
-  loading: { venues: false, tickets: false, detail: false },
-  error: null,
   viewMode: 'grid',
   currentPage: 0,
   itemsPerPage: 12,
@@ -111,46 +76,6 @@ const ticketSlice = createSlice({
     clearCompare(state) {
       state.compareIds = [];
     },
-  },
-  extraReducers: (builder) => {
-    // venues
-    builder
-      .addCase(fetchVenues.pending, (state) => { state.loading.venues = true; state.error = null; })
-      .addCase(fetchVenues.fulfilled, (state, action) => {
-        state.loading.venues = false;
-        state.venues = action.payload;
-        if (action.payload.length > 0 && !state.selectedVenueId) {
-          state.selectedVenueId = action.payload[0].id;
-        }
-      })
-      .addCase(fetchVenues.rejected, (state, action) => {
-        state.loading.venues = false;
-        state.error = action.error.message ?? 'Failed to load venues';
-      });
-
-    // ticket types
-    builder
-      .addCase(fetchTicketTypes.pending, (state) => { state.loading.tickets = true; state.error = null; })
-      .addCase(fetchTicketTypes.fulfilled, (state, action) => {
-        state.loading.tickets = false;
-        state.ticketTypes = action.payload;
-      })
-      .addCase(fetchTicketTypes.rejected, (state, action) => {
-        state.loading.tickets = false;
-        state.error = action.error.message ?? 'Failed to load tickets';
-      });
-
-    // detail
-    builder
-      .addCase(fetchTicketDetail.pending, (state) => { state.loading.detail = true; state.error = null; })
-      .addCase(fetchTicketDetail.fulfilled, (state, action) => {
-        state.loading.detail = false;
-        state.selectedDetail = action.payload;
-      })
-      .addCase(fetchTicketDetail.rejected, (state, action) => {
-        state.loading.detail = false;
-        state.error = action.error.message ?? 'Failed to load ticket detail';
-      });
   },
 });
 

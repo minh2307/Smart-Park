@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Container, Box, Grid, Typography, Button, Stack, Chip,
@@ -8,21 +8,17 @@ import {
 import {
   ArrowBack, AddShoppingCart, ExpandMore, CheckCircle,
   AccessTime, PeopleAlt, LocalOffer,
-  NavigateNext,
+  NavigateNext, Attractions as AttractionsIcon,
 } from '@mui/icons-material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
-import { fetchTicketDetail, fetchTicketTypes } from '../store/ticketSlice';
-import {
-  selectSelectedDetail, selectLoading, selectError, selectSelectedVenueId,
-  selectFilteredTickets,
-} from '../store/ticketSelectors';
+import { toggleCompare } from '../store/ticketSlice';
+import { selectCompareIds } from '../store/ticketSelectors';
+import { useGetVenueTicketTypesQuery, useGetVenueAttractionsQuery } from '../api/ticketApi';
 import { enrichTicket } from '../utils/enrichTicket';
 import { TicketBadge } from '../components/TicketBadge';
 import { TicketPrice } from '../components/TicketPrice';
 import { TicketCard } from '../components/TicketCard';
-import { toggleCompare } from '../store/ticketSlice';
-import { selectCompareIds } from '../store/ticketSelectors';
 
 const FAQS = [
   {
@@ -52,31 +48,46 @@ export const TicketDetailPage: React.FC = () => {
   const theme = useTheme();
 
   const [selectedImage, setSelectedImage] = useState(0);
-
-  const rawDetail = useAppSelector(selectSelectedDetail);
-  const loading = useAppSelector(selectLoading);
-  const error = useAppSelector(selectError);
-  const venueIdNum = useAppSelector(selectSelectedVenueId) ?? Number(venueId);
   const compareIds = useAppSelector(selectCompareIds);
-  const relatedTickets = useAppSelector(selectFilteredTickets).slice(0, 4);
 
-  const detail = rawDetail ? enrichTicket(rawDetail) : null;
+  const parsedVenueId = Number(venueId);
+  const parsedTicketId = Number(ticketId);
 
-  useEffect(() => {
-    if (venueId && ticketId) {
-      dispatch(fetchTicketDetail({ venueId: Number(venueId), ticketId: Number(ticketId) }));
-      dispatch(fetchTicketTypes(Number(venueId)));
-    }
-  }, [dispatch, venueId, ticketId]);
+  // RTK Query hooks
+  const { data: ticketTypes = [], isLoading: isLoadingTickets, error: ticketsError } = useGetVenueTicketTypesQuery(
+    parsedVenueId,
+    { skip: !venueId }
+  );
 
-  const images = detail
-    ? [
-        detail.imageUrl ?? `https://picsum.photos/seed/${detail.name}/900/540`,
-        ...GALLERY_SEEDS.map((s) => `https://picsum.photos/seed/${s}/900/540`),
-      ]
-    : [];
+  const { data: attractions = [], isLoading: isLoadingAttractions } = useGetVenueAttractionsQuery(
+    parsedVenueId,
+    { skip: !venueId }
+  );
 
-  if (loading.detail) {
+  // Derive detail by finding matching ticket ID in the venue list
+  const rawDetail = useMemo(() => {
+    return ticketTypes.find((t) => t.id === parsedTicketId) || null;
+  }, [ticketTypes, parsedTicketId]);
+
+  const detail = useMemo(() => {
+    return rawDetail ? enrichTicket(rawDetail) : null;
+  }, [rawDetail]);
+
+  const relatedTickets = useMemo(() => {
+    return ticketTypes.filter((t) => t.id !== parsedTicketId).slice(0, 3);
+  }, [ticketTypes, parsedTicketId]);
+
+  const images = useMemo(() => {
+    if (!detail) return [];
+    return [
+      detail.imageUrl ?? `https://picsum.photos/seed/${detail.name}/900/540`,
+      ...GALLERY_SEEDS.map((s) => `https://picsum.photos/seed/${s}/900/540`),
+    ];
+  }, [detail]);
+
+  const isLoading = isLoadingTickets || isLoadingAttractions;
+
+  if (isLoading && !detail) {
     return (
       <Container maxWidth="lg" sx={{ py: 5 }}>
         <Skeleton variant="rounded" height={460} sx={{ mb: 3 }} />
@@ -94,7 +105,7 @@ export const TicketDetailPage: React.FC = () => {
     );
   }
 
-  if (error || !detail) {
+  if (ticketsError || !detail) {
     return (
       <Container maxWidth="lg" sx={{ py: 5 }}>
         <Alert severity="error" sx={{ mb: 3 }}>
@@ -218,6 +229,15 @@ export const TicketDetailPage: React.FC = () => {
 
             <Divider sx={{ mb: 3 }} />
 
+            {/* Description */}
+            {detail.description && (
+              <Box sx={{ mb: 4 }}>
+                <Typography variant="body1" sx={{ lineHeight: 1.7, color: 'text.secondary' }}>
+                  {detail.description}
+                </Typography>
+              </Box>
+            )}
+
             {/* Benefits */}
             <Typography variant="h6" fontWeight={700} fontFamily="Outfit, sans-serif" sx={{ mb: 2 }}>
               Quyền lợi bao gồm
@@ -232,6 +252,62 @@ export const TicketDetailPage: React.FC = () => {
                 </Grid>
               ))}
             </Grid>
+
+            {/* Available Attractions */}
+            {attractions.length > 0 && (
+              <Box sx={{ mb: 4 }}>
+                <Typography variant="h6" fontWeight={700} fontFamily="Outfit, sans-serif" sx={{ mb: 2 }}>
+                  Khu vui chơi & Trò chơi áp dụng
+                </Typography>
+                <Grid container spacing={2}>
+                  {attractions.map((attr) => (
+                    <Grid item xs={12} sm={6} key={attr.id}>
+                      <Paper
+                        variant="outlined"
+                        sx={{
+                          p: 2,
+                          borderRadius: 3,
+                          borderColor: 'divider',
+                          backgroundColor: alpha(theme.palette.background.paper, 0.5),
+                          height: '100%',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          justifyContent: 'space-between',
+                        }}
+                      >
+                        <Box>
+                          <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1 }}>
+                            <AttractionsIcon sx={{ color: 'primary.main', fontSize: 20 }} />
+                            <Typography variant="subtitle2" fontWeight={700}>
+                              {attr.name}
+                            </Typography>
+                          </Stack>
+                          <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 1.5, minHeight: 32 }}>
+                            {attr.description || 'Không có mô tả chi tiết.'}
+                          </Typography>
+                        </Box>
+                        <Stack direction="row" spacing={1.5} alignItems="center">
+                          {attr.minHeight && (
+                            <Chip
+                              size="small"
+                              label={`H >= ${attr.minHeight}m`}
+                              sx={{ fontSize: '0.68rem', height: 20 }}
+                            />
+                          )}
+                          <Chip
+                            size="small"
+                            variant="outlined"
+                            label={attr.status === 'ACTIVE' ? 'Hoạt động' : 'Bảo trì'}
+                            color={attr.status === 'ACTIVE' ? 'success' : 'warning'}
+                            sx={{ fontSize: '0.68rem', height: 20 }}
+                          />
+                        </Stack>
+                      </Paper>
+                    </Grid>
+                  ))}
+                </Grid>
+              </Box>
+            )}
 
             {/* Map placeholder */}
             <Typography variant="h6" fontWeight={700} fontFamily="Outfit, sans-serif" sx={{ mb: 2 }}>
@@ -407,7 +483,7 @@ export const TicketDetailPage: React.FC = () => {
                   <Grid item xs={12} sm={6} md={4} key={t.id}>
                     <TicketCard
                       ticket={enrichTicket(t)}
-                      venueId={venueIdNum}
+                      venueId={parsedVenueId}
                       viewMode="grid"
                       isInCompare={compareIds.includes(t.id)}
                       onToggleCompare={(id) => dispatch(toggleCompare(id))}

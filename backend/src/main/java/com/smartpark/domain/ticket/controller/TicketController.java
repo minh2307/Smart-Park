@@ -16,12 +16,13 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/tickets")
 @RequiredArgsConstructor
-@org.springframework.security.access.prepost.PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
+@org.springframework.security.access.prepost.PreAuthorize("hasAnyRole('ADMIN', 'STAFF', 'CUSTOMER')")
 public class TicketController {
 
     private final TicketService ticketService;
 
     @GetMapping
+    @org.springframework.security.access.prepost.PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     public ResponseEntity<ApiResponse<Page<Ticket>>> findAll(Pageable pageable) {
         return ResponseEntity.ok(ApiResponse.success(ticketService.findAll(pageable)));
     }
@@ -36,7 +37,14 @@ public class TicketController {
         return ResponseEntity.ok(ApiResponse.success(ticketService.findByCode(code)));
     }
 
+    @GetMapping("/customer/{customerId}")
+    public ResponseEntity<ApiResponse<Page<Ticket>>> findByCustomer(
+            @PathVariable Long customerId, Pageable pageable) {
+        return ResponseEntity.ok(ApiResponse.success(ticketService.findByCustomer(customerId, pageable)));
+    }
+
     @PostMapping("/reserve")
+    @org.springframework.security.access.prepost.PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     public ResponseEntity<ApiResponse<List<Ticket>>> reserveTickets(
             @RequestParam Long customerId,
             @RequestParam Long ticketTypeId,
@@ -46,17 +54,20 @@ public class TicketController {
     }
 
     @PostMapping("/confirm")
+    @org.springframework.security.access.prepost.PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     public ResponseEntity<ApiResponse<List<Ticket>>> confirmTickets(@RequestBody List<Long> ticketIds) {
         return ResponseEntity.ok(ApiResponse.success(ticketService.confirmTickets(ticketIds)));
     }
 
     @PostMapping("/release")
+    @org.springframework.security.access.prepost.PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     public ResponseEntity<ApiResponse<Void>> releaseTickets(@RequestBody List<Long> ticketIds) {
         ticketService.releaseTickets(ticketIds);
         return ResponseEntity.ok(ApiResponse.success(null));
     }
 
     @PostMapping("/check-in/{code}")
+    @org.springframework.security.access.prepost.PreAuthorize("hasAnyRole('ADMIN', 'STAFF')")
     public ResponseEntity<ApiResponse<CheckIn>> checkIn(@PathVariable String code) {
         return ResponseEntity.ok(ApiResponse.success(ticketService.checkIn(code)));
     }

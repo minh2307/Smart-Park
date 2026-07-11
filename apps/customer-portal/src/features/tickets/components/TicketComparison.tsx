@@ -9,22 +9,24 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../../store/hooks';
 import { toggleCompare, clearCompare } from '../store/ticketSlice';
-import {
-  selectCompareTickets, selectCompareIds, selectSelectedVenueId,
-} from '../store/ticketSelectors';
+import { selectCompareIds, selectSelectedVenueId } from '../store/ticketSelectors';
 import { formatCurrency } from '@shared/utils';
+import type { TicketType } from '../types/ticket.types';
 
-export const TicketComparison: React.FC = () => {
+interface TicketComparisonProps {
+  tickets: TicketType[];
+}
+
+export const TicketComparison: React.FC<TicketComparisonProps> = ({ tickets }) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const theme = useTheme();
-  const tickets = useAppSelector(selectCompareTickets);
   const compareIds = useAppSelector(selectCompareIds);
   const venueId = useAppSelector(selectSelectedVenueId);
 
   if (compareIds.length === 0) return null;
 
-  const rows: Array<{ label: string; getValue: (t: (typeof tickets)[0]) => React.ReactNode }> = [
+  const rows: Array<{ label: string; getValue: (t: TicketType) => React.ReactNode }> = [
     { label: 'Giá vé', getValue: (t) => (
       <Typography fontWeight={800} color="primary.main" fontFamily="Outfit, sans-serif">
         {formatCurrency(t.price)}

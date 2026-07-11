@@ -38,3 +38,17 @@ export interface Venue {
 export interface CompareTicket {
   ticketId: number;
 }
+
+export interface Attraction {
+  id: number;
+  venueId: number;
+  name: string;
+  code: string;
+  description: string;
+  capacity: number;
+  minHeight?: number;
+  maxHeight?: number;
+  durationSeconds?: number;
+  status: string;
+}
+

@@ -10,17 +10,18 @@ import { ForbiddenPage } from '../pages/403';
 import { ServerErrorPage } from '../pages/500';
 
 import { HomePage } from '../pages/Home';
-import { BookingPage } from '../pages/Booking';
+import { BookingPage, CartPage } from '../features/booking';
 import { TicketListPage, TicketDetailPage } from '../features/tickets';
+import { CheckoutPage, PaymentResultPage } from '../features/checkout';
+import { MyTicketsPage, MyTicketDetailPage } from '../features/my-ticket';
+import { MembershipPage } from '../features/membership';
+import { ProfilePage } from '../features/profile';
 
 // Temporary mock landing pages to satisfy routing map without business features
 const LoginPage = () => <div>Đăng nhập</div>;
 const RegisterPage = () => <div>Đăng ký</div>;
 const VenuesPage = () => <div>Khám phá Công viên & Trò chơi</div>;
-const WalletPage = () => <div>Ví vé điện tử cá nhân</div>;
-const MembershipPage = () => <div>Loyalty & VIP Membership</div>;
 const ChatbotPage = () => <div>Hỗ trợ Trợ lý AI Chatbot</div>;
-const ProfilePage = () => <div>Hồ sơ cá nhân khách hàng</div>;
 
 export const router = createBrowserRouter([
   {
@@ -46,6 +47,14 @@ export const router = createBrowserRouter([
           {
             path: 'tickets/:venueId/:ticketId',
             element: <TicketDetailPage />,
+          },
+          {
+            path: 'cart',
+            element: <CartPage />,
+          },
+          {
+            path: 'checkout/payment-result',
+            element: <PaymentResultPage />,
           },
         ],
       },
@@ -80,8 +89,16 @@ export const router = createBrowserRouter([
             element: <BookingPage />,
           },
           {
+            path: 'checkout',
+            element: <CheckoutPage />,
+          },
+          {
             path: 'wallet',
-            element: <WalletPage />,
+            element: <MyTicketsPage />,
+          },
+          {
+            path: 'wallet/ticket/:ticketCode',
+            element: <MyTicketDetailPage />,
           },
           {
             path: 'membership',
