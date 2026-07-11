@@ -6,6 +6,7 @@ import bookingReducer from '../features/booking/store/bookingSlice';
 import checkoutReducer from '../features/checkout/store/checkoutSlice';
 import membershipReducer from '../features/membership/store/membershipSlice';
 import profileReducer from '../features/profile/store/profileSlice';
+import engagementReducer from '../features/engagement/store/engagementSlice';
 import { baseApi } from './api/baseApi';
 
 export const store = configureStore({
@@ -17,6 +18,7 @@ export const store = configureStore({
     checkout: checkoutReducer,
     membership: membershipReducer,
     profile: profileReducer,
+    engagement: engagementReducer,
     [baseApi.reducerPath]: baseApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>

@@ -1,3 +1,4 @@
+import { logger } from '../../../services/logger';
 import React from 'react';
 import { Container, Grid, Typography, Box, Button, Divider, Alert, Stack, CircularProgress } from '@mui/material';
 import { DeleteSweep, KeyboardArrowLeft } from '@mui/icons-material';
@@ -102,7 +103,7 @@ export const CartPage: React.FC = () => {
         navigate(`/checkout?code=${firstBookingCode}`);
       }
     } catch (err) {
-      console.error('Checkout failed', err);
+      logger.error('Checkout failed', err);
     }
   };
 

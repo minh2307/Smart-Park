@@ -1,3 +1,4 @@
+import { logger } from '../../../services/logger';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { CartItem, Booking } from '../types/booking.types';
 
@@ -24,7 +25,7 @@ const saveCart = (items: CartItem[]) => {
   try {
     localStorage.setItem('sp_cart', JSON.stringify(items));
   } catch (e) {
-    console.error('Failed to save cart to localStorage', e);
+    logger.error('Failed to save cart to localStorage', e);
   }
 };
 

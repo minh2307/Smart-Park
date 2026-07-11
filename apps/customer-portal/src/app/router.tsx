@@ -1,64 +1,78 @@
+import { lazy, Suspense } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import { GuestLayout } from '../layouts/GuestLayout';
 import { MainLayout } from '../layouts/MainLayout';
 import { AuthLayout } from '../layouts/AuthLayout';
 import { ProtectedRoute } from '../routes/ProtectedRoute';
 import { GuestRoute } from '../routes/GuestRoute';
-import { NotFoundPage } from '../pages/404';
-import { UnauthorizedPage } from '../pages/401';
-import { ForbiddenPage } from '../pages/403';
-import { ServerErrorPage } from '../pages/500';
+import { PageLoader } from '../components/PageLoader';
+import { ErrorBoundary } from '../components/ErrorBoundary';
 
-import { HomePage } from '../pages/Home';
-import { BookingPage, CartPage } from '../features/booking';
-import { TicketListPage, TicketDetailPage } from '../features/tickets';
-import { CheckoutPage, PaymentResultPage } from '../features/checkout';
-import { MyTicketsPage, MyTicketDetailPage } from '../features/my-ticket';
-import { MembershipPage } from '../features/membership';
-import { ProfilePage } from '../features/profile';
+// ─── Lazy-loaded pages (code split per route) ────────────────────────────────
+const HomePage        = lazy(() => import('../pages/Home').then((m) => ({ default: m.HomePage })));
+const NotFoundPage    = lazy(() => import('../pages/404').then((m) => ({ default: m.NotFoundPage })));
+const UnauthorizedPage= lazy(() => import('../pages/401').then((m) => ({ default: m.UnauthorizedPage })));
+const ForbiddenPage   = lazy(() => import('../pages/403').then((m) => ({ default: m.ForbiddenPage })));
+const ServerErrorPage = lazy(() => import('../pages/500').then((m) => ({ default: m.ServerErrorPage })));
 
-// Temporary mock landing pages to satisfy routing map without business features
-const LoginPage = () => <div>Đăng nhập</div>;
-const RegisterPage = () => <div>Đăng ký</div>;
-const VenuesPage = () => <div>Khám phá Công viên & Trò chơi</div>;
-const ChatbotPage = () => <div>Hỗ trợ Trợ lý AI Chatbot</div>;
+// Auth - inline placeholders until auth feature module is implemented
+const LoginPage    = () => <div>Login</div>;
+const RegisterPage = () => <div>Register</div>;
+
+// Features
+const BookingPage      = lazy(() => import('../features/booking').then((m) => ({ default: m.BookingPage })));
+const CartPage         = lazy(() => import('../features/booking').then((m) => ({ default: m.CartPage })));
+const TicketListPage   = lazy(() => import('../features/tickets').then((m) => ({ default: m.TicketListPage })));
+const TicketDetailPage = lazy(() => import('../features/tickets').then((m) => ({ default: m.TicketDetailPage })));
+const CheckoutPage     = lazy(() => import('../features/checkout').then((m) => ({ default: m.CheckoutPage })));
+const PaymentResultPage= lazy(() => import('../features/checkout').then((m) => ({ default: m.PaymentResultPage })));
+const MyTicketsPage    = lazy(() => import('../features/my-ticket').then((m) => ({ default: m.MyTicketsPage })));
+const MyTicketDetailPage=lazy(() => import('../features/my-ticket').then((m) => ({ default: m.MyTicketDetailPage })));
+const MembershipPage   = lazy(() => import('../features/membership').then((m) => ({ default: m.MembershipPage })));
+const ProfilePage      = lazy(() => import('../features/profile').then((m) => ({ default: m.ProfilePage })));
+const OrderListPage    = lazy(() => import('../features/orders').then((m) => ({ default: m.OrderListPage })));
+const OrderDetailPage  = lazy(() => import('../features/orders').then((m) => ({ default: m.OrderDetailPage })));
+const EngagementPage   = lazy(() => import('../features/engagement').then((m) => ({ default: m.EngagementPage })));
+
+// ─── Suspense wrapper reused per route ───────────────────────────────────────
+const withSuspense = (element: React.ReactNode) => (
+  <ErrorBoundary>
+    <Suspense fallback={<PageLoader />}>{element}</Suspense>
+  </ErrorBoundary>
+);
 
 export const router = createBrowserRouter([
   {
     path: '/',
     children: [
-      // Guest Layout Pages
+      // ─── Guest Layout (public) ────────────────────────────────────────────
       {
         element: <GuestLayout />,
         children: [
           {
             index: true,
-            element: <HomePage />,
+            element: withSuspense(<HomePage />),
           },
-          {
-            path: 'venues',
-            element: <VenuesPage />,
-          },
-          // ─── Ticket Module ────────────────────────────
           {
             path: 'tickets',
-            element: <TicketListPage />,
+            element: withSuspense(<TicketListPage />),
           },
           {
             path: 'tickets/:venueId/:ticketId',
-            element: <TicketDetailPage />,
+            element: withSuspense(<TicketDetailPage />),
           },
           {
             path: 'cart',
-            element: <CartPage />,
+            element: withSuspense(<CartPage />),
           },
           {
             path: 'checkout/payment-result',
-            element: <PaymentResultPage />,
+            element: withSuspense(<PaymentResultPage />),
           },
         ],
       },
-      // Auth Layout Pages
+
+      // ─── Auth Layout (guest-only) ─────────────────────────────────────────
       {
         element: (
           <GuestRoute>
@@ -68,15 +82,16 @@ export const router = createBrowserRouter([
         children: [
           {
             path: 'login',
-            element: <LoginPage />,
+            element: withSuspense(<LoginPage />),
           },
           {
             path: 'register',
-            element: <RegisterPage />,
+            element: withSuspense(<RegisterPage />),
           },
         ],
       },
-      // Main Authenticated Layout Pages
+
+      // ─── Main Authenticated Layout ────────────────────────────────────────
       {
         element: (
           <ProtectedRoute>
@@ -86,52 +101,60 @@ export const router = createBrowserRouter([
         children: [
           {
             path: 'booking',
-            element: <BookingPage />,
+            element: withSuspense(<BookingPage />),
           },
           {
             path: 'checkout',
-            element: <CheckoutPage />,
+            element: withSuspense(<CheckoutPage />),
           },
           {
             path: 'wallet',
-            element: <MyTicketsPage />,
+            element: withSuspense(<MyTicketsPage />),
           },
           {
             path: 'wallet/ticket/:ticketCode',
-            element: <MyTicketDetailPage />,
+            element: withSuspense(<MyTicketDetailPage />),
           },
           {
             path: 'membership',
-            element: <MembershipPage />,
+            element: withSuspense(<MembershipPage />),
           },
           {
             path: 'ai-assistant',
-            element: <ChatbotPage />,
+            element: withSuspense(<EngagementPage />),
           },
           {
             path: 'profile',
-            element: <ProfilePage />,
+            element: withSuspense(<ProfilePage />),
+          },
+          {
+            path: 'orders',
+            element: withSuspense(<OrderListPage />),
+          },
+          {
+            path: 'orders/:id',
+            element: withSuspense(<OrderDetailPage />),
           },
         ],
       },
-      // Error Page Routes
+
+      // ─── Error Routes ─────────────────────────────────────────────────────
       {
         path: 'unauthorized',
-        element: <UnauthorizedPage />,
+        element: withSuspense(<UnauthorizedPage />),
       },
       {
         path: 'forbidden',
-        element: <ForbiddenPage />,
+        element: withSuspense(<ForbiddenPage />),
       },
       {
         path: '500',
-        element: <ServerErrorPage />,
+        element: withSuspense(<ServerErrorPage />),
       },
       {
         path: '*',
-        element: <NotFoundPage />,
+        element: withSuspense(<NotFoundPage />),
       },
     ],
   },
 ]);
-

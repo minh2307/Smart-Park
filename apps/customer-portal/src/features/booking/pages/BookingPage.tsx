@@ -1,3 +1,4 @@
+import { logger } from '../../../services/logger';
 import React, { useState, useEffect } from 'react';
 import {
   Box,
@@ -181,7 +182,7 @@ export const BookingPage: React.FC = () => {
       
       navigate(`/checkout?code=${bookingResult.code}`);
     } catch (err: any) {
-      console.error('Failed to create booking', err);
+      logger.error('Failed to create booking', err);
     }
   };
 
@@ -199,7 +200,7 @@ export const BookingPage: React.FC = () => {
         setActiveStep(3); // Show success check in
       }
     } catch (err) {
-      console.error('Failed to generate payment url', err);
+      logger.error('Failed to generate payment url', err);
     }
   };
 

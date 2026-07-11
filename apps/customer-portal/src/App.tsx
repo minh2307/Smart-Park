@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { RouterProvider } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { ThemeProvider } from '@mui/material/styles';
@@ -7,6 +8,8 @@ import { store } from './store';
 import { createAppTheme } from '@shared/theme';
 import { useAppSelector } from './store/hooks';
 import { router } from './app/router';
+import { ErrorBoundary } from './components/ErrorBoundary';
+import { PageLoader } from './components/PageLoader';
 import 'react-toastify/dist/ReactToastify.css';
 
 function AppContent() {
@@ -16,7 +19,11 @@ function AppContent() {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <RouterProvider router={router} />
+      <ErrorBoundary>
+        <Suspense fallback={<PageLoader />}>
+          <RouterProvider router={router} />
+        </Suspense>
+      </ErrorBoundary>
       <ToastContainer
         position="top-right"
         autoClose={4000}

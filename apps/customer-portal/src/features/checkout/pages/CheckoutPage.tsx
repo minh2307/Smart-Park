@@ -1,3 +1,4 @@
+import { logger } from '../../../services/logger';
 import React, { useState, useEffect } from 'react';
 import { Container, Grid, Typography, Card, CardContent, Button, Stack, Box, CircularProgress, Alert, useTheme, alpha } from '@mui/material';
 import { Payment, KeyboardArrowLeft, ArrowForward, HelpOutline } from '@mui/icons-material';
@@ -88,7 +89,7 @@ export const CheckoutPage: React.FC = () => {
         window.location.href = response.paymentUrl;
       }
     } catch (err) {
-      console.error('Failed to create payment', err);
+      logger.error('Failed to create payment', err);
     }
   };
 

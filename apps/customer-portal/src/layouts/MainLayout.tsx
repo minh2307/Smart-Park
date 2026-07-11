@@ -10,6 +10,7 @@ import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useAppSelector } from '../store/hooks';
 import { selectCartCount } from '../features/booking/store/bookingSelectors';
+import { NotificationBadge } from '../features/engagement';
 
 export const MainLayout = () => {
   const navigate = useNavigate();
@@ -60,11 +61,16 @@ export const MainLayout = () => {
               <Button color="inherit" onClick={() => navigate(ROUTES.WALLET)} sx={{ mr: 2 }}>
                 Ví vé
               </Button>
+              <Button color="inherit" onClick={() => navigate(ROUTES.ORDERS)} sx={{ mr: 2 }}>
+                Đơn hàng
+              </Button>
               <Button color="inherit" onClick={() => navigate(ROUTES.CHATBOT)} sx={{ mr: 2 }}>
                 Hỗ trợ AI
               </Button>
 
-              <IconButton color="inherit" onClick={() => navigate('/cart')} sx={{ mr: 2 }}>
+              <NotificationBadge />
+
+              <IconButton color="inherit" onClick={() => navigate('/cart')} sx={{ mr: 1 }}>
                 <Badge badgeContent={cartCount} color="error">
                   <ShoppingCartIcon />
                 </Badge>

@@ -14,7 +14,10 @@ export const ROUTES = {
   TICKETS: '/wallet/tickets',
   MEMBERSHIP: '/membership',
   CHATBOT: '/ai-assistant',
+  ENGAGEMENT: '/ai-assistant',
   PROFILE: '/profile',
+  ORDERS: '/orders',
+  ORDER_DETAILS: '/orders/:id',
 
   // Admin Portal
   ADMIN_DASHBOARD: '/admin/dashboard',

@@ -38,6 +38,6 @@ const axiosBaseQuery =
 export const baseApi = createApi({
   reducerPath: 'api',
   baseQuery: axiosBaseQuery(),
-  tagTypes: ['Venues', 'Attractions', 'Promotions', 'Feedbacks', 'Recommendations', 'Tickets', 'Memberships', 'Coupons'],
+  tagTypes: ['Venues', 'Attractions', 'Promotions', 'Feedbacks', 'Recommendations', 'Tickets', 'Memberships', 'Coupons', 'Notifications', 'Incidents', 'Parks', 'Zones'],
   endpoints: () => ({}),
 });

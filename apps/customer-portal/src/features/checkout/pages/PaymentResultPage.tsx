@@ -1,3 +1,4 @@
+import { logger } from '../../../services/logger';
 import React, { useEffect, useState } from 'react';
 import { Container, Box, CircularProgress, Typography } from '@mui/material';
 import { useSearchParams } from 'react-router-dom';
@@ -48,7 +49,7 @@ export const PaymentResultPage: React.FC = () => {
         window.location.href = response.paymentUrl;
       }
     } catch (err) {
-      console.error('Failed to retry payment', err);
+      logger.error('Failed to retry payment', err);
     }
   };
 
