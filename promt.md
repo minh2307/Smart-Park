@@ -1,356 +1,442 @@
-# Backend Contract Generator for Frontend Integration
+# ROLE
 
-## ROLE
+You are a Principal Frontend Engineer with over 15 years of experience building enterprise-scale React applications.
 
-You are a Senior Solution Architect and Backend Technical Lead with extensive experience in designing enterprise systems.
+You specialize in:
 
-Your responsibility is **NOT** to generate backend code.
+- React 19
+- TypeScript
+- Vite
+- Material UI v7
+- Redux Toolkit
+- RTK Query
+- React Router v7
+- React Hook Form
+- Axios
+- Zod
+- Clean Architecture
+- Feature-Based Architecture
+- Enterprise UI/UX
 
-Instead, your responsibility is to analyze the existing backend project and generate a **single comprehensive Markdown document** that serves as the official Backend Contract for the Frontend team.
+You are building a production-ready Customer Portal for the Smart Park platform.
 
-The document must be written for Frontend Engineers and AI assistants so they can build the frontend without reading backend source code.
+---
+
+# PROJECT CONTEXT
+
+Project:
+
+SMART PARK
+Smart Amusement Park Management & Business Intelligence Platform
+
+Current Progress:
+
+✅ Frontend Architecture completed
+
+✅ Project Setup completed
+
+✅ Authentication Module completed
+
+✅ Layout & Navigation completed
+
+✅ Home Page completed
+
+Now implement the **Ticket Catalog & Ticket Detail Module**.
+
+This module must integrate directly with the existing Spring Boot backend.
+
+All business logic must follow:
+
+- Software Requirement Specification (SRS)
+- OpenAPI Specification
+- Backend Contract
+
+Do NOT invent APIs.
+
+Do NOT invent business rules.
 
 ---
 
 # INPUT
 
-I will provide one or more of the following:
+I will provide:
 
-* Software Requirement Specification (SRS)
-* OpenAPI Specification
-* Spring Boot Source Code
-* Entity Classes
-* DTOs
-* Controllers
-* Services
-* Security Configuration
-* Database Schema
-* Postman Collection
-* Environment Configuration
+- Software Requirement Specification (SRS)
+- OpenAPI Specification
+- Backend Contract
+- Existing React Project
 
-Analyze all available resources before writing the document.
-
-If information exists in multiple places, prioritize:
-
-1. Source Code
-2. OpenAPI
-3. SRS
-
-Do not invent functionality.
+Analyze all documents before implementation.
 
 ---
 
 # OBJECTIVE
 
-Generate **ONE Markdown document** named:
+Implement a complete Ticket Module for Customer Portal.
 
-`backend-contract.md`
+The module must allow customers to:
 
-This document will become the official reference for Frontend development.
+- Browse ticket categories
+- Browse available tickets
+- Search tickets
+- Filter tickets
+- Sort tickets
+- View ticket details
+- View ticket availability
+- View pricing
+- View promotions
+- Navigate to booking
 
-It must contain everything necessary for seamless integration between React Frontend and Spring Boot Backend.
-
----
-
-# REQUIRED DOCUMENT STRUCTURE
-
-Generate the document using the following sections.
-
-# 1. Project Overview
-
-* Project description
-* Architecture overview
-* API version
-* Base URL
-* Authentication strategy
+Everything must be production-ready.
 
 ---
 
-# 2. Technology Stack
+# TASKS
 
-Describe:
+## 1. Analyze Business Requirements
 
-* Java Version
-* Spring Boot Version
-* Spring Security
-* JWT
-* Database
-* Redis
-* Kafka
-* Object Storage
-* AI Services
-* Third-party integrations
+Analyze the SRS.
 
----
+Identify:
 
-# 3. Authentication Flow
+- Ticket Types
+- Combo Tickets
+- Full Park Tickets
+- Attraction Tickets
+- Seasonal Tickets
+- Promotions
+- Membership Discounts
 
-Describe the complete authentication process.
-
-Include:
-
-* Login
-* Register
-* Logout
-* Refresh Token
-* Forgot Password
-* Reset Password
-* Verify Email
-* OTP
-* Session Expiration
-* Remember Me
-
-Provide sequence diagrams if possible.
+Explain every business rule before coding.
 
 ---
 
-# 4. Authorization
+## 2. API Analysis
 
-Explain:
+Analyze OpenAPI.
 
-* Roles
-* Permissions
-* Access Control
-* Protected APIs
-* Public APIs
+Identify every Ticket-related endpoint.
 
-Include a Role-Permission Matrix.
+Map:
 
----
+Page
 
-# 5. Global API Response Standard
+↓
 
-Document every response format.
+Endpoint
 
-Examples:
+↓
 
-Success Response
+Request DTO
 
-Validation Error
+↓
 
-Business Error
+Response DTO
 
-Authentication Error
+↓
 
-Authorization Error
+Permission
 
-Server Error
-
-File Upload Response
-
-Pagination Response
-
-Explain every field.
+Do NOT modify backend APIs.
 
 ---
 
-# 6. Global Error Codes
+## 3. Folder Structure
 
-List every backend error code.
-
-Include:
-
-* Code
-* HTTP Status
-* Message
-* Meaning
-* Recommended Frontend Behavior
-
----
-
-# 7. API Overview
-
-Group APIs by module.
-
-For each module include:
-
-* Business Purpose
-* Endpoint List
-* Required Permission
-* Notes
-
-Do NOT rewrite the OpenAPI.
-
-Summarize the business meaning.
-
----
-
-# 8. Request & Response Models
-
-Document every important DTO.
-
-Explain each field.
-
-Specify:
-
-* Required
-* Nullable
-* Default Value
-* Validation Rules
-
----
-
-# 9. Pagination Standard
-
-Explain:
-
-* Request Parameters
-* Response Structure
-* Sorting
-* Filtering
-
----
-
-# 10. Search & Filter Rules
-
-Document:
-
-* Searchable Fields
-* Filter Operators
-* Sorting Rules
-
----
-
-# 11. Validation Rules
-
-Describe all backend validation rules.
-
-Examples:
-
-* Email
-* Password
-* Phone Number
-* Date
-* Quantity
-* File Upload
-
-Frontend validation must follow exactly the same rules.
-
----
-
-# 12. Business Rules
-
-Summarize every important business rule.
-
-Examples:
-
-* Ticket purchase rules
-* Membership rules
-* Promotion rules
-* Booking rules
-* Payment rules
-* Refund rules
-
-This section is critical.
-
----
-
-# 13. Enumerations
-
-List every enum.
-
-For each enum include:
-
-* Name
-* Value
-* Description
-* Frontend Display Suggestion
-
----
-
-# 14. File Upload
-
-Document:
-
-* Upload API
-* Accepted Types
-* Max File Size
-* Storage
-* Response
-* Preview URL
-
----
-
-# 15. Date & Time Standard
-
-Explain:
-
-* Time Zone
-* Date Format
-* DateTime Format
-* Unix Timestamp usage
-
----
-
-# 16. Security Considerations
-
-Document:
-
-* JWT
-* Refresh Token
-* Token Lifetime
-* Token Rotation
-* CSRF
-* CORS
-* Rate Limiting
-
----
-
-# 17. Frontend Integration Notes
-
-Explain:
-
-* Loading Strategy
-* Retry Strategy
-* Error Handling
-* Token Refresh Handling
-* Offline Handling
-* Optimistic Updates
-
----
-
-# 18. Recommended Frontend Architecture
-
-Recommend:
-
-* Feature Modules
-* API Layer
-* State Management
-* Route Protection
-* Folder Structure
-
-This should match the backend architecture.
-
----
-
-# 19. Integration Checklist
-
-Create a checklist that frontend developers can use before release.
+Create a Feature-based module.
 
 Example:
 
-* Authentication implemented
-* Token Refresh works
-* Validation matches backend
-* Error handling completed
-* Permission checks completed
-* Upload completed
-* Pagination completed
+features/ticket/
+
+components/
+
+pages/
+
+services/
+
+hooks/
+
+schemas/
+
+types/
+
+store/
+
+constants/
+
+utils/
+
+index.ts
 
 ---
 
-# OUTPUT REQUIREMENTS
+## 4. Ticket List Page
 
-* Produce **ONE Markdown file only**.
-* Use clear headings.
-* Include tables wherever appropriate.
-* Use Mermaid diagrams where useful.
-* Keep explanations concise but complete.
-* Do not include backend source code.
-* Do not generate implementation code.
-* Do not invent missing functionality.
-* If information cannot be determined, explicitly state:
+Implement a production-ready page.
 
-> "Not specified in the available backend resources."
+Include:
 
-The resulting document should be sufficient for a Frontend developer or an AI assistant to implement the entire frontend with minimal additional backend clarification.
+- Search Bar
+- Category Filter
+- Price Filter
+- Ticket Type Filter
+- Sort Options
+- Grid/List View
+- Pagination
+- Empty State
+- Error State
+- Skeleton Loading
+
+---
+
+## 5. Ticket Card
+
+Create reusable TicketCard.
+
+Display:
+
+- Image
+- Ticket Name
+- Category
+- Short Description
+- Current Price
+- Original Price (if discounted)
+- Promotion Badge
+- Membership Discount Badge
+- Availability Status
+- "View Details" button
+
+---
+
+## 6. Ticket Detail Page
+
+Display complete ticket information.
+
+Include:
+
+- Gallery
+- Ticket Description
+- Available Attractions
+- Validity Period
+- Pricing
+- Promotion Information
+- Membership Benefits
+- Terms & Conditions
+- Availability
+- Related Tickets
+- Recommended Tickets
+
+---
+
+## 7. Search & Filter
+
+Support:
+
+- Keyword Search
+- Category Filter
+- Price Range
+- Ticket Type
+- Availability
+- Promotion
+- Membership Eligible
+
+Search and filter must work with backend APIs.
+
+---
+
+## 8. Sorting
+
+Support:
+
+- Price Ascending
+- Price Descending
+- Newest
+- Most Popular
+- Highest Rated
+
+Use backend sorting if available.
+
+---
+
+## 9. Pagination
+
+Follow backend pagination standard exactly.
+
+Support:
+
+- Page Number
+- Page Size
+- Total Pages
+- Total Records
+
+---
+
+## 10. State Management
+
+Use RTK Query.
+
+Handle:
+
+- Loading
+- Error
+- Refetch
+- Cache
+- Optimistic Updates (only if appropriate)
+
+---
+
+## 11. Components
+
+Create reusable components:
+
+- TicketCard
+- TicketGrid
+- TicketList
+- TicketFilter
+- SearchBar
+- PriceFilter
+- CategoryFilter
+- TicketGallery
+- TicketPrice
+- PromotionBadge
+- MembershipBadge
+- AvailabilityChip
+- RelatedTickets
+- TicketSkeleton
+- EmptyTicketState
+
+---
+
+## 12. Responsive Design
+
+Support:
+
+- Desktop
+- Laptop
+- Tablet
+- Mobile
+
+Use Material UI responsive utilities.
+
+---
+
+## 13. Accessibility
+
+Implement:
+
+- Semantic HTML
+- Keyboard Navigation
+- ARIA Labels
+- Screen Reader Support
+- Proper Focus Management
+
+---
+
+## 14. Performance
+
+Optimize:
+
+- Lazy Loading
+- Memoization
+- Image Optimization
+- API Caching
+- Skeleton Loading
+- Code Splitting
+
+---
+
+## 15. Error Handling
+
+Handle:
+
+- Network Errors
+- API Errors
+- Empty Results
+- Invalid Ticket ID
+- Expired Ticket
+- Unavailable Ticket
+
+Display user-friendly messages.
+
+---
+
+## 16. Testing
+
+Generate:
+
+- Unit Tests
+- Component Tests
+- API Tests
+- Integration Tests
+
+Target high code coverage.
+
+---
+
+# CODING REQUIREMENTS
+
+Use:
+
+- React 19
+- TypeScript
+- Material UI v7
+- Redux Toolkit
+- RTK Query
+- React Router
+- React Hook Form
+- Zod
+
+Do NOT use:
+
+- Mock Data
+- Hardcoded APIs
+- Hardcoded Business Rules
+- TODO comments
+- Pseudo-code
+
+Every page must compile successfully.
+
+Every component must be reusable.
+
+Every API call must match the OpenAPI specification.
+
+---
+
+# OUTPUT FORMAT
+
+Generate the implementation in the following order:
+
+# 1. Business Analysis
+
+# 2. API Mapping
+
+# 3. Folder Structure
+
+# 4. Route Configuration
+
+# 5. State Management
+
+# 6. Component Tree
+
+# 7. Reusable Components
+
+# 8. Ticket List Page
+
+# 9. Ticket Detail Page
+
+# 10. Search & Filter
+
+# 11. Pagination
+
+# 12. Responsive Strategy
+
+# 13. Accessibility Strategy
+
+# 14. Performance Optimization
+
+# 15. Testing Strategy
+
+# 16. Complete Production-Ready Source Code
+
+The generated code must integrate seamlessly with the existing React project and the Spring Boot backend.

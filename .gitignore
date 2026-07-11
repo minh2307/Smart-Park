@@ -68,3 +68,6 @@ skills-lock.json
 
 # Local Auth Cache
 login_response.json
+
+# AI Prompts
+promt.md
