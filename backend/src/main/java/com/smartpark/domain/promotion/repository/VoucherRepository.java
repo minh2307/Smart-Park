@@ -19,4 +19,11 @@ public interface VoucherRepository extends JpaRepository<Voucher, Long> {
            "(:customerId IS NULL OR v.customer.id = :customerId) AND " +
            "(:status IS NULL OR v.status = :status)")
     Page<Voucher> findAllWithFilters(String search, Long customerId, Voucher.VoucherStatus status, Pageable pageable);
+
+    @Query("SELECT COALESCE(SUM(v.voucherValue), 0) FROM Voucher v WHERE v.createdAt BETWEEN :from AND :to")
+    java.math.BigDecimal sumVoucherValueIssued(@org.springframework.data.repository.query.Param("from") java.time.LocalDateTime from, @org.springframework.data.repository.query.Param("to") java.time.LocalDateTime to);
+
+    @Query("SELECT COALESCE(SUM(v.remainingBalance), 0) FROM Voucher v WHERE v.createdAt BETWEEN :from AND :to")
+    java.math.BigDecimal sumRemainingBalanceBetween(@org.springframework.data.repository.query.Param("from") java.time.LocalDateTime from, @org.springframework.data.repository.query.Param("to") java.time.LocalDateTime to);
 }
+

@@ -23,4 +23,7 @@ public interface RideCapacityRepository extends JpaRepository<RideCapacity, Long
 
     @Query("SELECT AVG(rc.currentWaitingCount) FROM RideCapacity rc")
     Double getAverageWaitingCount();
+
+    java.util.List<RideCapacity> findByRideId(Long rideId);
 }
+

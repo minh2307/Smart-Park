@@ -17,4 +17,8 @@ public interface CheckInRepository extends JpaRepository<CheckIn, Long> {
 
     @Query(value = "SELECT HOUR(check_time) as hourVal, COUNT(*) FROM check_ins WHERE check_time BETWEEN :from AND :to GROUP BY HOUR(check_time) ORDER BY hourVal ASC", nativeQuery = true)
     List<Object[]> countHourlyVisitorsBetween(@org.springframework.data.repository.query.Param("from") java.time.LocalDateTime from, @org.springframework.data.repository.query.Param("to") java.time.LocalDateTime to);
+
+    @Query(value = "SELECT DATE(check_time) as period, COUNT(*) as cnt FROM check_ins WHERE check_time BETWEEN :from AND :to GROUP BY DATE(check_time) ORDER BY period ASC", nativeQuery = true)
+    List<Object[]> countDailyVisitorsBetween(@org.springframework.data.repository.query.Param("from") java.time.LocalDateTime from, @org.springframework.data.repository.query.Param("to") java.time.LocalDateTime to);
 }
+

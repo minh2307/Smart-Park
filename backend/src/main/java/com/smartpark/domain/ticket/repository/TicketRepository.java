@@ -42,4 +42,17 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     @Query("SELECT COUNT(t) FROM Ticket t WHERE t.status IN (com.smartpark.domain.ticket.entity.Ticket.TicketStatus.PAID, com.smartpark.domain.ticket.entity.Ticket.TicketStatus.CHECKED_IN, com.smartpark.domain.ticket.entity.Ticket.TicketStatus.USED) AND t.createdAt BETWEEN :from AND :to")
     long countTicketsSoldBetween(@org.springframework.data.repository.query.Param("from") java.time.LocalDateTime from, @org.springframework.data.repository.query.Param("to") java.time.LocalDateTime to);
+
+    @Query("SELECT t.ticketType.name, COUNT(t) FROM Ticket t WHERE t.status IN (com.smartpark.domain.ticket.entity.Ticket.TicketStatus.PAID, com.smartpark.domain.ticket.entity.Ticket.TicketStatus.CHECKED_IN, com.smartpark.domain.ticket.entity.Ticket.TicketStatus.USED) AND t.createdAt BETWEEN :from AND :to GROUP BY t.ticketType.name")
+    List<Object[]> countTicketsSoldGroupedByType(@org.springframework.data.repository.query.Param("from") java.time.LocalDateTime from, @org.springframework.data.repository.query.Param("to") java.time.LocalDateTime to);
+
+    @Query("SELECT t.ticketType.name, COUNT(t) FROM Ticket t WHERE t.status IN (com.smartpark.domain.ticket.entity.Ticket.TicketStatus.CHECKED_IN, com.smartpark.domain.ticket.entity.Ticket.TicketStatus.USED) AND t.createdAt BETWEEN :from AND :to GROUP BY t.ticketType.name")
+    List<Object[]> countTicketsUsedGroupedByType(@org.springframework.data.repository.query.Param("from") java.time.LocalDateTime from, @org.springframework.data.repository.query.Param("to") java.time.LocalDateTime to);
+
+    @Query("SELECT t.ticketType.name, COUNT(t) FROM Ticket t WHERE t.status IN (com.smartpark.domain.ticket.entity.Ticket.TicketStatus.CANCELLED, com.smartpark.domain.ticket.entity.Ticket.TicketStatus.REFUNDED) AND t.createdAt BETWEEN :from AND :to GROUP BY t.ticketType.name")
+    List<Object[]> countTicketsCancelledGroupedByType(@org.springframework.data.repository.query.Param("from") java.time.LocalDateTime from, @org.springframework.data.repository.query.Param("to") java.time.LocalDateTime to);
+
+    @Query("SELECT COUNT(t) FROM Ticket t WHERE t.status = :status AND t.createdAt BETWEEN :from AND :to")
+    long countByStatusAndCreatedAtBetween(@org.springframework.data.repository.query.Param("status") Ticket.TicketStatus status, @org.springframework.data.repository.query.Param("from") java.time.LocalDateTime from, @org.springframework.data.repository.query.Param("to") java.time.LocalDateTime to);
 }
+

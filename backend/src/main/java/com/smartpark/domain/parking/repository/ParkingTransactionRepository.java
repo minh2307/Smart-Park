@@ -18,4 +18,8 @@ public interface ParkingTransactionRepository extends JpaRepository<ParkingTrans
 
     @org.springframework.data.jpa.repository.Query(value = "SELECT DATE(exit_time) as dateVal, SUM(amount_paid) FROM parking_transactions WHERE status = 'EXITED' AND exit_time BETWEEN :from AND :to GROUP BY DATE(exit_time) ORDER BY dateVal ASC", nativeQuery = true)
     List<Object[]> sumDailyParkingRevenueBetween(@org.springframework.data.repository.query.Param("from") java.time.LocalDateTime from, @org.springframework.data.repository.query.Param("to") java.time.LocalDateTime to);
+
+    @org.springframework.data.jpa.repository.Query(value = "SELECT pl.id as lotId, pl.name as lotName, COALESCE(SUM(pt.amount_paid), 0) as totalParkingFee, COUNT(pt.id) as totalSessions FROM parking_transactions pt JOIN parking_lots pl ON pt.parking_lot_id = pl.id WHERE pt.entry_time BETWEEN :from AND :to GROUP BY pl.id, pl.name", nativeQuery = true)
+    List<com.smartpark.domain.bi.projection.ParkingOccupancyProjection> getParkingOccupancyAndRevenueReport(@org.springframework.data.repository.query.Param("from") java.time.LocalDateTime from, @org.springframework.data.repository.query.Param("to") java.time.LocalDateTime to);
 }
+

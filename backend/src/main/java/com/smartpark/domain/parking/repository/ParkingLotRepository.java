@@ -47,4 +47,11 @@ public interface ParkingLotRepository extends JpaRepository<ParkingLot, Long> {
      * Đếm tất cả bãi chưa xóa.
      */
     long countByDeletedAtIsNull();
+
+    @Query("SELECT COALESCE(SUM(p.totalSpaces), 0) FROM ParkingLot p WHERE p.deletedAt IS NULL")
+    int sumTotalSpaces();
+
+    @Query("SELECT COALESCE(SUM(p.occupiedSpaces), 0) FROM ParkingLot p WHERE p.deletedAt IS NULL")
+    int sumOccupiedSpaces();
 }
+

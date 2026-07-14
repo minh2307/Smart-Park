@@ -31,4 +31,8 @@ public interface MembershipRepository extends JpaRepository<Membership, Long> {
 
     @org.springframework.data.jpa.repository.Query("SELECT COUNT(m) FROM Membership m WHERE m.status = com.smartpark.domain.membership.entity.Membership.MembershipStatus.ACTIVE AND m.createdAt <= :date")
     long countActiveMembershipsBefore(@org.springframework.data.repository.query.Param("date") java.time.LocalDateTime date);
+
+    @org.springframework.data.jpa.repository.Query("SELECT COUNT(m) FROM Membership m WHERE m.createdAt BETWEEN :from AND :to")
+    long countCreatedBetween(@org.springframework.data.repository.query.Param("from") java.time.LocalDateTime from, @org.springframework.data.repository.query.Param("to") java.time.LocalDateTime to);
 }
+
