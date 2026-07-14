@@ -42,9 +42,9 @@ public class SecurityConfig {
             "/api/v1/auth/register",
             "/api/v1/auth/refresh-token",
             // Payment webhooks
-            "/api/v1/payments/vnpay-ipn",
-            "/api/v1/payments/vnpay-return",
-            "/api/v1/payments/momo-webhook",
+            "/api/v1/integration/payment/payos/webhook",
+            "/api/v1/integration/payment/payos/return",
+            "/api/v1/integration/payment/payos/cancel",
             // Public park/ride info
             "/api/v1/parks",
             "/api/v1/parks/{id}",

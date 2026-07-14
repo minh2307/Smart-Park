@@ -6,7 +6,7 @@ import lombok.*;
 /**
  * Bảng payment_methods - danh mục phương thức thanh toán.
  * SRS schema: (id, name, code, provider, status)
- * MODULE 20: Tích hợp VNPay, MoMo.
+ * MODULE 20: Tích hợp PayOS, MoMo.
  */
 @Entity
 @Table(name = "payment_methods")
@@ -23,7 +23,7 @@ public class PaymentMethod {
     @Column(unique = true, nullable = false, length = 30)
     private String code;
 
-    /** Tên nhà cung cấp, ví dụ: VNPAY, MOMO, BANK_TRANSFER */
+    /** Tên nhà cung cấp, ví dụ: PAYOS, MOMO, BANK_TRANSFER */
     @Column(length = 100)
     private String provider;
 

@@ -28,15 +28,6 @@ public class PaymentController {
         return ResponseEntity.ok(ApiResponse.success(paymentService.createPayment(request)));
     }
 
-    /**
-     * IPN Webhook dành cho VNPay gọi server-to-server để báo kết quả thanh toán.
-     * Lưu ý: Webhook thường nhận các tham số dạng request parameters (Form URL-encoded hoặc Query Params)
-     */
-    @GetMapping("/vnpay-ipn")
-    public ResponseEntity<String> vnpayIpn(@RequestParam Map<String, String> requestParams) {
-        String result = paymentService.processVNPayIpn(requestParams);
-        return ResponseEntity.ok(result);
-    }
 
     @PostMapping("/{paymentId}/refunds")
     @org.springframework.security.access.prepost.PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
@@ -57,22 +48,5 @@ public class PaymentController {
         return ResponseEntity.ok(ApiResponse.success(paymentService.getActivePaymentMethods()));
     }
 
-    @GetMapping("/vnpay-return")
-    public ResponseEntity<Void> vnpayReturn(@RequestParam Map<String, String> requestParams) {
-        StringBuilder redirectUrl = new StringBuilder("http://localhost:5173/checkout/payment-result?");
-        requestParams.forEach((key, value) -> {
-            try {
-                redirectUrl.append(key).append("=").append(java.net.URLEncoder.encode(value, java.nio.charset.StandardCharsets.UTF_8.toString())).append("&");
-            } catch (Exception e) {
-                // ignore
-            }
-        });
-        if (redirectUrl.length() > 0 && redirectUrl.charAt(redirectUrl.length() - 1) == '&') {
-            redirectUrl.setLength(redirectUrl.length() - 1);
-        }
 
-        org.springframework.http.HttpHeaders headers = new org.springframework.http.HttpHeaders();
-        headers.setLocation(java.net.URI.create(redirectUrl.toString()));
-        return new ResponseEntity<>(headers, org.springframework.http.HttpStatus.FOUND);
-    }
 }

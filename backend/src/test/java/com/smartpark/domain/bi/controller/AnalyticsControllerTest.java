@@ -159,12 +159,12 @@ class AnalyticsControllerTest {
     @Test
     @WithMockUser(roles = "SYSTEM_ADMIN")
     void testGetRevenueByPayment() throws Exception {
-        RevenueByTypeDto item = RevenueByTypeDto.builder().ticketCategory("VNPAY").revenue(BigDecimal.valueOf(320000)).build();
+        RevenueByTypeDto item = RevenueByTypeDto.builder().ticketCategory("PAYOS").revenue(BigDecimal.valueOf(320000)).build();
         when(analyticsService.getRevenueByPayment(any(), any())).thenReturn(Collections.singletonList(item));
 
         mockMvc.perform(get("/api/v1/analytics/revenue/by-payment"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data[0].ticketCategory").value("VNPAY"));
+                .andExpect(jsonPath("$.data[0].ticketCategory").value("PAYOS"));
     }
 
     @Test

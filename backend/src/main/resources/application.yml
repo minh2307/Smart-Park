@@ -74,14 +74,16 @@ app:
     access-token-expiration: 900000       # 15 phút (ms)
     refresh-token-expiration: 604800000   # 7 ngày (ms)
 
-  # VNPay Configuration
-  vnpay:
-    tmn-code: ${VNPAY_TMN_CODE}
-    hash-secret: ${VNPAY_HASH_SECRET}
-    pay-url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
-    return-url: ${VNPAY_RETURN_URL:http://localhost:8080/api/v1/payments/vnpay-return}
-    ipn-url: ${VNPAY_IPN_URL:http://localhost:8080/api/v1/payments/vnpay-ipn}
-    api-url: https://sandbox.vnpayment.vn/merchant_webapi/api/transaction
+  # PayOS Configuration
+  integration:
+    payos:
+      enabled: true
+      client-id: ${PAYOS_CLIENT_ID:dummy-client-id}
+      api-key: ${PAYOS_API_KEY:dummy-api-key}
+      checksum-key: ${PAYOS_CHECKSUM_KEY:dummy-checksum-key}
+      return-url: ${PAYOS_RETURN_URL:http://localhost:8080/api/v1/integration/payment/payos/return}
+      cancel-url: ${PAYOS_CANCEL_URL:http://localhost:8080/api/v1/integration/payment/payos/cancel}
+      webhook-url: ${PAYOS_WEBHOOK_URL:http://localhost:8080/api/v1/integration/payment/payos/webhook}
 
   # Redis key TTL
   redis:
@@ -99,7 +101,7 @@ app:
 
   # Google BigQuery (BI Data Warehouse)
   bigquery:
-    enabled: ${BIGQUERY_ENABLED}
+    enabled: ${BIGQUERY_ENABLED:false}
     project-id: ${GCP_PROJECT_ID}
     dataset-id: ${BIGQUERY_DATASET}
 

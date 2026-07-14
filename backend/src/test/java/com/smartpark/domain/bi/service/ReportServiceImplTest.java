@@ -185,7 +185,7 @@ class ReportServiceImplTest {
     @Test
     void testPreviewReportPayment() {
         RevenueByTypeProjection proj = new RevenueByTypeProjection() {
-            @Override public String getTicketCategory() { return "VNPAY"; }
+            @Override public String getTicketCategory() { return "PAYOS"; }
             @Override public BigDecimal getRevenue() { return BigDecimal.valueOf(250); }
         };
         when(orderRepository.getRevenueByPaymentMethod(any(), any())).thenReturn(Collections.singletonList(proj));
@@ -193,7 +193,7 @@ class ReportServiceImplTest {
         ReportPreviewRequest req = ReportPreviewRequest.builder().reportType("PAYMENT").filters(new HashMap<>()).build();
         ReportPreviewResponse resp = reportService.previewReport(req);
         assertNotNull(resp);
-        assertEquals("VNPAY", resp.getData().get(0).get("Payment Method"));
+        assertEquals("PAYOS", resp.getData().get(0).get("Payment Method"));
     }
 
     @Test

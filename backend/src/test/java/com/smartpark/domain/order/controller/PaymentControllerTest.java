@@ -55,10 +55,10 @@ public class PaymentControllerTest {
     void testCreatePayment() throws Exception {
         PaymentDto.PaymentRequest request = new PaymentDto.PaymentRequest();
         request.setOrderCode("ORD-123");
-        request.setPaymentMethodCode("VNPAY");
+        request.setPaymentMethodCode("PAYOS");
 
         PaymentDto.PaymentResponse response = new PaymentDto.PaymentResponse();
-        response.setPaymentUrl("http://vnpay.vn");
+        response.setPaymentUrl("http://payos.vn");
 
         when(paymentService.createPayment(any(PaymentDto.PaymentRequest.class))).thenReturn(response);
 
@@ -66,17 +66,9 @@ public class PaymentControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.data.paymentUrl").value("http://vnpay.vn"));
+                .andExpect(jsonPath("$.data.paymentUrl").value("http://payos.vn"));
     }
 
-    @Test
-    void testVnpayIpn() throws Exception {
-        when(paymentService.processVNPayIpn(any())).thenReturn("{\"RspCode\":\"00\",\"Message\":\"Confirm Success\"}");
-
-        mockMvc.perform(get("/api/v1/payments/vnpay-ipn?vnp_Amount=50000000"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.RspCode").value("00"));
-    }
 
     @Test
     @WithMockUser(roles = "ADMIN")

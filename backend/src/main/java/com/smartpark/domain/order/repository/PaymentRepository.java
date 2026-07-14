@@ -19,4 +19,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT p FROM Payment p WHERE p.transactionReference = :txRef")
     Optional<Payment> findByTransactionReferenceForUpdate(String txRef);
+    Optional<Payment> findByOrderCodeAndProviderAndStatus(String orderCode, String provider, Payment.PaymentStatus status);
+    Optional<Payment> findByProviderTransactionId(String providerTransactionId);
+    List<Payment> findByOrderAndStatus(com.smartpark.domain.order.entity.Order order, Payment.PaymentStatus status);
 }

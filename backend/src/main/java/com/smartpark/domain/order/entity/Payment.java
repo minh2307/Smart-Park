@@ -46,5 +46,38 @@ public class Payment {
     @Column(name = "payment_time")
     private LocalDateTime paymentTime;
 
+    @Column(length = 50)
+    private String provider;
+
+    @Column(name = "provider_payment_link_id", length = 100)
+    private String providerPaymentLinkId;
+
+    @Column(name = "provider_transaction_id", length = 100)
+    private String providerTransactionId;
+
+    @Column(name = "order_code", length = 100)
+    private String orderCode;
+
+    @Column(name = "checkout_url", length = 500)
+    private String checkoutUrl;
+
+    @Column(name = "qr_code", columnDefinition = "TEXT")
+    private String qrCode;
+
+    @Column(name = "provider_status", length = 50)
+    private String providerStatus;
+
+    @Column(name = "paid_at")
+    private LocalDateTime paidAt;
+
+    @Column(name = "cancelled_at")
+    private LocalDateTime cancelledAt;
+
+    @Column(name = "expired_at")
+    private LocalDateTime expiredAt;
+
+    @Column(name = "failure_reason")
+    private String failureReason;
+
     public enum PaymentStatus { PENDING, SUCCESS, FAILED, CANCELLED, REFUNDED }
 }
