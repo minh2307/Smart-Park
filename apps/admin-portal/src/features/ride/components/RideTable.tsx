@@ -41,7 +41,7 @@ export const RideTable: React.FC<RideTableProps> = ({
           <TableHead>
             <TableRow>
               <TableCell>Mã / Tên trò chơi</TableCell>
-              <TableCell>Địa điểm / Phân khu</TableCell>
+              <TableCell>Phân khu</TableCell>
               <TableCell>Danh mục</TableCell>
               <TableCell>Công suất / Giờ</TableCell>
               <TableCell>Giới hạn chiều cao</TableCell>
@@ -85,7 +85,7 @@ export const RideTable: React.FC<RideTableProps> = ({
         <TableHead>
           <TableRow>
             <TableCell>Mã / Tên trò chơi</TableCell>
-            <TableCell>Địa điểm / Phân khu</TableCell>
+            <TableCell>Phân khu</TableCell>
             <TableCell>Danh mục</TableCell>
             <TableCell>Công suất / Giờ</TableCell>
             <TableCell>Giới hạn chiều cao</TableCell>
@@ -96,8 +96,8 @@ export const RideTable: React.FC<RideTableProps> = ({
         </TableHead>
         <TableBody>
           {data.map((ride) => {
-            const minH = ride.restrictions.minHeight;
-            const maxH = ride.restrictions.maxHeight;
+            const minH = ride.restrictions?.minHeight ?? (ride as any).minHeight;
+            const maxH = ride.restrictions?.maxHeight ?? (ride as any).maxHeight;
             let restrictLabel = 'Không giới hạn';
             if (minH && maxH) {
               restrictLabel = `${minH}-${maxH}cm`;
@@ -106,7 +106,7 @@ export const RideTable: React.FC<RideTableProps> = ({
             } else if (maxH) {
               restrictLabel = `<${maxH}cm`;
             }
-            const extraWarnings = ride.restrictions.healthWarning || ride.restrictions.pregnancyRestriction;
+            const extraWarnings = ride.restrictions?.healthWarning || ride.restrictions?.pregnancyRestriction;
 
             return (
               <TableRow key={ride.id} hover>
@@ -121,12 +121,9 @@ export const RideTable: React.FC<RideTableProps> = ({
                   </Box>
                 </TableCell>
                 <TableCell>
-                  <Box>
-                    <Typography variant="body2">{ride.venueName || '—'}</Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {ride.zoneName || '—'}
-                    </Typography>
-                  </Box>
+                  <Typography variant="body2">
+                    {ride.zoneName || '—'}
+                  </Typography>
                 </TableCell>
                 <TableCell>
                   <Typography variant="body2" fontWeight="medium">

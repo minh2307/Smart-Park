@@ -36,13 +36,30 @@ public class LockerTransaction {
     @Column(name = "end_time")
     private LocalDateTime endTime;
 
+    @Column(name = "deposit", nullable = false, precision = 15, scale = 2)
+    @Builder.Default
+    private BigDecimal deposit = BigDecimal.ZERO;
+
+    @Column(name = "rental_fee", nullable = false, precision = 15, scale = 2)
+    @Builder.Default
+    private BigDecimal rentalFee = BigDecimal.ZERO;
+
     @Column(name = "amount_paid", precision = 15, scale = 2)
-    private BigDecimal amountPaid;
+    @Builder.Default
+    private BigDecimal amountPaid = BigDecimal.ZERO;
+
+    @Column(name = "penalty_amount", nullable = false, precision = 15, scale = 2)
+    @Builder.Default
+    private BigDecimal penaltyAmount = BigDecimal.ZERO;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @Builder.Default
     private LockerTransactionStatus status = LockerTransactionStatus.ACTIVE;
 
-    public enum LockerTransactionStatus { ACTIVE, COMPLETED, OVERDUE }
+    @Column(name = "payment_status", nullable = false, length = 50)
+    @Builder.Default
+    private String paymentStatus = "PENDING";
+
+    public enum LockerTransactionStatus { ACTIVE, COMPLETED, OVERDUE, CANCELLED }
 }

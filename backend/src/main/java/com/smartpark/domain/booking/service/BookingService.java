@@ -9,7 +9,8 @@ import com.smartpark.domain.booking.repository.BookingRepository;
 import com.smartpark.domain.customer.entity.Customer;
 import com.smartpark.domain.customer.repository.CustomerRepository;
 import com.smartpark.domain.notification.entity.Notification;
-import com.smartpark.domain.notification.repository.NotificationRepository;
+import com.smartpark.domain.notification.dto.NotificationDto;
+import com.smartpark.domain.notification.service.NotificationService;
 import com.smartpark.domain.membership.service.MembershipService;
 import com.smartpark.domain.promotion.service.PromotionService;
 import com.smartpark.domain.ticket.entity.Ticket;
@@ -43,7 +44,7 @@ public class BookingService {
 
     private final BookingRepository bookingRepository;
     private final CustomerRepository customerRepository;
-    private final NotificationRepository notificationRepository;
+    private final NotificationService notificationService;
     private final TicketService ticketService;
     private final TicketTypeRepository ticketTypeRepository;
     private final TicketRepository ticketRepository;
@@ -246,15 +247,17 @@ public class BookingService {
         return bookingRepository.save(booking);
     }
 
-    private void _sendNotification(Long userId, String title, String message) {
+    private void _sendNotification(Long customerId, String title, String message) {
         try {
-            Notification notification = Notification.builder()
-                    .userId(userId).title(title).content(message)
+            notificationService.create(NotificationDto.CreateRequest.builder()
+                    .customerIds(List.of(customerId))
+                    .title(title)
+                    .content(message)
                     .type(Notification.NotificationType.IN_APP)
-                    .status(Notification.NotificationStatus.PENDING).build();
-            notificationRepository.save(notification);
+                    .priority(Notification.NotificationPriority.MEDIUM)
+                    .build());
         } catch (Exception e) {
-            log.warn("[NOTIFY FAIL] userId={} error={}", userId, e.getMessage());
+            log.warn("[NOTIFY FAIL] customerId={} error={}", customerId, e.getMessage());
         }
     }
 }

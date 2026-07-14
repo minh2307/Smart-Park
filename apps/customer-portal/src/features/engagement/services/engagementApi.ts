@@ -41,19 +41,11 @@ export const engagementApi = baseApi.injectEndpoints({
 
     // Feedbacks Endpoints
     getFeedbacks: builder.query<PaginatedResponse<Feedback>, { page?: number; size?: number }>({
-      query: ({ page = 0, size = 50 } = {}) => ({
-        url: '/feedbacks',
-        method: 'GET',
-        params: { page, size },
+      queryFn: () => ({
+        // Backend /feedbacks not yet implemented - return empty to avoid 500
+        data: { content: [], pageable: {}, totalElements: 0, totalPages: 0, size: 50, number: 0, empty: true },
       }),
-      transformResponse: (response: any) => response.data,
-      providesTags: (result) =>
-        result
-          ? [
-              ...result.content.map(({ id }) => ({ type: 'Feedbacks' as const, id })),
-              { type: 'Feedbacks' as const, id: 'LIST' },
-            ]
-          : [{ type: 'Feedbacks' as const, id: 'LIST' }],
+      providesTags: [{ type: 'Feedbacks' as const, id: 'LIST' }],
     }),
     submitFeedback: builder.mutation<Feedback, Feedback>({
       query: (feedback) => ({

@@ -11,6 +11,8 @@ import com.smartpark.domain.order.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,6 +48,16 @@ public class OrderService {
     public Order findById(Long id) {
         return orderRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Order", id));
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Order> findByCustomer(Long customerId, Pageable pageable) {
+        // Use derived query from repository; wrap list in a Page
+        List<Order> all = orderRepository.findByCustomerId(customerId);
+        int start = (int) pageable.getOffset();
+        int end = Math.min(start + pageable.getPageSize(), all.size());
+        List<Order> paged = (start >= all.size()) ? List.of() : all.subList(start, end);
+        return new PageImpl<>(paged, pageable, all.size());
     }
 
     @Transactional(readOnly = true)

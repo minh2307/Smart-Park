@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Typography, Button, Container, Paper, Grid, TextField, MenuItem, Stack } from '@mui/material';
 import { motion, Variants } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import ConfirmationNumberIcon from '@mui/icons-material/ConfirmationNumber';
 import ExploreIcon from '@mui/icons-material/Explore';
 import SearchIcon from '@mui/icons-material/Search';
@@ -8,6 +9,7 @@ import EventIcon from '@mui/icons-material/Event';
 import PeopleIcon from '@mui/icons-material/People';
 
 export const HeroSection: React.FC = () => {
+  const navigate = useNavigate();
   const [ticketDate, setTicketDate] = useState('');
   const [ticketType, setTicketType] = useState('single');
   const [quantity, setQuantity] = useState(1);
@@ -128,6 +130,7 @@ export const HeroSection: React.FC = () => {
                       color="primary"
                       size="large"
                       startIcon={<ConfirmationNumberIcon />}
+                      onClick={() => navigate('/booking')}
                       sx={{
                         px: 4,
                         py: 1.8,
@@ -144,6 +147,7 @@ export const HeroSection: React.FC = () => {
                       variant="outlined"
                       size="large"
                       startIcon={<ExploreIcon />}
+                      onClick={() => navigate('/tickets')}
                       sx={{
                         color: '#ffffff',
                         borderColor: '#ffffff',
@@ -276,6 +280,7 @@ export const HeroSection: React.FC = () => {
                       color="secondary"
                       size="large"
                       fullWidth
+                      onClick={() => navigate('/booking')}
                       sx={{
                         py: 1.5,
                         fontSize: '1rem',

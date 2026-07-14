@@ -2,16 +2,16 @@ package com.smartpark.domain.notification.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
-/**
- * Bảng notifications - thông báo hệ thống gửi đến người dùng.
- * SRS schema: (id, user_id, title, content, type, status, created_at)
- * MODULE 29: Gửi OTP, hóa đơn, cảnh báo bảo trì qua Email/SMS/Firebase Push.
- */
 @Entity
 @Table(name = "notifications")
 @EntityListeners(AuditingEntityListener.class)
@@ -22,17 +22,12 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /** ID tài khoản người nhận (references users table) */
-    @Column(name = "user_id", nullable = false)
-    private Long userId;
-
     @Column(nullable = false, length = 200)
     private String title;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String content;
 
-    /** Kênh gửi thông báo */
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private NotificationType type;
@@ -40,12 +35,40 @@ public class Notification {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @Builder.Default
+    private NotificationPriority priority = NotificationPriority.MEDIUM;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    @Builder.Default
     private NotificationStatus status = NotificationStatus.PENDING;
+
+    @Column(name = "expiration_time")
+    private LocalDateTime expirationTime;
 
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @CreatedBy
+    @Column(name = "created_by", updatable = false)
+    private String createdBy;
+
+    @LastModifiedBy
+    @Column(name = "updated_by")
+    private String updatedBy;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    @OneToMany(mappedBy = "notification", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<NotificationRecipient> recipients = new ArrayList<>();
+
     public enum NotificationType { EMAIL, SMS, PUSH, IN_APP }
-    public enum NotificationStatus { PENDING, SENT, FAILED, READ }
+    public enum NotificationPriority { LOW, MEDIUM, HIGH }
+    public enum NotificationStatus { PENDING, SENT, FAILED }
 }

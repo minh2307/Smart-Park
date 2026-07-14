@@ -61,14 +61,14 @@ export const CheckoutPage: React.FC = () => {
     );
   }
 
-  const items = booking.tickets.map((t: any) => ({
+  const items = (booking.tickets || []).map((t: any) => ({
     ticketName: t.ticketType?.name || 'Vé tham quan',
     quantity: t.quantity,
     price: t.ticketType?.price || 0,
     visitDate: booking.validDate,
   }));
 
-  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const subtotal = items.reduce((sum: number, item: any) => sum + item.price * item.quantity, 0);
   const couponDiscount = booking.discountAmount || 0;
   const membershipDiscount = 0; // Backend combines discounts or details it in the order total
   const finalTotal = booking.totalAmount;

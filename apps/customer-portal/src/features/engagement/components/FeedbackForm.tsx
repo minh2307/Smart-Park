@@ -86,7 +86,7 @@ export const FeedbackForm: React.FC = () => {
         Gửi ý kiến đóng góp & Đánh giá dịch vụ
       </Typography>
 
-      {error && (
+      {!!error && (
         <Alert severity="error" sx={{ mb: 3, bgcolor: 'rgba(239, 68, 68, 0.1)', color: '#ef4444' }}>
           Đã xảy ra lỗi khi gửi phản hồi. Vui lòng kiểm tra lại kết nối.
         </Alert>

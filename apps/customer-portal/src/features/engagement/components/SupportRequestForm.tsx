@@ -121,7 +121,7 @@ export const SupportRequestForm: React.FC = () => {
         </Box>
       </Stack>
 
-      {error && (
+      {!!error && (
         <Alert severity="error" sx={{ mb: 3, bgcolor: 'rgba(239, 68, 68, 0.1)', color: '#ef4444' }}>
           Đã xảy ra lỗi khi gửi yêu cầu hỗ trợ. Vui lòng thử lại sau.
         </Alert>

@@ -5,7 +5,6 @@ import {
   MdSettings,
   MdShoppingBag,
   MdPeople,
-  MdBusiness,
   MdAssignmentInd,
   MdCategory,
   MdToys,
@@ -122,12 +121,7 @@ export const menuConfig: MenuItem[] = [
     route: '/admin/users',
     allowedRoles: ['ADMIN'],
   },
-  {
-    title: 'Địa điểm',
-    icon: MdBusiness,
-    route: '/admin/venues',
-    allowedRoles: ['ADMIN', 'NHAN_VIEN'],
-  },
+
   {
     title: 'Kiểm soát ra vào',
     icon: MdSecurity,

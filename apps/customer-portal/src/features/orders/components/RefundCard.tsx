@@ -22,7 +22,7 @@ export const RefundCard: React.FC<RefundCardProps> = ({ refunds = [], payments =
   const [customReason, setCustomReason] = useState('');
   const [requestRefund, { isLoading }] = useRequestRefundMutation();
 
-  const successPayments = payments.filter(p => p.status === 'SUCCESS' || p.status === 'PAID');
+  const successPayments = payments.filter(p => p.status === 'SUCCESS' || (p.status as string) === 'PAID');
   
   // Check if there are active refunds or eligible payments
   const hasRefunds = refunds.length > 0;

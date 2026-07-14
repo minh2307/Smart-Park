@@ -5,7 +5,7 @@ import analyticsReducer from '../features/analytics/store/analyticsSlice';
 import themeReducer from '../theme/themeSlice';
 import { authApi } from '../features/auth/services/authApi';
 import { userApi } from '../features/user/services/userApi';
-import { venueApi } from '../features/venue/services/venueApi';
+
 import { ticketApi } from '../features/ticket/services/ticketApi';
 import { bookingApi } from '../features/booking/services/bookingApi';
 import { customerApi } from '../features/customer/services/customerApi';
@@ -36,6 +36,7 @@ import { incidentApi } from '../features/incident/services/incidentApi';
 import { supportApi } from '../features/support/services/supportApi';
 import { knowledgeBaseApi } from '../features/knowledge-base/services/knowledgeBaseApi';
 import { analyticsApi } from '../features/analytics/services/analyticsApi';
+import { venueApi } from '../features/venue/services/venueApi';
 
 export const store = configureStore({
   reducer: {
@@ -44,6 +45,7 @@ export const store = configureStore({
     [authApi.reducerPath]: authApi.reducer,
     [userApi.reducerPath]: userApi.reducer,
     [venueApi.reducerPath]: venueApi.reducer,
+
     [ticketApi.reducerPath]: ticketApi.reducer,
     [bookingApi.reducerPath]: bookingApi.reducer,
     [customerApi.reducerPath]: customerApi.reducer,
@@ -81,6 +83,7 @@ export const store = configureStore({
       authApi.middleware,
       userApi.middleware,
       venueApi.middleware,
+
       ticketApi.middleware,
       bookingApi.middleware,
       customerApi.middleware,

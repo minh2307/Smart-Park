@@ -8,8 +8,8 @@ spring:
 
   datasource:
     url: ${SPRING_DATASOURCE_URL:jdbc:mysql://localhost:3306/ticketing_db?createDatabaseIfNotExist=true&useSSL=false&serverTimezone=Asia/Ho_Chi_Minh&allowPublicKeyRetrieval=true&characterEncoding=UTF-8}
-    username: ${SPRING_DATASOURCE_USERNAME:root}
-    password: ${SPRING_DATASOURCE_PASSWORD:123456}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       maximum-pool-size: 20
@@ -30,7 +30,7 @@ spring:
     redis:
       host: ${SPRING_REDIS_HOST:localhost}
       port: ${SPRING_REDIS_PORT:6379}
-      password: ${SPRING_REDIS_PASSWORD:}
+      password: ${SPRING_REDIS_PASSWORD}
       timeout: 3000ms
       lettuce:
         pool:
@@ -41,8 +41,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: ${MAIL_USERNAME:workspacegateos@gmail.com}
-    password: ${MAIL_PASSWORD:ocitxfcpezgkcyvl}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
     properties:
       mail:
         smtp:
@@ -68,7 +68,7 @@ server:
 # JWT Configuration
 app:
   cors:
-    allowed-origins: ${FRONTEND_URL:http://localhost:3000}
+    allowed-origins: "http://localhost:3000,http://localhost:5173"
   jwt:
     secret: ${JWT_SECRET:GateOS-Super-Secret-Key-2026-Min64Chars-ForHS512-Algorithm-Security!!}
     access-token-expiration: 900000       # 15 phút (ms)
@@ -76,8 +76,8 @@ app:
 
   # VNPay Configuration
   vnpay:
-    tmn-code: ${VNPAY_TMN_CODE:1MPPQ86K}
-    hash-secret: ${VNPAY_HASH_SECRET:FQ6R7BDXUFZZS0YD5W5OU082BH7SUZ1V}
+    tmn-code: ${VNPAY_TMN_CODE}
+    hash-secret: ${VNPAY_HASH_SECRET}
     pay-url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
     return-url: ${VNPAY_RETURN_URL:http://localhost:8080/api/v1/payments/vnpay-return}
     ipn-url: ${VNPAY_IPN_URL:http://localhost:8080/api/v1/payments/vnpay-ipn}
@@ -99,9 +99,9 @@ app:
 
   # Google BigQuery (BI Data Warehouse)
   bigquery:
-    enabled: ${BIGQUERY_ENABLED:false}
-    project-id: ${GCP_PROJECT_ID:elegant-beach-502005-g8}
-    dataset-id: ${BIGQUERY_DATASET:ticketing}
+    enabled: ${BIGQUERY_ENABLED}
+    project-id: ${GCP_PROJECT_ID}
+    dataset-id: ${BIGQUERY_DATASET}
 
 # Swagger / OpenAPI
 springdoc:

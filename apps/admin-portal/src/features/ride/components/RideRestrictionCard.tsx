@@ -14,7 +14,7 @@ interface RideRestrictionCardProps {
   restrictions: RideRestrictions;
 }
 
-export const RideRestrictionCard: React.FC<RideRestrictionCardProps> = ({ restrictions }) => {
+export const RideRestrictionCard: React.FC<RideRestrictionCardProps> = ({ restrictions = {} }) => {
   const {
     minHeight,
     maxHeight,
@@ -26,7 +26,7 @@ export const RideRestrictionCard: React.FC<RideRestrictionCardProps> = ({ restri
     pregnancyRestriction,
     accessibilityFriendly,
     safetyNotes,
-  } = restrictions;
+  } = restrictions || {};
 
   const items = [
     {

@@ -166,14 +166,18 @@ export const MembershipPage: React.FC = () => {
     }
   };
 
+  const isDark = theme.palette.mode === 'dark';
+
   return (
     <Box
       sx={{
         minHeight: '85vh',
-        bgcolor: '#0f172a',
-        color: '#ffffff',
+        bgcolor: 'background.default',
+        color: 'text.primary',
         py: 6,
-        background: 'radial-gradient(circle at top right, rgba(20, 184, 166, 0.08), transparent 40%)',
+        background: isDark
+          ? 'radial-gradient(circle at top right, rgba(20, 184, 166, 0.08), transparent 40%)'
+          : 'radial-gradient(circle at top right, rgba(13, 148, 136, 0.04), transparent 40%)',
       }}
     >
       <Container maxWidth="lg">
@@ -184,7 +188,9 @@ export const MembershipPage: React.FC = () => {
               fontFamily: 'Outfit, sans-serif',
               fontWeight: 800,
               fontSize: { xs: '2rem', md: '2.8rem' },
-              background: 'linear-gradient(135deg, #ffffff 50%, #2dd4bf 100%)',
+              background: isDark
+                ? 'linear-gradient(135deg, #ffffff 50%, #2dd4bf 100%)'
+                : 'linear-gradient(135deg, #0f172a 50%, #0d9488 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               mb: 1,
@@ -192,13 +198,13 @@ export const MembershipPage: React.FC = () => {
           >
             Thành Viên & Ưu Đãi
           </Typography>
-          <Typography color="rgba(255, 255, 255, 0.6)" variant="body1">
+          <Typography color={isDark ? 'rgba(255, 255, 255, 0.6)' : 'text.secondary'} variant="body1">
             Tích lũy điểm thưởng từ mọi giao dịch, thăng hạng thẻ và đổi hàng ngàn voucher hấp dẫn tại Smart Park.
           </Typography>
         </Box>
 
         {/* Tab Navigation */}
-        <Box sx={{ borderBottom: '1px solid rgba(255, 255, 255, 0.1)', mb: 4 }}>
+        <Box sx={{ borderBottom: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.08)', mb: 4 }}>
           <Tabs
             value={activeTab}
             onChange={(_, val) => dispatch(setActiveTab(val))}
@@ -208,16 +214,16 @@ export const MembershipPage: React.FC = () => {
             scrollButtons="auto"
             sx={{
               '& .MuiTabs-indicator': {
-                bgcolor: '#2dd4bf',
+                bgcolor: isDark ? '#2dd4bf' : 'primary.main',
               },
               '& .MuiTab-root': {
-                color: 'rgba(255, 255, 255, 0.6)',
+                color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'text.secondary',
                 fontWeight: 600,
                 fontSize: '0.95rem',
                 minWidth: 'auto',
                 px: 3,
                 '&.Mui-selected': {
-                  color: '#2dd4bf',
+                  color: isDark ? '#2dd4bf' : 'primary.main',
                 },
               },
             }}

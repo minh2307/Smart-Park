@@ -46,7 +46,7 @@ export const TestimonialSection: React.FC = () => {
 
   // Combine DB feedback with default reviews to ensure a rich carousel list
   const getCombinedTestimonials = (): Testimonial[] => {
-    if (!dbFeedbacks || dbFeedbacks.length === 0) {
+    if (!dbFeedbacks || !Array.isArray(dbFeedbacks) || dbFeedbacks.length === 0) {
       return DEFAULT_TESTIMONIALS;
     }
 

@@ -2,13 +2,14 @@ package com.smartpark.domain.locker.repository;
 
 import com.smartpark.domain.locker.entity.LockerTransaction;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface LockerTransactionRepository extends JpaRepository<LockerTransaction, Long> {
+public interface LockerTransactionRepository extends JpaRepository<LockerTransaction, Long>, JpaSpecificationExecutor<LockerTransaction> {
     Optional<LockerTransaction> findByLockerIdAndStatus(Long lockerId, LockerTransaction.LockerTransactionStatus status);
     List<LockerTransaction> findByCustomerId(Long customerId);
     long countByStatus(LockerTransaction.LockerTransactionStatus status);

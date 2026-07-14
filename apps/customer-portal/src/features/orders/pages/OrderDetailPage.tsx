@@ -17,6 +17,7 @@ import {
   FormControlLabel,
   FormControl,
   FormLabel,
+  useTheme,
 } from '@mui/material';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import PaymentIcon from '@mui/icons-material/Payment';
@@ -38,6 +39,7 @@ import { RefundCard } from '../components/RefundCard';
 import { formatCurrency, formatDate } from '@shared/utils';
 
 export const OrderDetailPage: React.FC = () => {
+  const theme = useTheme();
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const orderId = Number(id);
@@ -80,18 +82,20 @@ export const OrderDetailPage: React.FC = () => {
 
   if (isLoading) {
     return (
-      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '80vh', gap: 2, bgcolor: '#0f172a' }}>
-        <CircularProgress sx={{ color: '#2dd4bf' }} />
-        <Typography variant="body2" color="rgba(255, 255, 255, 0.6)">
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '80vh', gap: 2, bgcolor: 'background.default' }}>
+        <CircularProgress color="primary" />
+        <Typography variant="body2" color="text.secondary">
           Đang tải chi tiết đơn hàng...
         </Typography>
       </Box>
     );
   }
 
+  const isDark = theme.palette.mode === 'dark';
+
   if (error || !order) {
     return (
-      <Box sx={{ minHeight: '100dvh', bgcolor: '#0f172a', py: 6 }}>
+      <Box sx={{ minHeight: '100dvh', bgcolor: 'background.default', py: 6 }}>
         <Container maxWidth="md">
           <Alert severity="error" sx={{ bgcolor: 'rgba(239, 68, 68, 0.1)', color: '#ef4444', borderRadius: 3 }}>
             Không tìm thấy thông tin đơn hàng này. Vui lòng quay lại danh sách giao dịch.
@@ -100,7 +104,14 @@ export const OrderDetailPage: React.FC = () => {
             variant="contained"
             onClick={() => navigate('/orders')}
             startIcon={<KeyboardArrowLeftIcon />}
-            sx={{ mt: 3, bgcolor: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 2 }}
+            sx={{
+              mt: 3,
+              bgcolor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)',
+              border: isDark ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.1)',
+              color: 'text.primary',
+              borderRadius: 2,
+              '&:hover': { bgcolor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' }
+            }}
           >
             Quay lại danh sách
           </Button>
@@ -113,10 +124,12 @@ export const OrderDetailPage: React.FC = () => {
     <Box
       sx={{
         minHeight: '100dvh',
-        bgcolor: '#0f172a',
-        color: '#ffffff',
+        bgcolor: 'background.default',
+        color: 'text.primary',
         py: 6,
-        background: 'radial-gradient(circle at top right, rgba(20, 184, 166, 0.08), transparent 45%)',
+        background: isDark
+          ? 'radial-gradient(circle at top right, rgba(20, 184, 166, 0.08), transparent 45%)'
+          : 'radial-gradient(circle at top right, rgba(13, 148, 136, 0.04), transparent 45%)',
       }}
     >
       <Container maxWidth="lg">
@@ -127,9 +140,9 @@ export const OrderDetailPage: React.FC = () => {
           sx={{
             mb: 4,
             fontWeight: 700,
-            color: 'rgba(255, 255, 255, 0.6)',
+            color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'text.secondary',
             textTransform: 'none',
-            '&:hover': { color: '#ffffff' },
+            '&:hover': { color: isDark ? '#ffffff' : 'text.primary' },
           }}
         >
           Quay lại danh sách giao dịch
@@ -145,14 +158,14 @@ export const OrderDetailPage: React.FC = () => {
                   sx={{
                     fontFamily: 'Outfit, sans-serif',
                     fontWeight: 900,
-                    color: '#ffffff',
+                    color: 'text.primary',
                   }}
                 >
                   Chi tiết đơn hàng: {order.orderCode}
                 </Typography>
                 <OrderStatusChip status={order.status} />
               </Stack>
-              <Typography color="rgba(255, 255, 255, 0.5)" variant="body2" sx={{ mt: 1 }}>
+              <Typography color={isDark ? 'rgba(255, 255, 255, 0.5)' : 'text.secondary'} variant="body2" sx={{ mt: 1 }}>
                 Khởi tạo ngày: {formatDate(order.createdAt)}
               </Typography>
             </Grid>
@@ -184,13 +197,13 @@ export const OrderDetailPage: React.FC = () => {
                   startIcon={<QrCodeIcon />}
                   onClick={() => navigate('/tickets')}
                   sx={{
-                    bgcolor: '#2dd4bf',
-                    color: '#0f172a',
+                    bgcolor: isDark ? '#2dd4bf' : 'primary.main',
+                    color: isDark ? '#0f172a' : '#ffffff',
                     fontWeight: 800,
                     textTransform: 'none',
                     borderRadius: 2.5,
                     px: 3,
-                    '&:hover': { bgcolor: '#0ea5e9', color: '#ffffff' },
+                    '&:hover': { bgcolor: isDark ? '#0ea5e9' : 'primary.dark', color: '#ffffff' },
                   }}
                 >
                   Ví vé của tôi (QR)
@@ -206,7 +219,7 @@ export const OrderDetailPage: React.FC = () => {
           <Grid item xs={12} md={8}>
             <Stack spacing={4}>
               {/* Product items table */}
-              <Card sx={{ bgcolor: 'rgba(30, 41, 59, 0.4)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: 4 }}>
+              <Card sx={{ bgcolor: isDark ? 'rgba(30, 41, 59, 0.4)' : 'background.paper', backdropFilter: 'blur(20px)', border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)', borderRadius: 4 }}>
                 <CardContent sx={{ p: 3 }}>
                   <Typography variant="subtitle1" sx={{ fontWeight: 800, fontFamily: 'Outfit, sans-serif', mb: 2 }}>
                     Chi tiết sản phẩm dịch vụ
@@ -219,24 +232,24 @@ export const OrderDetailPage: React.FC = () => {
                             <Typography variant="body2" sx={{ fontWeight: 700 }}>
                               Vé Vui Chơi Smart Park (Mã loại: {item.referenceId})
                             </Typography>
-                            <Typography variant="caption" color="rgba(255, 255, 255, 0.4)">
+                            <Typography variant="caption" color={isDark ? 'rgba(255, 255, 255, 0.4)' : 'text.secondary'}>
                               Loại hình dịch vụ: {item.itemType}
                             </Typography>
                           </Grid>
                           <Grid item xs={4} sm={2} sx={{ textAlign: { sm: 'center' } }}>
-                            <Typography variant="caption" color="rgba(255, 255, 255, 0.4)" sx={{ display: 'block' }}>Đơn giá</Typography>
+                            <Typography variant="caption" color={isDark ? 'rgba(255, 255, 255, 0.4)' : 'text.secondary'} sx={{ display: 'block' }}>Đơn giá</Typography>
                             <Typography variant="body2" sx={{ fontWeight: 600 }}>{formatCurrency(item.unitPrice)}</Typography>
                           </Grid>
                           <Grid item xs={4} sm={2} sx={{ textAlign: { sm: 'center' } }}>
-                            <Typography variant="caption" color="rgba(255, 255, 255, 0.4)" sx={{ display: 'block' }}>Số lượng</Typography>
+                            <Typography variant="caption" color={isDark ? 'rgba(255, 255, 255, 0.4)' : 'text.secondary'} sx={{ display: 'block' }}>Số lượng</Typography>
                             <Typography variant="body2" sx={{ fontWeight: 600 }}>{item.quantity}</Typography>
                           </Grid>
                           <Grid item xs={4} sm={2} sx={{ textAlign: 'right' }}>
-                            <Typography variant="caption" color="rgba(255, 255, 255, 0.4)" sx={{ display: 'block' }}>Thành tiền</Typography>
-                            <Typography variant="body2" sx={{ fontWeight: 750, color: '#ffffff' }}>{formatCurrency(item.totalPrice)}</Typography>
+                            <Typography variant="caption" color={isDark ? 'rgba(255, 255, 255, 0.4)' : 'text.secondary'} sx={{ display: 'block' }}>Thành tiền</Typography>
+                            <Typography variant="body2" sx={{ fontWeight: 750, color: 'text.primary' }}>{formatCurrency(item.totalPrice)}</Typography>
                           </Grid>
                         </Grid>
-                        <Divider sx={{ borderColor: 'rgba(255, 255, 255, 0.05)', mt: 2 }} />
+                        <Divider sx={{ borderColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)', mt: 2 }} />
                       </Box>
                     ))}
                   </Stack>
@@ -244,7 +257,7 @@ export const OrderDetailPage: React.FC = () => {
               </Card>
 
               {/* Order status tracking timeline */}
-              <Card sx={{ bgcolor: 'rgba(30, 41, 59, 0.4)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: 4 }}>
+              <Card sx={{ bgcolor: isDark ? 'rgba(30, 41, 59, 0.4)' : 'background.paper', backdropFilter: 'blur(20px)', border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)', borderRadius: 4 }}>
                 <CardContent sx={{ p: 3 }}>
                   <OrderTimeline order={order} />
                 </CardContent>
@@ -252,13 +265,13 @@ export const OrderDetailPage: React.FC = () => {
 
               {/* Retry payment selectors (if PENDING) */}
               {order.status === 'PENDING' && (
-                <Card sx={{ bgcolor: 'rgba(30, 41, 59, 0.4)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: 4 }}>
+                <Card sx={{ bgcolor: isDark ? 'rgba(30, 41, 59, 0.4)' : 'background.paper', backdropFilter: 'blur(20px)', border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)', borderRadius: 4 }}>
                   <CardContent sx={{ p: 3 }}>
                     <Typography variant="subtitle1" sx={{ fontWeight: 800, fontFamily: 'Outfit, sans-serif', mb: 2 }}>
                       Hoàn tất thanh toán
                     </Typography>
                     <FormControl component="fieldset">
-                      <FormLabel component="legend" sx={{ color: 'rgba(255, 255, 255, 0.6)', mb: 1, fontSize: '0.85rem' }}>
+                      <FormLabel component="legend" sx={{ color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'text.secondary', mb: 1, fontSize: '0.85rem' }}>
                         Chọn cổng thanh toán điện tử
                       </FormLabel>
                       <RadioGroup
@@ -268,12 +281,12 @@ export const OrderDetailPage: React.FC = () => {
                       >
                         <FormControlLabel
                           value="VNPAY"
-                          control={<Radio sx={{ color: '#2dd4bf', '&.Mui-checked': { color: '#2dd4bf' } }} />}
+                          control={<Radio sx={{ color: isDark ? '#2dd4bf' : 'primary.main', '&.Mui-checked': { color: isDark ? '#2dd4bf' : 'primary.main' } }} />}
                           label="Cổng thanh toán VNPay"
                         />
                         <FormControlLabel
                           value="MOMO"
-                          control={<Radio sx={{ color: '#2dd4bf', '&.Mui-checked': { color: '#2dd4bf' } }} />}
+                          control={<Radio sx={{ color: isDark ? '#2dd4bf' : 'primary.main', '&.Mui-checked': { color: isDark ? '#2dd4bf' : 'primary.main' } }} />}
                           label="Ví điện tử MoMo"
                         />
                       </RadioGroup>
@@ -285,14 +298,14 @@ export const OrderDetailPage: React.FC = () => {
                         onClick={handleRetryPayment}
                         disabled={isRetrying}
                         sx={{
-                          bgcolor: '#2dd4bf',
-                          color: '#0f172a',
+                          bgcolor: isDark ? '#2dd4bf' : 'primary.main',
+                          color: isDark ? '#0f172a' : '#ffffff',
                           fontWeight: 800,
                           px: 4,
                           py: 1.5,
                           borderRadius: 2.5,
                           textTransform: 'none',
-                          '&:hover': { bgcolor: '#0ea5e9', color: '#ffffff' },
+                          '&:hover': { bgcolor: isDark ? '#0ea5e9' : 'primary.dark', color: '#ffffff' },
                           '&:active': { transform: 'scale(0.98)' },
                         }}
                       >
@@ -309,7 +322,7 @@ export const OrderDetailPage: React.FC = () => {
           <Grid item xs={12} md={4}>
             <Stack spacing={4}>
               {/* Customer Profile card */}
-              <Card sx={{ bgcolor: 'rgba(30, 41, 59, 0.4)', backdropFilter: 'blur(20px)', border: '1px solid rgba(255, 255, 255, 0.08)', borderRadius: 4 }}>
+              <Card sx={{ bgcolor: isDark ? 'rgba(30, 41, 59, 0.4)' : 'background.paper', backdropFilter: 'blur(20px)', border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)', borderRadius: 4 }}>
                 <CardContent sx={{ p: 3 }}>
                   <Stack direction="row" spacing={1.5} alignItems="center" sx={{ mb: 2 }}>
                     <Box sx={{ p: 1, bgcolor: 'rgba(14, 165, 233, 0.1)', borderRadius: 2 }}>
@@ -321,16 +334,16 @@ export const OrderDetailPage: React.FC = () => {
                   </Stack>
                   <Stack spacing={1.5}>
                     <Box>
-                      <Typography variant="caption" color="rgba(255, 255, 255, 0.4)" sx={{ display: 'block' }}>Họ tên</Typography>
+                      <Typography variant="caption" color={isDark ? 'rgba(255, 255, 255, 0.4)' : 'text.secondary'} sx={{ display: 'block' }}>Họ tên</Typography>
                       <Typography variant="body2" sx={{ fontWeight: 600 }}>{order.customer?.fullName}</Typography>
                     </Box>
                     <Box>
-                      <Typography variant="caption" color="rgba(255, 255, 255, 0.4)" sx={{ display: 'block' }}>Email liên hệ</Typography>
+                      <Typography variant="caption" color={isDark ? 'rgba(255, 255, 255, 0.4)' : 'text.secondary'} sx={{ display: 'block' }}>Email liên hệ</Typography>
                       <Typography variant="body2" sx={{ fontWeight: 600 }}>{order.customer?.email}</Typography>
                     </Box>
                     {order.customer?.phone && (
                       <Box>
-                        <Typography variant="caption" color="rgba(255, 255, 255, 0.4)" sx={{ display: 'block' }}>Số điện thoại</Typography>
+                        <Typography variant="caption" color={isDark ? 'rgba(255, 255, 255, 0.4)' : 'text.secondary'} sx={{ display: 'block' }}>Số điện thoại</Typography>
                         <Typography variant="body2" sx={{ fontWeight: 600 }}>{order.customer?.phone}</Typography>
                       </Box>
                     )}

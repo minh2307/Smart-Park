@@ -41,7 +41,11 @@ app:
     base-url: http://localhost:8000
     timeout-seconds: 5
 
+  rate-limit:
+    capacity: 10
+
   bigquery:
     enabled: false
     project-id: test-project
     dataset-id: test-dataset
+

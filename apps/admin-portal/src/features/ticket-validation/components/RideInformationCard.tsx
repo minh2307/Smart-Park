@@ -57,7 +57,7 @@ export const RideInformationCard: React.FC<RideInformationCardProps> = ({ ride }
             <Box display="flex" alignItems="center" gap={0.5}>
               <MdHeight />
               <Typography variant="body2" fontWeight="bold">
-                {ride.restrictions?.minHeight ? `>= ${ride.restrictions.minHeight} cm` : 'Tự do'}
+                {(ride.restrictions?.minHeight ?? (ride as any).minHeight) ? `>= ${ride.restrictions?.minHeight ?? (ride as any).minHeight} cm` : 'Tự do'}
               </Typography>
             </Box>
           </Box>
@@ -67,7 +67,7 @@ export const RideInformationCard: React.FC<RideInformationCardProps> = ({ ride }
             <StatusChip status={ride.status} />
           </Box>
 
-          {ride.restrictions?.healthWarning && (
+          {(ride.restrictions?.healthWarning ?? (ride as any).healthWarning) && (
             <Chip
               label="Cảnh báo sức khỏe"
               color="error"

@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const profileValidationSchema = z.zodSchema ? null : z.object({
+export const profileValidationSchema = z.object({
   fullName: z
     .string()
     .min(3, 'Họ và tên phải có ít nhất 3 ký tự')

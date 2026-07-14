@@ -32,6 +32,9 @@ public class AuthService {
     private final SecurityAuditService securityAuditService;
     private final UserDetailsService userDetailsService;
     private final com.smartpark.domain.employee.repository.EmployeeRepository employeeRepository;
+    private final com.smartpark.domain.customer.repository.CustomerRepository customerRepository;
+    private final com.smartpark.domain.membership.repository.MembershipRepository membershipRepository;
+    private final com.smartpark.domain.membership.repository.MembershipTierRepository membershipTierRepository;
 
     private static final int MAX_FAILED_ATTEMPTS = 5;
     private static final int LOCK_TIME_DURATION = 15; // minutes
@@ -101,6 +104,33 @@ public class AuthService {
 
         User saved = userRepository.save(user);
         
+        // Auto-create Customer profile for new CUSTOMER users (enables membership/order lookups)
+        com.smartpark.domain.customer.entity.Customer customer = com.smartpark.domain.customer.entity.Customer.builder()
+                .userId(saved.getId())
+                .fullName(request.getUsername())
+                .status(com.smartpark.domain.customer.entity.Customer.CustomerStatus.ACTIVE)
+                .build();
+        com.smartpark.domain.customer.entity.Customer savedCustomer = customerRepository.save(customer);
+
+        // Auto-assign default (Bronze) membership tier
+        var defaultTier = membershipTierRepository.findAll().stream()
+                .filter(t -> t.getMinSpend() != null)
+                .min(java.util.Comparator.comparing(t -> t.getMinSpend()))
+                .orElse(null);
+        if (defaultTier != null) {
+            String membershipCode = "MBR-" + java.util.UUID.randomUUID().toString().replace("-", "").substring(0, 8).toUpperCase();
+            com.smartpark.domain.membership.entity.Membership membership = com.smartpark.domain.membership.entity.Membership.builder()
+                    .customer(savedCustomer)
+                    .tier(defaultTier)
+                    .membershipCode(membershipCode)
+                    .points(0L)
+                    .joinDate(java.time.LocalDate.now())
+                    .status(com.smartpark.domain.membership.entity.Membership.MembershipStatus.ACTIVE)
+                    .build();
+            membershipRepository.save(membership);
+            log.info("[MEMBERSHIP AUTO-CREATED] customerId={} code={}", savedCustomer.getId(), membershipCode);
+        }
+
         log.info("[USER REGISTERED] username={}", saved.getUsername());
 
         AuthDto.UserResponse response = new AuthDto.UserResponse();
@@ -157,6 +187,13 @@ public class AuthService {
             }
         }
         response.setFullName(fullName);
+        
+        // Populate customerId and phone from Customer record
+        var customerOpt = customerRepository.findByUserId(user.getId());
+        if (customerOpt.isPresent()) {
+            response.setCustomerId(customerOpt.get().getId());
+            response.setPhone(customerOpt.get().getPhone());
+        }
         
         // Collect permission codes
         java.util.List<String> permissionsList = java.util.Collections.emptyList();
@@ -282,6 +319,15 @@ public class AuthService {
             employee.setPhone(request.getPhone());
             employee.setEmail(request.getEmail());
             employeeRepository.save(employee);
+        }
+
+        // Also update Customer profile (for CUSTOMER role users)
+        var customerOpt = customerRepository.findByUserId(user.getId());
+        if (customerOpt.isPresent()) {
+            var cust = customerOpt.get();
+            if (request.getFullName() != null) cust.setFullName(request.getFullName());
+            if (request.getPhone() != null) cust.setPhone(request.getPhone());
+            customerRepository.save(cust);
         }
 
         return getMe(username);

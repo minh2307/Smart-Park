@@ -159,6 +159,8 @@ export const ProfilePage: React.FC = () => {
     }
   };
 
+  const isDark = theme.palette.mode === 'dark';
+
   if (isLoadingCustomer) {
     return (
       <Container maxWidth="lg" sx={{ py: 6 }}>
@@ -171,10 +173,12 @@ export const ProfilePage: React.FC = () => {
     <Box
       sx={{
         minHeight: '85vh',
-        bgcolor: '#0f172a',
-        color: '#ffffff',
+        bgcolor: 'background.default',
+        color: 'text.primary',
         py: 6,
-        background: 'radial-gradient(circle at top right, rgba(45, 212, 191, 0.08), transparent 45%)',
+        background: isDark
+          ? 'radial-gradient(circle at top right, rgba(45, 212, 191, 0.08), transparent 45%)'
+          : 'radial-gradient(circle at top right, rgba(13, 148, 136, 0.04), transparent 45%)',
       }}
     >
       <Container maxWidth="lg">
@@ -185,7 +189,9 @@ export const ProfilePage: React.FC = () => {
               fontFamily: 'Outfit, sans-serif',
               fontWeight: 800,
               fontSize: { xs: '2rem', md: '2.8rem' },
-              background: 'linear-gradient(135deg, #ffffff 50%, #2dd4bf 100%)',
+              background: isDark
+                ? 'linear-gradient(135deg, #ffffff 50%, #2dd4bf 100%)'
+                : 'linear-gradient(135deg, #0f172a 50%, #0d9488 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               mb: 1,
@@ -193,7 +199,7 @@ export const ProfilePage: React.FC = () => {
           >
             Quản Lý Tài Khoản
           </Typography>
-          <Typography color="rgba(255, 255, 255, 0.6)" variant="body1">
+          <Typography color={isDark ? 'rgba(255, 255, 255, 0.6)' : 'text.secondary'} variant="body1">
             Xem thông tin cá nhân, quản lý tùy chọn bảo mật và cấu hình thông báo tài khoản của bạn.
           </Typography>
         </Box>
@@ -214,13 +220,13 @@ export const ProfilePage: React.FC = () => {
           <Grid item xs={12} md={8}>
             <Card
               sx={{
-                bgcolor: 'rgba(30, 41, 59, 0.3)',
-                border: '1px solid rgba(255,255,255,0.08)',
+                bgcolor: isDark ? 'rgba(30, 41, 59, 0.3)' : 'background.paper',
+                border: isDark ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(0, 0, 0, 0.08)',
                 borderRadius: 4,
                 mb: 4,
               }}
             >
-              <Box sx={{ borderBottom: '1px solid rgba(255, 255, 255, 0.1)' }}>
+              <Box sx={{ borderBottom: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.08)' }}>
                 <Tabs
                   value={activeTab}
                   onChange={(_, val) => setActiveTab(val)}
@@ -229,12 +235,12 @@ export const ProfilePage: React.FC = () => {
                   variant="scrollable"
                   scrollButtons="auto"
                   sx={{
-                    '& .MuiTabs-indicator': { bgcolor: '#2dd4bf' },
+                    '& .MuiTabs-indicator': { bgcolor: isDark ? '#2dd4bf' : 'primary.main' },
                     '& .MuiTab-root': {
-                      color: 'rgba(255, 255, 255, 0.6)',
+                      color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'text.secondary',
                       fontWeight: 600,
                       fontSize: '0.9rem',
-                      '&.Mui-selected': { color: '#2dd4bf' },
+                      '&.Mui-selected': { color: isDark ? '#2dd4bf' : 'primary.main' },
                     },
                   }}
                 >

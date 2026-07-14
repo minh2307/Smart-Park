@@ -32,6 +32,7 @@ import type { Ticket, TicketStatus } from '../types/my-ticket.types';
 
 export const MyTicketsPage: React.FC = () => {
   const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
   const navigate = useNavigate();
   
   // Auth details
@@ -130,10 +131,10 @@ export const MyTicketsPage: React.FC = () => {
           label: 'Đã sử dụng',
           color: 'default' as const,
           sx: {
-            bgcolor: 'rgba(255, 255, 255, 0.05)',
-            color: 'rgba(255, 255, 255, 0.5)',
+            bgcolor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)',
+            color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'text.secondary',
             fontWeight: 'bold',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
+            border: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.1)',
           },
         };
       case 'EXPIRED':
@@ -172,10 +173,12 @@ export const MyTicketsPage: React.FC = () => {
     <Box
       sx={{
         minHeight: '85vh',
-        bgcolor: '#0f172a',
-        color: '#ffffff',
+        bgcolor: 'background.default',
+        color: 'text.primary',
         py: 6,
-        background: 'radial-gradient(circle at top right, rgba(20, 184, 166, 0.08), transparent 40%)',
+        background: isDark
+          ? 'radial-gradient(circle at top right, rgba(20, 184, 166, 0.08), transparent 40%)'
+          : 'radial-gradient(circle at top right, rgba(13, 148, 136, 0.04), transparent 40%)',
       }}
     >
       <Container maxWidth="lg">
@@ -186,7 +189,9 @@ export const MyTicketsPage: React.FC = () => {
               fontFamily: 'Outfit, sans-serif',
               fontWeight: 800,
               fontSize: { xs: '2rem', md: '2.8rem' },
-              background: 'linear-gradient(135deg, #ffffff 50%, #2dd4bf 100%)',
+              background: isDark
+                ? 'linear-gradient(135deg, #ffffff 50%, #2dd4bf 100%)'
+                : 'linear-gradient(135deg, #0f172a 50%, #0d9488 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               mb: 1,
@@ -194,7 +199,7 @@ export const MyTicketsPage: React.FC = () => {
           >
             Ví Vé Điện Tử
           </Typography>
-          <Typography color="rgba(255, 255, 255, 0.6)" variant="body1">
+          <Typography color={isDark ? 'rgba(255, 255, 255, 0.6)' : 'text.secondary'} variant="body1">
             Quản lý các vé tham quan, trải nghiệm và QR check-in cổng tự động của bạn tại Smart Park.
           </Typography>
         </Box>
@@ -202,22 +207,22 @@ export const MyTicketsPage: React.FC = () => {
         {/* Stats Grid */}
         <Grid container spacing={3} sx={{ mb: 5 }}>
           {[
-            { label: 'Tổng số vé', count: stats.total, color: '#ffffff' },
-            { label: 'Vé chưa sử dụng', count: stats.active, color: '#2dd4bf' },
+            { label: 'Tổng số vé', count: stats.total, color: isDark ? '#ffffff' : 'text.primary' },
+            { label: 'Vé chưa sử dụng', count: stats.active, color: isDark ? '#2dd4bf' : 'primary.main' },
             { label: 'Đã check-in/sử dụng', count: stats.used, color: '#0ea5e9' },
-            { label: 'Đã hết hạn/hủy', count: stats.other, color: '#94a3b8' },
+            { label: 'Đã hết hạn/hủy', count: stats.other, color: isDark ? '#94a3b8' : 'text.secondary' },
           ].map((item, idx) => (
             <Grid item xs={6} md={3} key={idx}>
               <Card
                 sx={{
-                  bgcolor: 'rgba(30, 41, 59, 0.6)',
+                  bgcolor: isDark ? 'rgba(30, 41, 59, 0.6)' : 'background.paper',
                   backdropFilter: 'blur(20px)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)',
                   borderRadius: 3,
                 }}
               >
                 <CardContent sx={{ py: 2.5, '&:last-child': { pb: 2.5 } }}>
-                  <Typography variant="body2" color="rgba(255, 255, 255, 0.5)" sx={{ mb: 0.5 }}>
+                  <Typography variant="body2" color={isDark ? 'rgba(255, 255, 255, 0.5)' : 'text.secondary'} sx={{ mb: 0.5 }}>
                     {item.label}
                   </Typography>
                   <Typography
@@ -225,10 +230,10 @@ export const MyTicketsPage: React.FC = () => {
                     sx={{
                       fontFamily: 'Outfit, sans-serif',
                       fontWeight: 700,
-                      color: item.color,
+                      color: item.color === 'text.primary' ? 'text.primary' : item.color === 'text.secondary' ? 'text.secondary' : item.color,
                     }}
                   >
-                    {isLoading ? <Skeleton width={40} sx={{ bgcolor: 'rgba(255,255,255,0.1)' }} /> : item.count}
+                    {isLoading ? <Skeleton width={40} /> : item.count}
                   </Typography>
                 </CardContent>
               </Card>
@@ -245,7 +250,7 @@ export const MyTicketsPage: React.FC = () => {
             alignItems: { xs: 'stretch', md: 'center' },
             gap: 3,
             mb: 4,
-            borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
+            borderBottom: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.08)',
             pb: 2,
           }}
         >
@@ -258,16 +263,16 @@ export const MyTicketsPage: React.FC = () => {
             scrollButtons="auto"
             sx={{
               '& .MuiTabs-indicator': {
-                bgcolor: '#2dd4bf',
+                bgcolor: isDark ? '#2dd4bf' : 'primary.main',
               },
               '& .MuiTab-root': {
-                color: 'rgba(255, 255, 255, 0.6)',
+                color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'text.secondary',
                 fontWeight: 600,
                 fontSize: '0.95rem',
                 minWidth: 'auto',
                 px: 3,
                 '&.Mui-selected': {
-                  color: '#2dd4bf',
+                  color: isDark ? '#2dd4bf' : 'primary.main',
                 },
               },
             }}
@@ -287,18 +292,18 @@ export const MyTicketsPage: React.FC = () => {
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
-                    <SearchIcon sx={{ color: 'rgba(255, 255, 255, 0.4)' }} />
+                    <SearchIcon sx={{ color: isDark ? 'rgba(255, 255, 255, 0.4)' : 'text.secondary' }} />
                   </InputAdornment>
                 ),
               }}
               sx={{
                 flexGrow: 1,
                 '& .MuiOutlinedInput-root': {
-                  color: '#ffffff',
-                  bgcolor: 'rgba(30, 41, 59, 0.4)',
-                  '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.1)' },
-                  '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
-                  '&.Mui-focused fieldset': { borderColor: '#2dd4bf' },
+                  color: 'text.primary',
+                  bgcolor: isDark ? 'rgba(30, 41, 59, 0.4)' : 'background.paper',
+                  '& fieldset': { borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.15)' },
+                  '&:hover fieldset': { borderColor: isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.25)' },
+                  '&.Mui-focused fieldset': { borderColor: isDark ? '#2dd4bf' : 'primary.main' },
                 },
               }}
             />
@@ -311,11 +316,11 @@ export const MyTicketsPage: React.FC = () => {
               sx={{
                 width: { sm: 160 },
                 '& .MuiOutlinedInput-root': {
-                  color: '#ffffff',
-                  bgcolor: 'rgba(30, 41, 59, 0.4)',
-                  '& fieldset': { borderColor: 'rgba(255, 255, 255, 0.1)' },
-                  '&:hover fieldset': { borderColor: 'rgba(255, 255, 255, 0.2)' },
-                  '&.Mui-focused fieldset': { borderColor: '#2dd4bf' },
+                  color: 'text.primary',
+                  bgcolor: isDark ? 'rgba(30, 41, 59, 0.4)' : 'background.paper',
+                  '& fieldset': { borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.15)' },
+                  '&:hover fieldset': { borderColor: isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.25)' },
+                  '&.Mui-focused fieldset': { borderColor: isDark ? '#2dd4bf' : 'primary.main' },
                 },
               }}
             >
@@ -326,7 +331,7 @@ export const MyTicketsPage: React.FC = () => {
         </Box>
 
         {/* Error State */}
-        {error && (
+        {!!error && (
           <Alert severity="error" sx={{ mb: 4, bgcolor: 'rgba(211, 47, 47, 0.1)', color: '#f44336' }}>
             Không thể tải danh sách vé. Vui lòng thử lại sau.
           </Alert>
@@ -337,12 +342,12 @@ export const MyTicketsPage: React.FC = () => {
           <Grid container spacing={3}>
             {Array.from({ length: 4 }).map((_, idx) => (
               <Grid item xs={12} sm={6} md={4} key={idx}>
-                <Card sx={{ bgcolor: 'rgba(30, 41, 59, 0.4)', border: '1px solid rgba(255,255,255,0.05)', height: 260 }}>
+                <Card sx={{ bgcolor: isDark ? 'rgba(30, 41, 59, 0.4)' : 'background.paper', border: isDark ? '1px solid rgba(255,255,255,0.05)' : '1px solid rgba(0,0,0,0.08)', height: 260 }}>
                   <CardContent>
-                    <Skeleton variant="rectangular" height={24} width="40%" sx={{ bgcolor: 'rgba(255,255,255,0.05)', mb: 2 }} />
-                    <Skeleton variant="rectangular" height={36} width="80%" sx={{ bgcolor: 'rgba(255,255,255,0.05)', mb: 2 }} />
-                    <Skeleton variant="text" sx={{ bgcolor: 'rgba(255,255,255,0.05)', mb: 1 }} />
-                    <Skeleton variant="text" sx={{ bgcolor: 'rgba(255,255,255,0.05)' }} />
+                    <Skeleton variant="rectangular" height={24} width="40%" sx={{ mb: 2 }} />
+                    <Skeleton variant="rectangular" height={36} width="80%" sx={{ mb: 2 }} />
+                    <Skeleton variant="text" sx={{ mb: 1 }} />
+                    <Skeleton variant="text" />
                   </CardContent>
                 </Card>
               </Grid>
@@ -359,11 +364,11 @@ export const MyTicketsPage: React.FC = () => {
               textAlign: 'center',
             }}
           >
-            <ConfirmationNumberIcon sx={{ fontSize: 80, color: 'rgba(255, 255, 255, 0.1)', mb: 3 }} />
+            <ConfirmationNumberIcon sx={{ fontSize: 80, color: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)', mb: 3 }} />
             <Typography variant="h5" sx={{ fontWeight: 600, mb: 1 }}>
               Không tìm thấy vé nào
             </Typography>
-            <Typography variant="body1" color="rgba(255, 255, 255, 0.5)" sx={{ mb: 4, maxWidth: 400 }}>
+            <Typography variant="body1" color={isDark ? 'rgba(255, 255, 255, 0.5)' : 'text.secondary'} sx={{ mb: 4, maxWidth: 400 }}>
               {searchQuery
                 ? 'Không tìm thấy vé trùng khớp với từ khóa tìm kiếm. Vui lòng kiểm tra lại.'
                 : 'Bạn chưa có vé nào trong ví của mình. Hãy mua vé để bắt đầu hành trình.'}
@@ -389,139 +394,142 @@ export const MyTicketsPage: React.FC = () => {
                   sm={6}
                   md={4}
                   key={ticket.id}
-                  component={motion.div}
-                  layout
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
-                  transition={{ duration: 0.4 }}
                 >
-                  <Card
-                    sx={{
-                      height: '100%',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      bgcolor: 'rgba(30, 41, 59, 0.4)',
-                      backdropFilter: 'blur(20px)',
-                      border: '1px solid rgba(255, 255, 255, 0.08)',
-                      borderRadius: 4,
-                      position: 'relative',
-                      overflow: 'hidden',
-                      transition: 'all 0.3s ease-in-out',
-                      '&:hover': {
-                        transform: 'translateY(-6px)',
-                        borderColor: ticket.status === 'PAID' ? 'rgba(45, 212, 191, 0.5)' : 'rgba(255, 255, 255, 0.15)',
-                        boxShadow: ticket.status === 'PAID'
-                          ? '0 12px 30px rgba(45, 212, 191, 0.15)'
-                          : '0 12px 30px rgba(0, 0, 0, 0.25)',
-                      },
-                    }}
+                  <motion.div
+                    layout
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, scale: 0.95 }}
+                    transition={{ duration: 0.4 }}
+                    style={{ height: '100%' }}
                   >
-                    {/* Glowing highlight for active ticket */}
-                    {ticket.status === 'PAID' && (
-                      <Box
-                        sx={{
-                          position: 'absolute',
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          height: 3,
-                          background: 'linear-gradient(90deg, #2dd4bf, #0ea5e9)',
-                        }}
-                      />
-                    )}
-
-                    <CardContent sx={{ p: 3, flexGrow: 1 }}>
-                      {/* Top Bar with Status and Code */}
-                      <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2.5 }}>
-                        <Chip size="small" {...getStatusChipProps(ticket.status)} />
-                        <Typography
-                          variant="caption"
+                    <Card
+                      sx={{
+                        height: '100%',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        bgcolor: isDark ? 'rgba(30, 41, 59, 0.4)' : 'background.paper',
+                        backdropFilter: 'blur(20px)',
+                        border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)',
+                        borderRadius: 4,
+                        position: 'relative',
+                        overflow: 'hidden',
+                        transition: 'all 0.3s ease-in-out',
+                        '&:hover': {
+                          transform: 'translateY(-6px)',
+                          borderColor: ticket.status === 'PAID' ? (isDark ? 'rgba(45, 212, 191, 0.5)' : 'rgba(13, 148, 136, 0.5)') : (isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.15)'),
+                          boxShadow: ticket.status === 'PAID'
+                            ? (isDark ? '0 12px 30px rgba(45, 212, 191, 0.15)' : '0 12px 30px rgba(13, 148, 136, 0.15)')
+                            : (isDark ? '0 12px 30px rgba(0, 0, 0, 0.25)' : '0 12px 30px rgba(0, 0, 0, 0.08)'),
+                        },
+                      }}
+                    >
+                      {/* Glowing highlight for active ticket */}
+                      {ticket.status === 'PAID' && (
+                        <Box
                           sx={{
-                            fontFamily: 'monospace',
-                            color: 'rgba(255, 255, 255, 0.4)',
-                            letterSpacing: '0.05em',
-                            fontWeight: 'bold',
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            height: 3,
+                            background: 'linear-gradient(90deg, #2dd4bf, #0ea5e9)',
+                          }}
+                        />
+                      )}
+
+                      <CardContent sx={{ p: 3, flexGrow: 1 }}>
+                        {/* Top Bar with Status and Code */}
+                        <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2.5 }}>
+                          <Chip size="small" {...getStatusChipProps(ticket.status)} />
+                          <Typography
+                            variant="caption"
+                            sx={{
+                              fontFamily: 'monospace',
+                              color: isDark ? 'rgba(255, 255, 255, 0.4)' : 'text.secondary',
+                              letterSpacing: '0.05em',
+                              fontWeight: 'bold',
+                            }}
+                          >
+                            {ticket.ticketCode}
+                          </Typography>
+                        </Stack>
+
+                        {/* Ticket Type Name */}
+                        <Typography
+                          variant="h6"
+                          sx={{
+                            fontFamily: 'Outfit, sans-serif',
+                            fontWeight: 700,
+                            lineHeight: 1.3,
+                            mb: 1.5,
+                            height: 56,
+                            display: '-webkit-box',
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: 'vertical',
+                            overflow: 'hidden',
                           }}
                         >
-                          {ticket.ticketCode}
+                          {ticket.ticketType.name}
                         </Typography>
-                      </Stack>
 
-                      {/* Ticket Type Name */}
-                      <Typography
-                        variant="h6"
-                        sx={{
-                          fontFamily: 'Outfit, sans-serif',
-                          fontWeight: 700,
-                          lineHeight: 1.3,
-                          mb: 1.5,
-                          height: 56,
-                          display: '-webkit-box',
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: 'vertical',
-                          overflow: 'hidden',
-                        }}
-                      >
-                        {ticket.ticketType.name}
-                      </Typography>
+                        {/* Visit Date */}
+                        <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1.5, color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'text.secondary' }}>
+                          <EventIcon sx={{ fontSize: 18, color: isDark ? '#2dd4bf' : 'primary.main' }} />
+                          <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                            Hạn sử dụng: {ticket.validDate}
+                          </Typography>
+                        </Stack>
 
-                      {/* Visit Date */}
-                      <Stack direction="row" spacing={1} alignItems="center" sx={{ mb: 1.5, color: 'rgba(255, 255, 255, 0.6)' }}>
-                        <EventIcon sx={{ fontSize: 18, color: '#2dd4bf' }} />
-                        <Typography variant="body2" sx={{ fontWeight: 500 }}>
-                          Hạn sử dụng: {ticket.validDate}
+                        {/* Venue Details */}
+                        <Typography variant="body2" color={isDark ? 'rgba(255, 255, 255, 0.4)' : 'text.secondary'} sx={{ mb: 1 }}>
+                          Công viên số {ticket.ticketType.venueId}
                         </Typography>
-                      </Stack>
+                      </CardContent>
 
-                      {/* Venue Details */}
-                      <Typography variant="body2" color="rgba(255, 255, 255, 0.4)" sx={{ mb: 1 }}>
-                        Công viên số {ticket.ticketType.venueId}
-                      </Typography>
-                    </CardContent>
-
-                    <CardActions sx={{ p: 3, pt: 0 }}>
-                      <Stack direction="row" spacing={1.5} sx={{ width: '100%' }}>
-                        {ticket.status === 'PAID' ? (
-                          <Button
-                            variant="contained"
-                            color="secondary"
-                            fullWidth
-                            startIcon={<QrCodeIcon />}
-                            onClick={() => navigate(`/wallet/ticket/${ticket.ticketCode}`)}
-                            sx={{
-                              fontWeight: 'bold',
-                              color: '#0f172a',
-                              bgcolor: '#2dd4bf',
-                              '&:hover': {
-                                bgcolor: '#0d9488',
-                              },
-                            }}
-                          >
-                            Dùng Vé (QR)
-                          </Button>
-                        ) : (
-                          <Button
-                            variant="outlined"
-                            fullWidth
-                            endIcon={<ArrowForwardIcon />}
-                            onClick={() => navigate(`/wallet/ticket/${ticket.ticketCode}`)}
-                            sx={{
-                              fontWeight: 'bold',
-                              borderColor: 'rgba(255, 255, 255, 0.1)',
-                              color: 'rgba(255, 255, 255, 0.8)',
-                              '&:hover': {
-                                borderColor: 'rgba(255, 255, 255, 0.2)',
-                                bgcolor: 'rgba(255, 255, 255, 0.05)',
-                              },
-                            }}
-                          >
-                            Xem Chi Tiết
-                          </Button>
-                        )}
-                      </Stack>
-                    </CardActions>
-                  </Card>
+                      <CardActions sx={{ p: 3, pt: 0 }}>
+                        <Stack direction="row" spacing={1.5} sx={{ width: '100%' }}>
+                          {ticket.status === 'PAID' ? (
+                            <Button
+                              variant="contained"
+                              color="secondary"
+                              fullWidth
+                              startIcon={<QrCodeIcon />}
+                              onClick={() => navigate(`/wallet/ticket/${ticket.ticketCode}`)}
+                              sx={{
+                                fontWeight: 'bold',
+                                color: isDark ? '#0f172a' : '#ffffff',
+                                bgcolor: isDark ? '#2dd4bf' : 'primary.main',
+                                '&:hover': {
+                                  bgcolor: isDark ? '#0d9488' : 'primary.dark',
+                                },
+                              }}
+                            >
+                              Dùng Vé (QR)
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="outlined"
+                              fullWidth
+                              endIcon={<ArrowForwardIcon />}
+                              onClick={() => navigate(`/wallet/ticket/${ticket.ticketCode}`)}
+                              sx={{
+                                fontWeight: 'bold',
+                                borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.12)',
+                                color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'text.primary',
+                                '&:hover': {
+                                  borderColor: isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+                                  bgcolor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.04)',
+                                },
+                              }}
+                            >
+                              Xem Chi Tiết
+                            </Button>
+                          )}
+                        </Stack>
+                      </CardActions>
+                    </Card>
+                  </motion.div>
                 </Grid>
               ))}
             </AnimatePresence>

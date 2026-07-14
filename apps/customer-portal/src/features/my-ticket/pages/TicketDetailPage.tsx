@@ -16,6 +16,7 @@ import {
   Alert,
   LinearProgress,
   Paper,
+  useTheme,
 } from '@mui/material';
 import { motion } from 'framer-motion';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -37,6 +38,8 @@ import type { TicketStatus } from '../types/my-ticket.types';
 export const TicketDetailPage: React.FC = () => {
   const { ticketCode } = useParams<{ ticketCode: string }>();
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
 
   // QR security state
   const [qrToken, setQrToken] = useState('');
@@ -204,11 +207,13 @@ export const TicketDetailPage: React.FC = () => {
   return (
     <Box
       sx={{
-        bgcolor: '#0f172a',
-        color: '#ffffff',
+        bgcolor: 'background.default',
+        color: 'text.primary',
         py: 6,
         minHeight: '90vh',
-        background: 'radial-gradient(circle at top right, rgba(20, 184, 166, 0.08), transparent 40%)',
+        background: isDark
+          ? 'radial-gradient(circle at top right, rgba(20, 184, 166, 0.08), transparent 40%)'
+          : 'radial-gradient(circle at top right, rgba(13, 148, 136, 0.04), transparent 40%)',
         // Hide sidebar/layout during browser print view
         '@media print': {
           bgcolor: '#ffffff',
@@ -225,9 +230,9 @@ export const TicketDetailPage: React.FC = () => {
             startIcon={<ArrowBackIcon />}
             onClick={() => navigate('/wallet')}
             sx={{
-              color: 'rgba(255, 255, 255, 0.7)',
+              color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'text.secondary',
               fontWeight: 600,
-              '&:hover': { color: '#2dd4bf' },
+              '&:hover': { color: isDark ? '#2dd4bf' : 'primary.main' },
             }}
           >
             Quay lại ví vé
@@ -239,9 +244,12 @@ export const TicketDetailPage: React.FC = () => {
               startIcon={<PrintIcon />}
               onClick={handlePrint}
               sx={{
-                borderColor: 'rgba(255, 255, 255, 0.1)',
-                color: 'rgba(255, 255, 255, 0.8)',
-                '&:hover': { borderColor: 'rgba(255, 255, 255, 0.2)' },
+                borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.12)',
+                color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'text.primary',
+                '&:hover': {
+                  borderColor: isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+                  bgcolor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.04)',
+                },
               }}
             >
               In Vé
@@ -270,9 +278,9 @@ export const TicketDetailPage: React.FC = () => {
               {/* Ticket Voucher Block */}
               <Card
                 sx={{
-                  bgcolor: 'rgba(30, 41, 59, 0.4)',
+                  bgcolor: isDark ? 'rgba(30, 41, 59, 0.4)' : 'background.paper',
                   backdropFilter: 'blur(20px)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)',
                   borderRadius: 4,
                   overflow: 'hidden',
                   '@media print': {
@@ -289,8 +297,10 @@ export const TicketDetailPage: React.FC = () => {
                   sx={{
                     px: 4,
                     py: 3,
-                    background: 'linear-gradient(90deg, rgba(20, 184, 166, 0.15), rgba(14, 165, 233, 0.15))',
-                    borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                    background: isDark
+                      ? 'linear-gradient(90deg, rgba(20, 184, 166, 0.15), rgba(14, 165, 233, 0.15))'
+                      : 'linear-gradient(90deg, rgba(20, 184, 166, 0.06), rgba(14, 165, 233, 0.06))',
+                    borderBottom: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)',
                     display: 'flex',
                     justifyContent: 'space-between',
                     alignItems: 'center',
@@ -310,7 +320,7 @@ export const TicketDetailPage: React.FC = () => {
                     >
                       THẺ RA VÀO SMART PARK
                     </Typography>
-                    <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.4)', '@media print': { color: '#666666' } }}>
+                    <Typography variant="caption" sx={{ color: isDark ? 'rgba(255,255,255,0.4)' : 'text.secondary', '@media print': { color: '#666666' } }}>
                       Mã vé: {ticket.ticketCode}
                     </Typography>
                   </Stack>
@@ -323,7 +333,7 @@ export const TicketDetailPage: React.FC = () => {
                     sx={{
                       fontFamily: 'Outfit, sans-serif',
                       fontWeight: 800,
-                      color: '#ffffff',
+                      color: 'text.primary',
                       mb: 3,
                       '@media print': { color: '#000000' },
                     }}
@@ -333,7 +343,7 @@ export const TicketDetailPage: React.FC = () => {
 
                   <Grid container spacing={3}>
                     <Grid item xs={12} sm={6}>
-                      <Typography variant="body2" color="rgba(255, 255, 255, 0.4)" sx={{ mb: 0.5, '@media print': { color: '#666666' } }}>
+                      <Typography variant="body2" color={isDark ? 'rgba(255, 255, 255, 0.4)' : 'text.secondary'} sx={{ mb: 0.5, '@media print': { color: '#666666' } }}>
                         Khách hàng
                       </Typography>
                       <Typography variant="body1" sx={{ fontWeight: 600 }}>
@@ -341,11 +351,11 @@ export const TicketDetailPage: React.FC = () => {
                       </Typography>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <Typography variant="body2" color="rgba(255, 255, 255, 0.4)" sx={{ mb: 0.5, '@media print': { color: '#666666' } }}>
+                      <Typography variant="body2" color={isDark ? 'rgba(255, 255, 255, 0.4)' : 'text.secondary'} sx={{ mb: 0.5, '@media print': { color: '#666666' } }}>
                         Hạn sử dụng
                       </Typography>
                       <Stack direction="row" spacing={1} alignItems="center">
-                        <EventIcon sx={{ fontSize: 18, color: '#2dd4bf', '@media print': { color: '#000000' } }} />
+                        <EventIcon sx={{ fontSize: 18, color: isDark ? '#2dd4bf' : 'primary.main', '@media print': { color: '#000000' } }} />
                         <Typography variant="body1" sx={{ fontWeight: 600 }}>
                           {ticket.validDate}
                         </Typography>
@@ -353,11 +363,11 @@ export const TicketDetailPage: React.FC = () => {
                     </Grid>
 
                     <Grid item xs={12}>
-                      <Divider sx={{ borderColor: 'rgba(255,255,255,0.08)', my: 1, '@media print': { borderColor: '#000000' } }} />
+                      <Divider sx={{ borderColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)', my: 1, '@media print': { borderColor: '#000000' } }} />
                     </Grid>
 
                     <Grid item xs={12} sm={6}>
-                      <Typography variant="body2" color="rgba(255, 255, 255, 0.4)" sx={{ mb: 0.5, '@media print': { color: '#666666' } }}>
+                      <Typography variant="body2" color={isDark ? 'rgba(255, 255, 255, 0.4)' : 'text.secondary'} sx={{ mb: 0.5, '@media print': { color: '#666666' } }}>
                         Mã Booking
                       </Typography>
                       <Typography variant="body1" sx={{ fontWeight: 600, fontFamily: 'monospace' }}>
@@ -365,10 +375,10 @@ export const TicketDetailPage: React.FC = () => {
                       </Typography>
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                      <Typography variant="body2" color="rgba(255, 255, 255, 0.4)" sx={{ mb: 0.5, '@media print': { color: '#666666' } }}>
+                      <Typography variant="body2" color={isDark ? 'rgba(255, 255, 255, 0.4)' : 'text.secondary'} sx={{ mb: 0.5, '@media print': { color: '#666666' } }}>
                         Trạng thái thanh toán
                       </Typography>
-                      <Typography variant="body1" sx={{ fontWeight: 600, color: '#2dd4bf', '@media print': { color: '#000000' } }}>
+                      <Typography variant="body1" sx={{ fontWeight: 600, color: isDark ? '#2dd4bf' : 'primary.main', '@media print': { color: '#000000' } }}>
                         ĐÃ THANH TOÁN (VNPAY)
                       </Typography>
                     </Grid>
@@ -398,8 +408,8 @@ export const TicketDetailPage: React.FC = () => {
               {/* Timeline Verification Logs */}
               <Card
                 sx={{
-                  bgcolor: 'rgba(30, 41, 59, 0.4)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  bgcolor: isDark ? 'rgba(30, 41, 59, 0.4)' : 'background.paper',
+                  border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)',
                   borderRadius: 4,
                   p: 3,
                   '@media print': { display: 'none' },
@@ -418,7 +428,7 @@ export const TicketDetailPage: React.FC = () => {
                       bottom: 10,
                       left: 10,
                       width: 2,
-                      bgcolor: 'rgba(255, 255, 255, 0.1)',
+                      bgcolor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)',
                     }}
                   />
 
@@ -440,7 +450,7 @@ export const TicketDetailPage: React.FC = () => {
                       <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
                         Khởi tạo đơn hàng & Đặt vé thành công
                       </Typography>
-                      <Typography variant="caption" color="rgba(255, 255, 255, 0.4)">
+                      <Typography variant="caption" color={isDark ? 'rgba(255, 255, 255, 0.4)' : 'text.secondary'}>
                         {ticket.createdAt}
                       </Typography>
                     </Box>
@@ -456,16 +466,16 @@ export const TicketDetailPage: React.FC = () => {
                         width: 14,
                         height: 14,
                         borderRadius: '50%',
-                        bgcolor: ticket.status !== 'RESERVED' ? '#2dd4bf' : 'rgba(255,255,255,0.1)',
-                        boxShadow: ticket.status !== 'RESERVED' ? '0 0 10px rgba(45, 212, 191, 0.5)' : 'none',
+                        bgcolor: ticket.status !== 'RESERVED' ? (isDark ? '#2dd4bf' : 'primary.main') : (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'),
+                        boxShadow: ticket.status !== 'RESERVED' ? (isDark ? '0 0 10px rgba(45, 212, 191, 0.5)' : '0 0 10px rgba(13, 148, 136, 0.4)') : 'none',
                       }}
                     />
                     <Box>
-                      <Typography variant="body2" sx={{ fontWeight: 'bold', color: ticket.status !== 'RESERVED' ? '#ffffff' : 'rgba(255,255,255,0.3)' }}>
+                      <Typography variant="body2" sx={{ fontWeight: 'bold', color: ticket.status !== 'RESERVED' ? 'text.primary' : (isDark ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.35)') }}>
                         Đã xác nhận thanh toán thành công
                       </Typography>
                       {ticket.status !== 'RESERVED' && (
-                        <Typography variant="caption" color="rgba(255, 255, 255, 0.4)">
+                        <Typography variant="caption" color={isDark ? 'rgba(255, 255, 255, 0.4)' : 'text.secondary'}>
                           {ticket.createdAt}
                         </Typography>
                       )}
@@ -482,12 +492,12 @@ export const TicketDetailPage: React.FC = () => {
                         width: 14,
                         height: 14,
                         borderRadius: '50%',
-                        bgcolor: (ticket.status === 'CHECKED_IN' || ticket.status === 'USED') ? '#0288d1' : 'rgba(255,255,255,0.1)',
+                        bgcolor: (ticket.status === 'CHECKED_IN' || ticket.status === 'USED') ? '#0288d1' : (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'),
                         boxShadow: (ticket.status === 'CHECKED_IN' || ticket.status === 'USED') ? '0 0 10px rgba(2, 136, 209, 0.5)' : 'none',
                       }}
                     />
                     <Box>
-                      <Typography variant="body2" sx={{ fontWeight: 'bold', color: (ticket.status === 'CHECKED_IN' || ticket.status === 'USED') ? '#ffffff' : 'rgba(255,255,255,0.3)' }}>
+                      <Typography variant="body2" sx={{ fontWeight: 'bold', color: (ticket.status === 'CHECKED_IN' || ticket.status === 'USED') ? 'text.primary' : (isDark ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.35)') }}>
                         Quét check-in tại cổng
                       </Typography>
                     </Box>
@@ -509,9 +519,9 @@ export const TicketDetailPage: React.FC = () => {
                 </Typography>
 
                 {isLoadingAttractions ? (
-                  <Skeleton variant="rectangular" height={150} sx={{ bgcolor: 'rgba(255,255,255,0.05)', borderRadius: 3 }} />
+                  <Skeleton variant="rectangular" height={150} sx={{ borderRadius: 3 }} />
                 ) : attractions.length === 0 ? (
-                  <Typography variant="body2" color="rgba(255,255,255,0.5)">
+                  <Typography variant="body2" color={isDark ? 'rgba(255,255,255,0.5)' : 'text.secondary'}>
                     Chưa có thông tin trò chơi cho công viên này.
                   </Typography>
                 ) : (
@@ -520,8 +530,8 @@ export const TicketDetailPage: React.FC = () => {
                       <Grid item xs={12} sm={4} key={attr.id}>
                         <Card
                           sx={{
-                            bgcolor: 'rgba(30, 41, 59, 0.3)',
-                            border: '1px solid rgba(255, 255, 255, 0.05)',
+                            bgcolor: isDark ? 'rgba(30, 41, 59, 0.3)' : 'background.paper',
+                            border: isDark ? '1px solid rgba(255, 255, 255, 0.05)' : '1px solid rgba(0, 0, 0, 0.08)',
                             borderRadius: 3,
                             height: '100%',
                           }}
@@ -538,7 +548,7 @@ export const TicketDetailPage: React.FC = () => {
                             </Typography>
                             <Typography
                               variant="caption"
-                              color="rgba(255, 255, 255, 0.4)"
+                              color={isDark ? 'rgba(255, 255, 255, 0.4)' : 'text.secondary'}
                               sx={{
                                 display: '-webkit-box',
                                 WebkitLineClamp: 3,
@@ -566,10 +576,10 @@ export const TicketDetailPage: React.FC = () => {
               {ticket.status === 'PAID' && (
                 <Card
                   sx={{
-                    bgcolor: 'rgba(30, 41, 59, 0.6)',
+                    bgcolor: isDark ? 'rgba(30, 41, 59, 0.6)' : 'background.paper',
                     backdropFilter: 'blur(20px)',
-                    border: '1px solid rgba(45, 212, 191, 0.3)',
-                    boxShadow: '0 8px 32px 0 rgba(45, 212, 191, 0.05)',
+                    border: isDark ? '1px solid rgba(45, 212, 191, 0.3)' : '1px solid rgba(13, 148, 136, 0.3)',
+                    boxShadow: isDark ? '0 8px 32px 0 rgba(45, 212, 191, 0.05)' : '0 8px 32px 0 rgba(0, 0, 0, 0.05)',
                     borderRadius: 4,
                     textAlign: 'center',
                     p: 4,
@@ -578,7 +588,7 @@ export const TicketDetailPage: React.FC = () => {
                   <Typography variant="h6" sx={{ fontFamily: 'Outfit, sans-serif', fontWeight: 700, mb: 1 }}>
                     Mã Check-in Tự Động
                   </Typography>
-                  <Typography variant="body2" color="rgba(255, 255, 255, 0.5)" sx={{ mb: 3 }}>
+                  <Typography variant="body2" color={isDark ? 'rgba(255, 255, 255, 0.5)' : 'text.secondary'} sx={{ mb: 3 }}>
                     Quét tại làn cổng soát vé tự động Smart Gate.
                   </Typography>
 
@@ -592,7 +602,7 @@ export const TicketDetailPage: React.FC = () => {
                       borderRadius: 3,
                       mb: 2.5,
                       cursor: 'zoom-in',
-                      boxShadow: '0 4px 20px rgba(0,0,0,0.5)',
+                      boxShadow: isDark ? '0 4px 20px rgba(0,0,0,0.5)' : '0 4px 20px rgba(0,0,0,0.1)',
                       transition: 'transform 0.2s',
                       '&:hover': { transform: 'scale(1.03)' },
                     }}
@@ -603,10 +613,10 @@ export const TicketDetailPage: React.FC = () => {
                   {/* Expiration progress tracker */}
                   <Stack spacing={1} sx={{ px: 2, mb: 2 }}>
                     <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <Typography variant="caption" color="rgba(255,255,255,0.4)">
+                      <Typography variant="caption" color={isDark ? 'rgba(255,255,255,0.4)' : 'text.secondary'}>
                         Mã bảo mật tự động cập nhật
                       </Typography>
-                      <Typography variant="caption" sx={{ color: '#2dd4bf', fontWeight: 'bold' }}>
+                      <Typography variant="caption" sx={{ color: isDark ? '#2dd4bf' : 'primary.main', fontWeight: 'bold' }}>
                         {countdown}s
                       </Typography>
                     </Box>
@@ -617,14 +627,14 @@ export const TicketDetailPage: React.FC = () => {
                       sx={{
                         height: 4,
                         borderRadius: 2,
-                        bgcolor: 'rgba(255, 255, 255, 0.08)',
+                        bgcolor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)',
                         '& .MuiLinearProgress-bar': {
-                          bgcolor: '#2dd4bf',
+                          bgcolor: isDark ? '#2dd4bf' : 'primary.main',
                         },
                       }}
                     />
                   </Stack>
-                  <Typography variant="caption" color="rgba(255, 255, 255, 0.3)">
+                  <Typography variant="caption" color={isDark ? 'rgba(255, 255, 255, 0.3)' : 'text.secondary'}>
                     Mã QR bảo mật động chống sao chép và chia sẻ trái phép.
                   </Typography>
                 </Card>
@@ -633,8 +643,8 @@ export const TicketDetailPage: React.FC = () => {
               {/* Terms and Guidelines */}
               <Card
                 sx={{
-                  bgcolor: 'rgba(30, 41, 59, 0.4)',
-                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  bgcolor: isDark ? 'rgba(30, 41, 59, 0.4)' : 'background.paper',
+                  border: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)',
                   borderRadius: 4,
                   p: 3,
                 }}
@@ -645,26 +655,26 @@ export const TicketDetailPage: React.FC = () => {
 
                 <Stack spacing={2}>
                   <Stack direction="row" spacing={1.5}>
-                    <CheckCircleIcon sx={{ fontSize: 18, color: '#2dd4bf', mt: 0.3 }} />
-                    <Typography variant="body2" color="rgba(255, 255, 255, 0.7)">
+                    <CheckCircleIcon sx={{ fontSize: 18, color: isDark ? '#2dd4bf' : 'primary.main', mt: 0.3 }} />
+                    <Typography variant="body2" color={isDark ? 'rgba(255, 255, 255, 0.7)' : 'text.primary'}>
                       Có giá trị sử dụng một lần duy nhất vào ngày đăng ký đã chọn ({ticket.validDate}).
                     </Typography>
                   </Stack>
                   <Stack direction="row" spacing={1.5}>
-                    <CheckCircleIcon sx={{ fontSize: 18, color: '#2dd4bf', mt: 0.3 }} />
-                    <Typography variant="body2" color="rgba(255, 255, 255, 0.7)">
+                    <CheckCircleIcon sx={{ fontSize: 18, color: isDark ? '#2dd4bf' : 'primary.main', mt: 0.3 }} />
+                    <Typography variant="body2" color={isDark ? 'rgba(255, 255, 255, 0.7)' : 'text.primary'}>
                       Vui lòng tăng tối đa độ sáng màn hình điện thoại trước khi quét tại cổng tự động.
                     </Typography>
                   </Stack>
                   <Stack direction="row" spacing={1.5}>
-                    <CheckCircleIcon sx={{ fontSize: 18, color: '#2dd4bf', mt: 0.3 }} />
-                    <Typography variant="body2" color="rgba(255, 255, 255, 0.7)">
+                    <CheckCircleIcon sx={{ fontSize: 18, color: isDark ? '#2dd4bf' : 'primary.main', mt: 0.3 }} />
+                    <Typography variant="body2" color={isDark ? 'rgba(255, 255, 255, 0.7)' : 'text.primary'}>
                       Trẻ em dưới 1m được miễn phí vé cổng nhưng cần có người lớn đi kèm bảo hộ.
                     </Typography>
                   </Stack>
                   <Stack direction="row" spacing={1.5}>
-                    <InfoIcon sx={{ fontSize: 18, color: 'rgba(255,255,255,0.4)', mt: 0.3 }} />
-                    <Typography variant="body2" color="rgba(255, 255, 255, 0.5)">
+                    <InfoIcon sx={{ fontSize: 18, color: isDark ? 'rgba(255,255,255,0.4)' : 'text.secondary', mt: 0.3 }} />
+                    <Typography variant="body2" color={isDark ? 'rgba(255, 255, 255, 0.5)' : 'text.secondary'}>
                       Chính sách hoàn hủy áp dụng trước thời gian tham quan tối thiểu 24 giờ.
                     </Typography>
                   </Stack>

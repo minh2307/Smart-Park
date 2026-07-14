@@ -24,6 +24,13 @@ public class Promotion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "campaign_id")
+    private Campaign campaign;
+
+    @Column(unique = true, length = 50)
+    private String code;
+
     @Column(nullable = false, length = 150)
     private String name;
 
@@ -43,6 +50,21 @@ public class Promotion {
 
     @Column(name = "\"value\"", nullable = false, precision = 15, scale = 2)
     private BigDecimal value;
+
+    @Column(name = "max_discount", precision = 15, scale = 2)
+    private BigDecimal maxDiscount;
+
+    @Column(name = "min_order", precision = 15, scale = 2)
+    private BigDecimal minOrder;
+
+    @Column(name = "applicable_ticket_types", length = 255)
+    private String applicableTicketTypes;
+
+    @Column(name = "applicable_membership_tier", length = 100)
+    private String applicableMembershipTier;
+
+    @Column(name = "valid_time", length = 100)
+    private String validTime;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

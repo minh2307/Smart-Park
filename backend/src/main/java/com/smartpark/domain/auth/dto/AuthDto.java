@@ -83,6 +83,8 @@ public class AuthDto {
         private String role;
         private String fullName;
         private String avatarUrl;
+        private Long customerId;   // ID in customers table; null for non-customer accounts
+        private String phone;
         private java.util.List<String> permissions;
     }
 }

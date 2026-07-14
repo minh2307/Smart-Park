@@ -14,6 +14,7 @@ import {
   IconButton,
   Chip,
   Stack,
+  Box,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import LogoutIcon from '@mui/icons-material/Logout';

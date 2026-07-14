@@ -11,11 +11,8 @@ interface ThemeState {
 const getInitialMode = (): ThemeMode => {
   const savedMode = storage.get<ThemeMode>(STORAGE_KEYS.THEME_MODE);
   if (savedMode) return savedMode;
-  
-  if (typeof window !== 'undefined' && window.matchMedia) {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  }
-  return 'light';
+  // Default dark — all customer portal pages ship dark-first.
+  return 'dark';
 };
 
 const initialState: ThemeState = {

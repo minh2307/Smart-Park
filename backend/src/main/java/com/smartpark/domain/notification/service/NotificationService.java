@@ -1,26 +1,39 @@
 package com.smartpark.domain.notification.service;
 
-import com.smartpark.domain.notification.entity.Notification;
-import com.smartpark.domain.notification.repository.NotificationRepository;
-import lombok.RequiredArgsConstructor;
+import com.smartpark.domain.notification.dto.NotificationDto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-@Service
-@RequiredArgsConstructor
-public class NotificationService {
+import java.time.LocalDateTime;
 
-    private final NotificationRepository notificationRepository;
+public interface NotificationService {
 
-    @Transactional(readOnly = true)
-    public Page<Notification> findAll(Pageable pageable) {
-        return notificationRepository.findAll(pageable);
-    }
+    Page<NotificationDto.Response> findAll(
+            String search,
+            String type,
+            String priority,
+            String status,
+            Long userId,
+            Long customerId,
+            Long employeeId,
+            LocalDateTime startDate,
+            LocalDateTime endDate,
+            Pageable pageable
+    );
 
-    @Transactional
-    public Notification create(Notification notification) {
-        return notificationRepository.save(notification);
-    }
+    NotificationDto.Response findById(Long id);
+
+    NotificationDto.Response create(NotificationDto.CreateRequest request);
+
+    NotificationDto.Response update(Long id, NotificationDto.UpdateRequest request);
+
+    void delete(Long id);
+
+    void markAsRead(Long id);
+
+    void markAsUnread(Long id);
+
+    void markAllAsRead();
+
+    long getUnreadCount();
 }

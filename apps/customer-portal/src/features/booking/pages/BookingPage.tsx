@@ -177,7 +177,7 @@ export const BookingPage: React.FC = () => {
       const bookingResult = await createBooking({
         customerId: user!.id,
         tickets: ticketsReq,
-        validDate,
+        validDate: visitDate,
       }).unwrap();
       
       navigate(`/checkout?code=${bookingResult.code}`);

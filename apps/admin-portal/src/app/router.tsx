@@ -18,9 +18,6 @@ const UserListPage = lazy(() => import('../features/user/pages/UserListPage').th
 const UserDetailsPage = lazy(() => import('../features/user/pages/UserDetailsPage').then(m => ({ default: m.UserDetailsPage })));
 const ProfilePage = lazy(() => import('../features/user/pages/ProfilePage').then(m => ({ default: m.ProfilePage })));
 
-// Venue
-const VenueListPage = lazy(() => import('../features/venue/pages/VenueListPage').then(m => ({ default: m.VenueListPage })));
-const VenueDetailsPage = lazy(() => import('../features/venue/pages/VenueDetailsPage').then(m => ({ default: m.VenueDetailsPage })));
 
 // Ticket
 const TicketOverviewPage = lazy(() => import('../features/ticket/pages/TicketOverviewPage').then(m => ({ default: m.TicketOverviewPage })));
@@ -110,7 +107,7 @@ export const router = createBrowserRouter([
           {
             path: 'dashboard',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
+              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
                 <ExecutiveDashboardPage />
               </RoleGuard>
             ),
@@ -229,34 +226,14 @@ export const router = createBrowserRouter([
               },
             ],
           },
-          {
-            path: 'venues',
-            children: [
-              {
-                index: true,
-                element: (
-                  <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
-                    <VenueListPage />
-                  </RoleGuard>
-                ),
-              },
-              {
-                path: ':id',
-                element: (
-                  <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
-                    <VenueDetailsPage />
-                  </RoleGuard>
-                ),
-              },
-            ],
-          },
+
           {
             path: 'tickets',
             children: [
               {
                 path: 'overview',
                 element: (
-                  <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
+                  <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
                     <TicketOverviewPage />
                   </RoleGuard>
                 ),
@@ -274,7 +251,7 @@ export const router = createBrowserRouter([
           {
             path: 'orders',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
+              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
                 <BookingListPage />
               </RoleGuard>
             ),
@@ -282,7 +259,7 @@ export const router = createBrowserRouter([
           {
             path: 'customers',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
+              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
                 <CustomerListPage />
               </RoleGuard>
             ),
@@ -290,7 +267,7 @@ export const router = createBrowserRouter([
           {
             path: 'memberships',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
+              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
                 <MembershipListPage />
               </RoleGuard>
             ),
@@ -298,7 +275,7 @@ export const router = createBrowserRouter([
           {
             path: 'loyalty',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
+              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
                 <LoyaltyDashboardPage />
               </RoleGuard>
             ),
@@ -306,7 +283,7 @@ export const router = createBrowserRouter([
           {
             path: 'campaigns',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
+              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
                 <CampaignListPage />
               </RoleGuard>
             ),
@@ -314,7 +291,7 @@ export const router = createBrowserRouter([
           {
             path: 'promotions',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
+              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
                 <PromotionListPage />
               </RoleGuard>
             ),
@@ -322,7 +299,7 @@ export const router = createBrowserRouter([
           {
             path: 'coupons',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
+              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
                 <CouponListPage />
               </RoleGuard>
             ),
@@ -330,7 +307,7 @@ export const router = createBrowserRouter([
           {
             path: 'vouchers',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
+              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
                 <VoucherListPage />
               </RoleGuard>
             ),
@@ -338,7 +315,7 @@ export const router = createBrowserRouter([
           {
             path: 'visitors',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
+              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
                 <VisitorListPage />
               </RoleGuard>
             ),
@@ -346,7 +323,7 @@ export const router = createBrowserRouter([
           {
             path: 'rides',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
+              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
                 <RideListPage />
               </RoleGuard>
             ),
@@ -354,7 +331,7 @@ export const router = createBrowserRouter([
           {
             path: 'ride-categories',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
+              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
                 <RideCategoryListPage />
               </RoleGuard>
             ),
@@ -362,7 +339,7 @@ export const router = createBrowserRouter([
           {
             path: 'gates',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
+              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
                 <GateListPage />
               </RoleGuard>
             ),
@@ -370,7 +347,7 @@ export const router = createBrowserRouter([
           {
             path: 'ticket-validation',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
+              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
                 <ValidationDashboardPage />
               </RoleGuard>
             ),
@@ -378,7 +355,7 @@ export const router = createBrowserRouter([
           {
             path: 'scanner',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
+              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
                 <ScannerTerminalPage />
               </RoleGuard>
             ),
@@ -386,7 +363,7 @@ export const router = createBrowserRouter([
           {
             path: 'parking',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
+              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
                 <ParkingListPage />
               </RoleGuard>
             ),
@@ -394,7 +371,7 @@ export const router = createBrowserRouter([
           {
             path: 'lockers',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
+              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
                 <LockerListPage />
               </RoleGuard>
             ),
@@ -402,7 +379,7 @@ export const router = createBrowserRouter([
           {
             path: 'food-court',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
+              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
                 <FoodCourtListPage />
               </RoleGuard>
             ),
@@ -410,7 +387,7 @@ export const router = createBrowserRouter([
           {
             path: 'retail',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
+              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
                 <RetailListPage />
               </RoleGuard>
             ),
@@ -418,7 +395,7 @@ export const router = createBrowserRouter([
           {
             path: 'pos',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
+              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
                 <POSScreen />
               </RoleGuard>
             ),
@@ -426,7 +403,7 @@ export const router = createBrowserRouter([
           {
             path: 'notifications',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
+              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
                 <NotificationPage />
               </RoleGuard>
             ),
@@ -434,7 +411,7 @@ export const router = createBrowserRouter([
           {
             path: 'support',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
+              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
                 <SupportPage />
               </RoleGuard>
             ),
@@ -442,7 +419,7 @@ export const router = createBrowserRouter([
           {
             path: 'incidents',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
+              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
                 <IncidentPage />
               </RoleGuard>
             ),
@@ -450,7 +427,7 @@ export const router = createBrowserRouter([
           {
             path: 'operational',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
+              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
                 <OperationalDashboardPage />
               </RoleGuard>
             ),
@@ -474,7 +451,7 @@ export const router = createBrowserRouter([
           {
             path: 'profile',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN']}>
+              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
                 <ProfilePage />
               </RoleGuard>
             ),

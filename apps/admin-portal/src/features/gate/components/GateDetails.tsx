@@ -110,9 +110,6 @@ export const GateDetails: React.FC<GateDetailsProps> = ({
               </Box>
               <Divider />
               <List>
-                <ListItem disableGutters>
-                  <ListItemText primary="Địa điểm chính" secondary={gate.assignedVenueName} />
-                </ListItem>
                 {gate.assignedZoneName && (
                   <ListItem disableGutters>
                     <ListItemText primary="Phân khu chỉ định" secondary={gate.assignedZoneName} />

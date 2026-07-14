@@ -26,4 +26,22 @@ public class RideCategory {
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
+
+    @Transient
+    private String code;
+
+    @Transient
+    @Builder.Default
+    private String status = "ACTIVE";
+
+    @Transient
+    @Builder.Default
+    private Integer rideCount = 0;
+
+    public String getCode() {
+        if (code == null && name != null) {
+            return "CAT-" + name.toUpperCase().replaceAll("[^A-Z0-9]", "");
+        }
+        return code;
+    }
 }

@@ -94,7 +94,7 @@ export const RideDetails: React.FC<RideDetailsProps> = ({ ride }) => {
               <Divider orientation="vertical" flexItem sx={{ bgcolor: 'rgba(255,255,255,0.3)' }} />
               <Typography variant="caption">{ride.categoryName}</Typography>
               <Divider orientation="vertical" flexItem sx={{ bgcolor: 'rgba(255,255,255,0.3)' }} />
-              <Typography variant="caption">{ride.venueName} — {ride.zoneName}</Typography>
+              <Typography variant="caption">{ride.zoneName}</Typography>
             </Box>
           </Grid>
           <Grid item xs={12} sm={4} sx={{ textAlign: { sm: 'right' } }}>
@@ -189,7 +189,14 @@ export const RideDetails: React.FC<RideDetailsProps> = ({ ride }) => {
 
       {/* Restrictions panel */}
       <TabPanel value={tabValue} index={1}>
-        <RideRestrictionCard restrictions={ride.restrictions} />
+        <RideRestrictionCard
+          restrictions={
+            ride.restrictions || {
+              minHeight: (ride as any).minHeight,
+              maxHeight: (ride as any).maxHeight,
+            }
+          }
+        />
       </TabPanel>
 
       {/* Gallery panel */}

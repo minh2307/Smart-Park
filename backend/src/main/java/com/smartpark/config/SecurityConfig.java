@@ -33,14 +33,14 @@ public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthFilter;
     private final com.smartpark.security.RateLimitFilter rateLimitFilter;
 
-    @org.springframework.beans.factory.annotation.Value("${app.cors.allowed-origins:http://localhost:3000}")
-    private List<String> allowedOrigins;
+    @org.springframework.beans.factory.annotation.Value("${app.cors.allowed-origins}")
+    private String allowedOriginsRaw;
 
     private static final String[] PUBLIC_PATHS = {
             // Auth
             "/api/v1/auth/login",
             "/api/v1/auth/register",
-            "/api/v1/auth/refresh",
+            "/api/v1/auth/refresh-token",
             // Payment webhooks
             "/api/v1/payments/vnpay-ipn",
             "/api/v1/payments/vnpay-return",
@@ -99,7 +99,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOrigins(allowedOrigins);
+        List<String> origins = java.util.Arrays.asList(allowedOriginsRaw.split(","));
+        config.setAllowedOriginPatterns(origins);
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);

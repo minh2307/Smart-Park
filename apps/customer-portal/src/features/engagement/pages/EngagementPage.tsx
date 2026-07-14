@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Box, Container, Typography, Stack, Grid, Chip } from '@mui/material';
+import { Box, Container, Typography, Stack, Grid, Chip, useTheme } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
 import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
@@ -68,7 +68,7 @@ const TAB_MAP: Record<string, number> = TABS.reduce(
 
 const tabVariants = {
   initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0, transition: { duration: 0.28, ease: [0.16, 1, 0.3, 1] } },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.28, ease: [0.16, 1, 0.3, 1] as any } },
   exit: { opacity: 0, y: -10, transition: { duration: 0.18 } },
 };
 
@@ -78,7 +78,7 @@ const stagger = {
 
 const fadeUp = {
   initial: { opacity: 0, y: 16 },
-  animate: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] } },
+  animate: { opacity: 1, y: 0, transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] as any } },
 };
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -86,6 +86,8 @@ export const EngagementPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const initialTab = TAB_MAP[searchParams.get('tab') || ''] ?? 0;
   const [activeTab, setActiveTab] = useState(initialTab);
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
 
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
@@ -124,8 +126,8 @@ export const EngagementPage: React.FC = () => {
     <Box
       sx={{
         minHeight: '100dvh',
-        bgcolor: '#0b1221',
-        color: '#ffffff',
+        bgcolor: 'background.default',
+        color: 'text.primary',
         position: 'relative',
         overflow: 'hidden',
       }}
@@ -139,7 +141,9 @@ export const EngagementPage: React.FC = () => {
           width: '55vw',
           height: '55vw',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(45,212,191,0.05) 0%, transparent 70%)',
+          background: isDark
+            ? 'radial-gradient(circle, rgba(45,212,191,0.05) 0%, transparent 70%)'
+            : 'radial-gradient(circle, rgba(13, 148, 136, 0.02) 0%, transparent 70%)',
           pointerEvents: 'none',
           zIndex: 0,
         }}
@@ -152,7 +156,9 @@ export const EngagementPage: React.FC = () => {
           width: '45vw',
           height: '45vw',
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(14,165,233,0.04) 0%, transparent 70%)',
+          background: isDark
+            ? 'radial-gradient(circle, rgba(14,165,233,0.04) 0%, transparent 70%)'
+            : 'radial-gradient(circle, rgba(14, 165, 233, 0.01) 0%, transparent 70%)',
           pointerEvents: 'none',
           zIndex: 0,
         }}
@@ -162,7 +168,7 @@ export const EngagementPage: React.FC = () => {
         {/* ─── Page Header: Asymmetric left-aligned ─── */}
         <Box
           sx={{
-            borderBottom: '1px solid rgba(255,255,255,0.06)',
+            borderBottom: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(0, 0, 0, 0.08)',
             pt: { xs: 5, md: 7 },
             pb: 0,
           }}
@@ -178,21 +184,21 @@ export const EngagementPage: React.FC = () => {
                       fontFamily: 'Outfit, sans-serif',
                       fontWeight: 900,
                       fontSize: { xs: '2rem', md: '2.6rem' },
-                      color: '#ffffff',
+                      color: 'text.primary',
                       letterSpacing: '-0.03em',
                       lineHeight: 1.15,
                       mb: 1.5,
                     }}
                   >
-                    Trung tam
+                    Trung tâm
                     <Box
                       component="span"
                       sx={{
-                        color: '#2dd4bf',
+                        color: isDark ? '#2dd4bf' : 'primary.main',
                         ml: 1.5,
                       }}
                     >
-                      Khach hang
+                      Khách hàng
                     </Box>
                   </Typography>
                 </motion.div>
@@ -200,13 +206,13 @@ export const EngagementPage: React.FC = () => {
                 <motion.div variants={fadeUp}>
                   <Typography
                     sx={{
-                      color: 'rgba(255,255,255,0.5)',
+                      color: 'text.secondary',
                       fontSize: '1rem',
                       lineHeight: 1.6,
                       maxWidth: '42ch',
                     }}
                   >
-                    Quan ly thong bao, gui phan hoi, dat ticket ho tro, tra cuu FAQ va lien he voi Smart Park.
+                    Quản lý thông báo, gửi phản hồi, đặt ticket hỗ trợ, tra cứu FAQ và liên hệ với Smart Park.
                   </Typography>
                 </motion.div>
               </Box>
@@ -240,9 +246,9 @@ export const EngagementPage: React.FC = () => {
                           border: 'none',
                           borderRadius: '12px 12px 0 0',
                           cursor: 'pointer',
-                          bgcolor: isActive ? 'rgba(45,212,191,0.08)' : 'transparent',
-                          color: isActive ? '#2dd4bf' : 'rgba(255,255,255,0.45)',
-                          borderBottom: isActive ? '2px solid #2dd4bf' : '2px solid transparent',
+                          bgcolor: isActive ? (isDark ? 'rgba(45,212,191,0.08)' : 'rgba(13, 148, 136, 0.08)') : 'transparent',
+                          color: isActive ? (isDark ? '#2dd4bf' : 'primary.main') : 'text.secondary',
+                          borderBottom: isActive ? (isDark ? '2px solid #2dd4bf' : '2px solid ' + theme.palette.primary.main) : '2px solid transparent',
                           fontFamily: 'Outfit, sans-serif',
                           fontWeight: isActive ? 800 : 600,
                           fontSize: '0.92rem',
@@ -250,8 +256,8 @@ export const EngagementPage: React.FC = () => {
                           transition: 'all 0.2s cubic-bezier(0.4,0,0.2,1)',
                           flexShrink: 0,
                           '&:hover': {
-                            color: isActive ? '#2dd4bf' : 'rgba(255,255,255,0.75)',
-                            bgcolor: isActive ? 'rgba(45,212,191,0.08)' : 'rgba(255,255,255,0.04)',
+                            color: isActive ? (isDark ? '#2dd4bf' : 'primary.main') : 'text.primary',
+                            bgcolor: isActive ? (isDark ? 'rgba(45,212,191,0.08)' : 'rgba(13, 148, 136, 0.08)') : (isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)'),
                           },
                           '&:active': { transform: 'scale(0.98)' },
                         }}
@@ -322,10 +328,10 @@ export const EngagementPage: React.FC = () => {
                           letterSpacing: '-0.02em',
                         }}
                       >
-                        Lich su yeu cau ho tro
+                        Lịch sử yêu cầu hỗ trợ
                       </Typography>
                       <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.4)', mt: 0.5 }}>
-                        Toan bo yeu cau ban da gui den Smart Park
+                        Toàn bộ yêu cầu bạn đã gửi đến Smart Park
                       </Typography>
                     </Box>
 
@@ -334,8 +340,8 @@ export const EngagementPage: React.FC = () => {
                     ) : incidents.length === 0 ? (
                       <EmptyState
                         icon={SupportAgentIcon}
-                        title="Chua co ticket nao"
-                        description="Ban chua gui yeu cau ho tro nao. Su dung form ben trai de tao ticket dau tien."
+                        title="Chưa có ticket nào"
+                        description="Bạn chưa gửi yêu cầu hỗ trợ nào. Sử dụng form bên trái để tạo ticket đầu tiên."
                       />
                     ) : (
                       <Stack spacing={3}>
@@ -344,7 +350,7 @@ export const EngagementPage: React.FC = () => {
                             key={incident.id}
                             initial={{ opacity: 0, y: 12 }}
                             animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: idx * 0.07, ease: [0.16, 1, 0.3, 1], duration: 0.4 }}
+                            transition={{ delay: idx * 0.07, ease: [0.16, 1, 0.3, 1] as any, duration: 0.4 }}
                           >
                             <SupportTicketCard incident={incident} />
                             <Box
@@ -359,7 +365,7 @@ export const EngagementPage: React.FC = () => {
                                 variant="caption"
                                 sx={{ color: 'rgba(255,255,255,0.3)', fontWeight: 700, mb: 2, display: 'block', letterSpacing: '0.08em' }}
                               >
-                                TIEN TRINH XU LY
+                              TIẾN TRÌNH XỬ LÝ
                               </Typography>
                               <TicketTimeline incident={incident} />
                             </Box>
@@ -411,10 +417,10 @@ export const EngagementPage: React.FC = () => {
                           mb: 1.5,
                         }}
                       >
-                        Tai sao phan hoi cua ban quan trong?
+                        Tại sao phản hồi của bạn quan trọng?
                       </Typography>
                       <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.5)', lineHeight: 1.7, mb: 3 }}>
-                        Moi y kien dong gop tu khach hang deu giup Smart Park cai thien chat luong dich vu, nang cap trai nghiem va dam bao an toan.
+                        Mọi ý kiến đóng góp từ khách hàng đều giúp Smart Park cải thiện chất lượng dịch vụ, nâng cấp trải nghiệm và đảm bảo an toàn.
                       </Typography>
 
                       {/* Commitment list - NO decorative dots (taste-skill banned) */}
@@ -426,9 +432,9 @@ export const EngagementPage: React.FC = () => {
                         }}
                       >
                         {[
-                          { time: '24h', text: 'Phan hoi duoc xem xet trong vong 24 gio lam viec' },
-                          { time: '100%', text: 'Moi danh gia deu duoc Hoi dong CSKH doc va phan tich' },
-                          { time: 'Quy', text: 'Ket qua cai tien duoc cong bo cong khai hang quy' },
+                          { time: '24h', text: 'Phản hồi được xem xét trong vòng 24 giờ làm việc' },
+                          { time: '100%', text: 'Mọi đánh giá đều được Hội đồng CSKH đọc và phân tích' },
+                          { time: 'Quý', text: 'Kết quả cải tiến được công bố công khai hàng quý' },
                         ].map((item) => (
                           <Stack key={item.time} direction="row" spacing={2.5} alignItems="flex-start">
                             <Typography

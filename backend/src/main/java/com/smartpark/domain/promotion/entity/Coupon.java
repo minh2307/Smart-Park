@@ -1,9 +1,11 @@
 package com.smartpark.domain.promotion.entity;
 
+import com.smartpark.domain.customer.entity.Customer;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
  * Bảng coupons - mã giảm giá phát hành cho khách hàng.
@@ -39,6 +41,13 @@ public class Coupon {
     @Column(name = "min_order_value", precision = 15, scale = 2)
     @Builder.Default
     private BigDecimal minOrderValue = BigDecimal.ZERO;
+
+    @Column(name = "expiration_date")
+    private LocalDate expirationDate;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)

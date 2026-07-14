@@ -18,6 +18,7 @@ import {
   DialogContent,
   DialogActions,
   CircularProgress,
+  useTheme,
 } from '@mui/material';
 import { motion, AnimatePresence } from 'framer-motion';
 import SearchIcon from '@mui/icons-material/Search';
@@ -37,6 +38,7 @@ import { OrderStatusChip } from '../components/OrderStatusChip';
 import { formatCurrency, formatDate } from '@shared/utils';
 
 export const OrderListPage: React.FC = () => {
+  const theme = useTheme();
   const { user } = useAppSelector((state) => state.auth);
   const customerId = user?.id || 0;
 
@@ -182,14 +184,18 @@ export const OrderListPage: React.FC = () => {
     }
   };
 
+  const isDark = theme.palette.mode === 'dark';
+
   return (
     <Box
       sx={{
         minHeight: '100dvh',
-        bgcolor: '#0f172a',
-        color: '#ffffff',
+        bgcolor: 'background.default',
+        color: 'text.primary',
         py: 6,
-        background: 'radial-gradient(circle at top right, rgba(20, 184, 166, 0.08), transparent 45%)',
+        background: isDark
+          ? 'radial-gradient(circle at top right, rgba(20, 184, 166, 0.08), transparent 45%)'
+          : 'radial-gradient(circle at top right, rgba(13, 148, 136, 0.04), transparent 45%)',
       }}
     >
       <Container maxWidth="lg">
@@ -200,7 +206,9 @@ export const OrderListPage: React.FC = () => {
               fontFamily: 'Outfit, sans-serif',
               fontWeight: 900,
               fontSize: { xs: '2.2rem', md: '3rem' },
-              background: 'linear-gradient(135deg, #ffffff 50%, #2dd4bf 100%)',
+              background: isDark
+                ? 'linear-gradient(135deg, #ffffff 50%, #2dd4bf 100%)'
+                : 'linear-gradient(135deg, #0f172a 50%, #0d9488 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               mb: 1.5,
@@ -208,13 +216,13 @@ export const OrderListPage: React.FC = () => {
           >
             Quản lý giao dịch
           </Typography>
-          <Typography color="rgba(255, 255, 255, 0.6)" variant="body1">
+          <Typography color={isDark ? 'rgba(255, 255, 255, 0.6)' : 'text.secondary'} variant="body1">
             Tra cứu đơn hàng, lịch sử đặt giữ vé và lịch sử các cổng giao dịch của bạn.
           </Typography>
         </Box>
 
         {/* Tab Selection */}
-        <Box sx={{ borderBottom: '1px solid rgba(255, 255, 255, 0.1)', mb: 4 }}>
+        <Box sx={{ borderBottom: isDark ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.08)', mb: 4 }}>
           <Tabs
             value={activeTab}
             onChange={(_, val) => {
@@ -226,16 +234,16 @@ export const OrderListPage: React.FC = () => {
             variant="scrollable"
             scrollButtons="auto"
             sx={{
-              '& .MuiTabs-indicator': { bgcolor: '#2dd4bf' },
+              '& .MuiTabs-indicator': { bgcolor: isDark ? '#2dd4bf' : 'primary.main' },
               '& .MuiTab-root': {
-                color: 'rgba(255, 255, 255, 0.6)',
+                color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'text.secondary',
                 fontWeight: 700,
                 fontSize: '1rem',
                 textTransform: 'none',
                 minWidth: 'auto',
                 px: 3,
                 pb: 1.5,
-                '&.Mui-selected': { color: '#2dd4bf' },
+                '&.Mui-selected': { color: isDark ? '#2dd4bf' : 'primary.main' },
               },
             }}
           >

@@ -66,10 +66,7 @@ export const RideForm: React.FC<RideFormProps> = ({
     },
   });
 
-  const mockVenues = [
-    { id: 1, name: 'Smart Park East Wing' },
-    { id: 2, name: 'Water World Pavilion' },
-  ];
+
 
   const mockZones = [
     { id: 1, name: 'Space Zone A', venueId: 1 },
@@ -127,7 +124,7 @@ export const RideForm: React.FC<RideFormProps> = ({
           />
         </Grid>
 
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={6}>
           <Controller
             name="rideCategoryId"
             control={control}
@@ -147,27 +144,7 @@ export const RideForm: React.FC<RideFormProps> = ({
           />
         </Grid>
 
-        <Grid item xs={12} sm={4}>
-          <Controller
-            name="venueId"
-            control={control}
-            render={({ field }) => (
-              <FormControl fullWidth error={!!errors.venueId} disabled={loading}>
-                <InputLabel id="ride-venue-label">Địa điểm *</InputLabel>
-                <Select {...field} labelId="ride-venue-label" label="Địa điểm *">
-                  {mockVenues.map((v) => (
-                    <MenuItem key={v.id} value={v.id}>
-                      {v.name}
-                    </MenuItem>
-                  ))}
-                </Select>
-                {errors.venueId && <FormHelperText>{errors.venueId.message}</FormHelperText>}
-              </FormControl>
-            )}
-          />
-        </Grid>
-
-        <Grid item xs={12} sm={4}>
+        <Grid item xs={12} sm={6}>
           <Controller
             name="zoneId"
             control={control}

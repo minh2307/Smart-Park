@@ -27,12 +27,13 @@ public class RateLimitFilter extends OncePerRequestFilter {
 
     private final ProxyManager<byte[]> proxyManager;
 
-
+    @org.springframework.beans.factory.annotation.Value("${app.rate-limit.capacity:1000}")
+    private int capacity;
 
     private Bucket resolveBucket(String ip, String endpoint) {
         String key = "RL:" + endpoint + ":" + ip;
         Supplier<io.github.bucket4j.BucketConfiguration> configSupplier = () -> io.github.bucket4j.BucketConfiguration.builder()
-                .addLimit(Bandwidth.classic(10, Refill.intervally(10, Duration.ofMinutes(1))))
+                .addLimit(Bandwidth.classic(capacity, Refill.intervally(capacity, Duration.ofMinutes(1))))
                 .build();
         return proxyManager.builder().build(key.getBytes(), configSupplier);
     }

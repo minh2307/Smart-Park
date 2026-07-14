@@ -28,7 +28,7 @@ export const bookingApi = createApi({
   endpoints: (builder) => ({
     getBookings: builder.query<BookingListResponse, BookingFilters>({
       query: (params) => ({
-        url: '/orders',
+        url: '/orders/admin',
         method: 'GET',
         params,
       }),
@@ -41,7 +41,7 @@ export const bookingApi = createApi({
           : [{ type: 'Booking', id: 'LIST' }],
     }),
     getBookingById: builder.query<Booking, number>({
-      query: (id) => `/orders/${id}`,
+      query: (id) => `/orders/admin/${id}`,
       providesTags: (_result, _error, id) => [{ type: 'Booking', id }],
     }),
     createBooking: builder.mutation<Booking, { body: OrderRequest; idempotencyKey: string }>({

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card, CardContent, Typography, Button, Stack, Alert, Box } from '@mui/material';
-import { ShoppingCartCheck } from '@mui/icons-material';
+
 import { PriceBreakdown } from './PriceBreakdown';
 import { PromotionSelector } from './PromotionSelector';
 import { MembershipDiscountCard } from './MembershipDiscountCard';

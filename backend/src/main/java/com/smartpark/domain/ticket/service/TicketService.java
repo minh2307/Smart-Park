@@ -8,7 +8,8 @@ import com.smartpark.domain.customer.repository.CustomerRepository;
 import com.smartpark.domain.bi.entity.AnalyticsEvent;
 import com.smartpark.domain.bi.service.AnalyticsEventPublisher;
 import com.smartpark.domain.notification.entity.Notification;
-import com.smartpark.domain.notification.repository.NotificationRepository;
+import com.smartpark.domain.notification.dto.NotificationDto;
+import com.smartpark.domain.notification.service.NotificationService;
 import com.smartpark.domain.ticket.entity.CheckIn;
 import com.smartpark.domain.ticket.entity.Ticket;
 import com.smartpark.domain.ticket.entity.TicketType;
@@ -47,7 +48,7 @@ public class TicketService {
     private final TicketTypeRepository ticketTypeRepository;
     private final CustomerRepository customerRepository;
     private final CheckInRepository checkInRepository;
-    private final NotificationRepository notificationRepository;
+    private final NotificationService notificationService;
     private final AnalyticsEventPublisher analyticsEventPublisher;
 
     // ─────────────────────────────── QUERIES ───────────────────────────────
@@ -300,14 +301,13 @@ public class TicketService {
 
     private void _sendNotification(Customer customer, String title, String message) {
         try {
-            Notification notification = Notification.builder()
-                    .userId(customer.getId()) // customer.id used as user reference for BI
+            notificationService.create(NotificationDto.CreateRequest.builder()
+                    .customerIds(List.of(customer.getId()))
                     .title(title)
                     .content(message)
                     .type(Notification.NotificationType.IN_APP)
-                    .status(Notification.NotificationStatus.PENDING)
-                    .build();
-            notificationRepository.save(notification);
+                    .priority(Notification.NotificationPriority.MEDIUM)
+                    .build());
         } catch (Exception e) {
             // Notification không được phép làm fail luồng chính
             log.warn("[NOTIFICATION FAIL] customerId={} title={} error={}",

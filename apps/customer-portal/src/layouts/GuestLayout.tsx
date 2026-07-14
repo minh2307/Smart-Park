@@ -1,46 +1,24 @@
 import { Outlet } from 'react-router-dom';
-import { Box, AppBar, Toolbar, Typography, Button, Container, Badge, IconButton } from '@mui/material';
-import { ShoppingCart } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
-import { ROUTES } from '@shared/config';
-import { useAppSelector } from '../store/hooks';
-import { selectCartCount } from '../features/booking/store/bookingSelectors';
+import { Box } from '@mui/material';
+import { Navbar } from '../components/Navbar';
 
+/**
+ * GuestLayout - wraps public routes (/, /tickets, /cart, etc.)
+ * 
+ * Uses the unified Navbar. The Navbar reads isAuthenticated from Redux,
+ * so it automatically renders the guest variant (logo + park nav + login button).
+ * The pt offset (68px) keeps content below the fixed Navbar.
+ */
 export const GuestLayout = () => {
-  const navigate = useNavigate();
-  const cartCount = useAppSelector(selectCartCount);
-
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-      <AppBar position="sticky" color="default" elevation={1} sx={{ backgroundColor: 'background.paper' }}>
-        <Toolbar component={Container} maxWidth="lg" sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          <Typography
-            variant="h6"
-            component="div"
-            sx={{ fontWeight: 'bold', color: 'primary.main', cursor: 'pointer' }}
-            onClick={() => navigate(ROUTES.HOME)}
-          >
-            Smart Park
-          </Typography>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Button color="inherit" onClick={() => navigate(ROUTES.VENUES)} sx={{ mr: 2 }}>
-              Công viên & Trò chơi
-            </Button>
-            
-            <IconButton color="inherit" onClick={() => navigate('/cart')} sx={{ mr: 2 }}>
-              <Badge badgeContent={cartCount} color="error">
-                <ShoppingCart />
-              </Badge>
-            </IconButton>
+    <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh', bgcolor: 'background.default' }}>
+      <Navbar />
 
-            <Button variant="contained" color="primary" onClick={() => navigate(ROUTES.LOGIN)}>
-              Đăng nhập
-            </Button>
-          </Box>
-        </Toolbar>
-      </AppBar>
-
-      <Box component="main" sx={{ flexGrow: 1, py: 4 }}>
+      <Box
+        component="main"
+        sx={{ flexGrow: 1, pt: { xs: '60px', md: '68px' } }}
+        id="main-content"
+      >
         <Outlet />
       </Box>
     </Box>

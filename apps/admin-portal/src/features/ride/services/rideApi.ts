@@ -4,6 +4,25 @@ import { Ride, RideFilters, RideListResponse, RideSchedule, RideMaintenance } fr
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api/v1';
 
+const normalizeRide = (ride: any): Ride => {
+  if (!ride) return ride;
+  return {
+    ...ride,
+    restrictions: {
+      minHeight: ride.minHeight ?? ride.restrictions?.minHeight,
+      maxHeight: ride.maxHeight ?? ride.restrictions?.maxHeight,
+      minAge: ride.restrictions?.minAge,
+      maxAge: ride.restrictions?.maxAge,
+      minWeight: ride.restrictions?.minWeight,
+      maxWeight: ride.restrictions?.maxWeight,
+      healthWarning: ride.restrictions?.healthWarning,
+      pregnancyRestriction: ride.restrictions?.pregnancyRestriction,
+      accessibilityFriendly: ride.restrictions?.accessibilityFriendly,
+      safetyNotes: ride.restrictions?.safetyNotes,
+    }
+  };
+};
+
 export const rideApi = createApi({
   reducerPath: 'rideApi',
   baseQuery: fetchBaseQuery({
@@ -24,6 +43,12 @@ export const rideApi = createApi({
         method: 'GET',
         params,
       }),
+      transformResponse: (response: RideListResponse) => {
+        return {
+          ...response,
+          content: (response.content || []).map(normalizeRide)
+        };
+      },
       providesTags: (result) =>
         result
           ? [
@@ -34,22 +59,42 @@ export const rideApi = createApi({
     }),
     getRideById: builder.query<Ride, number>({
       query: (id) => `/rides/${id}`,
+      transformResponse: (response: Ride) => normalizeRide(response),
       providesTags: (_result, _error, id) => [{ type: 'Ride', id }],
     }),
     createRide: builder.mutation<Ride, Partial<Ride>>({
-      query: (body) => ({
-        url: '/rides',
-        method: 'POST',
-        body,
-      }),
+      query: (body) => {
+        const { restrictions, ...rest } = body;
+        const apiBody = {
+          ...rest,
+          minHeight: restrictions?.minHeight,
+          maxHeight: restrictions?.maxHeight,
+        };
+        const zoneId = body.zoneId || 1;
+        return {
+          url: `/rides/zones/${zoneId}`,
+          method: 'POST',
+          body: apiBody,
+        };
+      },
+      transformResponse: (response: Ride) => normalizeRide(response),
       invalidatesTags: [{ type: 'Ride', id: 'LIST' }],
     }),
     updateRide: builder.mutation<Ride, { id: number; body: Partial<Ride> }>({
-      query: ({ id, body }) => ({
-        url: `/rides/${id}`,
-        method: 'PUT',
-        body,
-      }),
+      query: ({ id, body }) => {
+        const { restrictions, ...rest } = body;
+        const apiBody = {
+          ...rest,
+          minHeight: restrictions?.minHeight,
+          maxHeight: restrictions?.maxHeight,
+        };
+        return {
+          url: `/rides/${id}`,
+          method: 'PUT',
+          body: apiBody,
+        };
+      },
+      transformResponse: (response: Ride) => normalizeRide(response),
       invalidatesTags: (_result, _error, { id }) => [
         { type: 'Ride', id },
         { type: 'Ride', id: 'LIST' },

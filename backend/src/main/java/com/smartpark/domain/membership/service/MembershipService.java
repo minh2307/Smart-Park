@@ -40,6 +40,12 @@ public class MembershipService {
                 .orElseThrow(() -> new ResourceNotFoundException("Membership", id));
     }
 
+    @Transactional(readOnly = true)
+    public Membership findByCustomerId(Long customerId) {
+        return membershipRepository.findByCustomerId(customerId)
+                .orElseThrow(() -> new ResourceNotFoundException("Membership for customer", customerId));
+    }
+
     @Transactional
     public Membership updateTier(Long id, Long tierId) {
         Membership membership = findById(id);

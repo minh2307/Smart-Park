@@ -1,5 +1,7 @@
 package com.smartpark.domain.ride.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.smartpark.domain.park.entity.Zone;
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,10 +23,12 @@ public class Ride {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "zone_id", nullable = false)
+    @JsonIgnore
     private Zone zone;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ride_category_id")
+    @JsonIgnore
     private RideCategory rideCategory;
 
     @Column(nullable = false, length = 150)
@@ -65,5 +69,41 @@ public class Ride {
 
     public enum RideStatus {
         ACTIVE, MAINTENANCE, CLOSED, TEMPORARY_STOP
+    }
+
+    @Transient
+    @JsonProperty("zoneId")
+    public Long getZoneId() {
+        return zone != null ? zone.getId() : null;
+    }
+
+    @Transient
+    @JsonProperty("zoneName")
+    public String getZoneName() {
+        return zone != null ? zone.getName() : null;
+    }
+
+    @Transient
+    @JsonProperty("venueId")
+    public Long getVenueId() {
+        return (zone != null && zone.getPark() != null) ? zone.getPark().getId() : null;
+    }
+
+    @Transient
+    @JsonProperty("venueName")
+    public String getVenueName() {
+        return (zone != null && zone.getPark() != null) ? zone.getPark().getName() : null;
+    }
+
+    @Transient
+    @JsonProperty("rideCategoryId")
+    public Long getRideCategoryId() {
+        return rideCategory != null ? rideCategory.getId() : null;
+    }
+
+    @Transient
+    @JsonProperty("categoryName")
+    public String getCategoryName() {
+        return rideCategory != null ? rideCategory.getName() : null;
     }
 }

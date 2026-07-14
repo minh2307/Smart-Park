@@ -19,8 +19,7 @@ import * as z from 'zod';
 import { useAppDispatch } from '../../../store/hooks';
 import { loginSuccess } from '@shared/api';
 import { useLoginMutation } from '../api/authApi';
-import { useGetMeQuery } from '../api/authApi';
-import { v4 as uuidv4 } from 'uuid';
+
 import { storage } from '@shared/utils';
 
 const schema = z.object({

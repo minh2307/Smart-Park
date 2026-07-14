@@ -30,6 +30,17 @@ public class Locker {
     @Column(name = "locker_code", unique = true, nullable = false, length = 20)
     private String lockerCode;
 
+    @Column(name = "locker_number", unique = true, nullable = false, length = 50)
+    private String lockerNumber;
+
+    @Column(name = "type", nullable = false, length = 50)
+    @Builder.Default
+    private String type = "STANDARD";
+
+    @Column(name = "rental_price", nullable = false, precision = 15, scale = 2)
+    @Builder.Default
+    private java.math.BigDecimal rentalPrice = java.math.BigDecimal.ZERO;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private LockerSize size;
@@ -39,10 +50,24 @@ public class Locker {
     @Builder.Default
     private LockerStatus status = LockerStatus.AVAILABLE;
 
+    @Column(name = "location")
+    private String location;
+
+    @Column(name = "qr_code")
+    private String qrCode;
+
+    @Column(name = "current_availability", nullable = false)
+    @Builder.Default
+    private Boolean currentAvailability = true;
+
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 
-    public enum LockerSize { SMALL, MEDIUM, LARGE }
-    public enum LockerStatus { AVAILABLE, OCCUPIED, OUT_OF_ORDER }
+    @org.springframework.data.annotation.LastModifiedDate
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    public enum LockerSize { SMALL, MEDIUM, LARGE, FAMILY, VIP }
+    public enum LockerStatus { AVAILABLE, OCCUPIED, RESERVED, MAINTENANCE, LOCKED, OUT_OF_SERVICE, CLEANING, DISABLED }
 }

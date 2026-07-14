@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Badge, IconButton, Tooltip } from '@mui/material';
+import { Badge, IconButton, Tooltip, useTheme } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useGetNotificationsQuery } from '../services/engagementApi';
 import { useAppSelector } from '../../../store/hooks';
@@ -10,6 +10,8 @@ export const NotificationBadge: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.auth);
   const customerId = user?.id || 0;
+  const theme = useTheme();
+  const isDark = theme.palette.mode === 'dark';
 
   // Retrieve notifications
   const { data: notificationsData } = useGetNotificationsQuery(
@@ -43,7 +45,7 @@ export const NotificationBadge: React.FC = () => {
         color="inherit"
         onClick={handleBadgeClick}
         sx={{
-          color: 'rgba(255, 255, 255, 0.8)',
+          color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(15, 23, 42, 0.8)',
           '&:hover': {
             color: '#2dd4bf',
             bgcolor: 'rgba(45, 212, 191, 0.1)',

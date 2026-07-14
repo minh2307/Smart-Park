@@ -16,11 +16,18 @@ export interface Booking {
   id: number;
   code: string;
   customerId: number;
+  customer?: {
+    id: number;
+    fullName: string;
+    email: string;
+  };
   validDate: string; // YYYY-MM-DD
   totalAmount: number;
+  discountAmount?: number;
   couponCode: string | null;
   status: 'PENDING' | 'PAID' | 'CHECKED_IN' | 'COMPLETED' | 'CANCELLED' | 'EXPIRED';
   createdAt: string;
+  tickets?: any[];
 }
 
 export interface CartItem {

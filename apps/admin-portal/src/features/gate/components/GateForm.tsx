@@ -18,7 +18,6 @@ import {
 } from '@mui/material';
 import { gateSchema, GateInput } from '../schemas/gateSchema';
 import { Gate } from '../types';
-import { useGetVenuesQuery } from '../../venue/services/venueApi';
 import { useGetRidesQuery } from '../../ride/services/rideApi';
 
 interface GateFormProps {
@@ -32,60 +31,59 @@ export const GateForm: React.FC<GateFormProps> = ({
   onSubmit,
   onCancel,
 }) => {
-  const { data: venueData } = useGetVenuesQuery({ page: 0, size: 100 });
   const { data: rideData } = useGetRidesQuery({ page: 0, size: 100 });
 
   const defaultValues: GateInput = initialValues
     ? {
-        code: initialValues.code,
-        name: initialValues.name,
-        type: initialValues.type,
-        assignedVenueId: initialValues.assignedVenueId,
-        assignedZoneId: initialValues.assignedZoneId || undefined,
-        assignedAttractionId: initialValues.assignedAttractionId || undefined,
-        status: initialValues.status,
-        deviceStatus: initialValues.deviceStatus,
-        currentOperator: initialValues.currentOperator || '',
-        deviceInfo: {
-          ipAddress: initialValues.deviceInfo.ipAddress,
-          macAddress: initialValues.deviceInfo.macAddress,
-          firmwareVersion: initialValues.deviceInfo.firmwareVersion,
-        },
-        scannerConfig: {
-          autoScan: initialValues.scannerConfig.autoScan,
-          continuousScan: initialValues.scannerConfig.continuousScan,
-          beepSound: initialValues.scannerConfig.beepSound,
-          flashLight: initialValues.scannerConfig.flashLight,
-        },
-        operatingHours: {
-          open: initialValues.operatingHours.open,
-          close: initialValues.operatingHours.close,
-        },
-      }
+      code: initialValues.code,
+      name: initialValues.name,
+      type: initialValues.type,
+      assignedVenueId: initialValues.assignedVenueId,
+      assignedZoneId: initialValues.assignedZoneId || undefined,
+      assignedAttractionId: initialValues.assignedAttractionId || undefined,
+      status: initialValues.status,
+      deviceStatus: initialValues.deviceStatus,
+      currentOperator: initialValues.currentOperator || '',
+      deviceInfo: {
+        ipAddress: initialValues.deviceInfo.ipAddress,
+        macAddress: initialValues.deviceInfo.macAddress,
+        firmwareVersion: initialValues.deviceInfo.firmwareVersion,
+      },
+      scannerConfig: {
+        autoScan: initialValues.scannerConfig.autoScan,
+        continuousScan: initialValues.scannerConfig.continuousScan,
+        beepSound: initialValues.scannerConfig.beepSound,
+        flashLight: initialValues.scannerConfig.flashLight,
+      },
+      operatingHours: {
+        open: initialValues.operatingHours.open,
+        close: initialValues.operatingHours.close,
+      },
+    }
     : {
-        code: '',
-        name: '',
-        type: 'ENTRY',
-        assignedVenueId: 1,
-        status: 'OPEN',
-        deviceStatus: 'ONLINE',
-        currentOperator: '',
-        deviceInfo: {
-          ipAddress: '192.168.1.100',
-          macAddress: '00:1A:2B:3C:4D:5E',
-          firmwareVersion: 'v1.0.0',
-        },
-        scannerConfig: {
-          autoScan: true,
-          continuousScan: false,
-          beepSound: true,
-          flashLight: false,
-        },
-        operatingHours: {
-          open: '08:00',
-          close: '18:00',
-        },
-      };
+      code: '',
+      name: '',
+      type: 'ENTRY',
+      assignedVenueId: 1,
+      status: 'OPEN',
+      deviceStatus: 'ONLINE',
+      currentOperator: '',
+      deviceInfo: {
+        ipAddress: '192.168.1.100',
+        macAddress: '00:1A:2B:3C:4D:5E',
+        firmwareVersion: 'v1.0.0',
+      },
+      scannerConfig: {
+        autoScan: true,
+        continuousScan: false,
+        beepSound: true,
+        flashLight: false,
+      },
+      operatingHours: {
+        open: '08:00',
+        close: '18:00',
+      },
+    };
 
   const {
     register,
@@ -98,14 +96,11 @@ export const GateForm: React.FC<GateFormProps> = ({
     defaultValues,
   });
 
-  const selectedVenueId = watch('assignedVenueId');
   const gateType = watch('type');
 
-  // Filter rides based on venue if possible (or show all)
+  // Show all rides in this single amusement park
   const availableRides = rideData?.content || [];
-  const filteredRides = selectedVenueId
-    ? availableRides.filter((r) => r.venueId === selectedVenueId)
-    : availableRides;
+  const filteredRides = availableRides;
 
   return (
     <Box component="form" onSubmit={handleSubmit(onSubmit)} sx={{ mt: 1 }}>
@@ -204,44 +199,12 @@ export const GateForm: React.FC<GateFormProps> = ({
         {/* Assignments */}
         <Grid item xs={12} sx={{ mt: 1 }}>
           <Typography variant="h6" color="primary" gutterBottom>
-            Phân Công Địa Điểm & Vận Hành
+            Phân Công Vận Hành
           </Typography>
           <Divider />
         </Grid>
 
-        <Grid item xs={12} sm={6}>
-          <FormControl fullWidth error={!!errors.assignedVenueId}>
-            <InputLabel id="venue-label">Địa Điểm (Park)</InputLabel>
-            <Controller
-              name="assignedVenueId"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  labelId="venue-label"
-                  label="Địa Điểm (Park)"
-                  value={field.value}
-                  onChange={(e) => field.onChange(Number(e.target.value))}
-                >
-                  {venueData?.content.map((v) => (
-                    <MenuItem key={v.id} value={v.id}>
-                      {v.name}
-                    </MenuItem>
-                  )) || [
-                    <MenuItem key={1} value={1}>
-                      Đầm Sen Water Park
-                    </MenuItem>,
-                    <MenuItem key={2} value={2}>
-                      Fantasy Park
-                    </MenuItem>,
-                  ]}
-                </Select>
-              )}
-            />
-            {errors.assignedVenueId && <FormHelperText>{errors.assignedVenueId.message}</FormHelperText>}
-          </FormControl>
-        </Grid>
-
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12}>
           {gateType === 'RIDE' ? (
             <FormControl fullWidth error={!!errors.assignedAttractionId}>
               <InputLabel id="attraction-label">Trò Chơi (Attraction)</InputLabel>
