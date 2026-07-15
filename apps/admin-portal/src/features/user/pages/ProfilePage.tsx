@@ -187,7 +187,12 @@ export const ProfilePage: React.FC = () => {
 
               <Box display="inline-block" px={1.5} py={0.5} borderRadius={2} bgcolor="primary.light" sx={{ opacity: 0.9, mb: 3 }}>
                 <Typography variant="caption" color="primary.contrastText" fontWeight={600}>
-                  {authUser?.role === 'ADMIN' ? 'Quản trị viên' : 'Nhân viên'}
+                  {({
+                    SYSTEM_ADMIN: 'Quản trị hệ thống',
+                    PARK_MANAGER: 'Quản lý công viên',
+                    SALES_STAFF: 'Nhân viên bán hàng',
+                    OPERATIONS_STAFF: 'Nhân viên vận hành',
+                  })[authUser?.role as string] || authUser?.role}
                 </Typography>
               </Box>
 

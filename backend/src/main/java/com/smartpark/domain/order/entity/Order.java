@@ -32,6 +32,15 @@ public class Order {
     @Column(name = "order_code", unique = true, nullable = false, length = 50)
     private String orderCode;
 
+    @Column(name = "park_id")
+    private Long parkId;
+
+    @Column(name = "terminal_id")
+    private Long terminalId;
+
+    @Column(name = "receipt_number", unique = true, length = 64)
+    private String receiptNumber;
+
     @Column(name = "subtotal", precision = 15, scale = 2)
     private BigDecimal subtotal;
 

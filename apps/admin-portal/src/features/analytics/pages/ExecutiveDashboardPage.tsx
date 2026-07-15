@@ -21,6 +21,7 @@ export const ExecutiveDashboardPage: React.FC = () => {
   const theme = useTheme();
   const mode = theme.palette.mode;
   const { dateRange, groupBy } = useSelector((state: RootState) => (state as any).analytics);
+  const { user } = useSelector((state: RootState) => state.auth);
 
   const { data: summary, isLoading, refetch } = useGetDashboardSummaryQuery({
     startDate: dateRange.startDate,
@@ -57,6 +58,15 @@ export const ExecutiveDashboardPage: React.FC = () => {
     return (summary as unknown as Record<string, KpiMetric>)[key];
   };
 
+  const visibleKpis = useMemo(() => {
+    return KPI_DEFINITIONS.filter(kpi => {
+      if (!kpi.allowedRoles) return true;
+      return kpi.allowedRoles.includes(user?.role || '');
+    });
+  }, [user?.role]);
+
+  const canSeeRevenue = user?.role === 'SYSTEM_ADMIN' || user?.role === 'PARK_MANAGER';
+
   return (
     <Box>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 1 }}>
@@ -74,7 +84,7 @@ export const ExecutiveDashboardPage: React.FC = () => {
 
       {/* KPI Row */}
       <Grid container spacing={2} sx={{ mb: 3 }}>
-        {KPI_DEFINITIONS.map((kpiDef: any) => {
+        {visibleKpis.map((kpiDef: any) => {
           const data = getKpiData(kpiDef.key);
           return (
             <Grid item key={kpiDef.key} xs={kpiDef.gridSize.xs} sm={kpiDef.gridSize.sm} md={kpiDef.gridSize.md} lg={kpiDef.gridSize.lg}>
@@ -95,13 +105,15 @@ export const ExecutiveDashboardPage: React.FC = () => {
 
       {/* Charts Row */}
       <Grid container spacing={2.5}>
-        <Grid item xs={12} lg={7}>
-          <DashboardCard title="Xu hướng doanh thu" subtitle="Doanh thu và lợi nhuận theo thời gian" onRefresh={refetch}>
-            <ChartContainer option={revenueTrendOption} height={320} loading={isLoading} />
-          </DashboardCard>
-        </Grid>
+        {canSeeRevenue && (
+          <Grid item xs={12} lg={7}>
+            <DashboardCard title="Xu hướng doanh thu" subtitle="Doanh thu và lợi nhuận theo thời gian" onRefresh={refetch}>
+              <ChartContainer option={revenueTrendOption} height={320} loading={isLoading} />
+            </DashboardCard>
+          </Grid>
+        )}
 
-        <Grid item xs={12} lg={5}>
+        <Grid item xs={12} lg={canSeeRevenue ? 5 : 12}>
           <DashboardCard title="Lưu lượng khách tham quan" subtitle="Số lượng khách tham quan theo giờ hôm nay">
             <ChartContainer option={visitorFlowOption} height={320} loading={isLoading} />
           </DashboardCard>

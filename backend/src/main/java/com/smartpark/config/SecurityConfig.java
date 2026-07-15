@@ -69,7 +69,7 @@ public class SecurityConfig {
     };
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, com.smartpark.domain.device.service.DeviceCredentialService deviceCredentialService) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -83,12 +83,13 @@ public class SecurityConfig {
                 // Add rate limit filter first, then JWT filter
                 .addFilterBefore(rateLimitFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthFilter, com.smartpark.security.RateLimitFilter.class)
+                .addFilterAfter(new com.smartpark.domain.device.security.DeviceAuthenticationFilter(deviceCredentialService), com.smartpark.security.JwtAuthenticationFilter.class)
                 .build();
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(12);
+    public PasswordEncoder passwordEncoder(com.smartpark.domain.settings.service.SecurityPolicyService policyService) {
+        return new com.smartpark.domain.settings.security.PolicyAwarePasswordEncoder(policyService);
     }
 
     @Bean

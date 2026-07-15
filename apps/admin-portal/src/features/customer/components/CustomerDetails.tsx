@@ -86,7 +86,7 @@ export const CustomerDetails: React.FC<CustomerDetailsProps> = ({ customer }) =>
                 {customer.fullName}
               </Typography>
               <Chip
-                label={customer.status === 'ACTIVE' ? 'HOẠT ĐỘNG' : customer.status === 'SUSPENDED' ? 'TẠM KHÓA' : customer.status}
+                label={customer.status === 'ACTIVE' ? 'HOẠT ĐỘNG' : customer.status === 'INACTIVE' ? 'NGỪNG HOẠT ĐỘNG' : customer.status}
                 size="small"
                 color={customer.status === 'ACTIVE' ? 'success' : 'error'}
                 sx={{ fontWeight: 'bold' }}

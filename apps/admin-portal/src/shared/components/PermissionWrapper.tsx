@@ -21,7 +21,7 @@ export const PermissionWrapper: React.FC<PermissionWrapperProps> = ({
 
   // Admin role automatically has all permissions. Other roles check permission array.
   const hasPermission =
-    user.role === 'ADMIN' || 
+    user.role === 'SYSTEM_ADMIN' || 
     (user.permissions && user.permissions.includes(requiredPermission));
 
   if (!hasPermission) {

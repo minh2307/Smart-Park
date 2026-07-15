@@ -277,7 +277,7 @@ export const CustomerListPage: React.FC = () => {
                 >
                   <MenuItem value=""><em>Tất cả trạng thái</em></MenuItem>
                   <MenuItem value="ACTIVE">Đang hoạt động</MenuItem>
-                  <MenuItem value="SUSPENDED">Tạm khóa</MenuItem>
+                  <MenuItem value="INACTIVE">Ngừng hoạt động</MenuItem>
                 </Select>
               </FormControl>
             </Grid>

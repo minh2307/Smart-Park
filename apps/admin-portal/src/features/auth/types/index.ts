@@ -1,4 +1,4 @@
-export type UserRole = 'ADMIN' | 'NHAN_VIEN' | 'MANAGER' | 'CUSTOMER';
+export type AppRole = 'SYSTEM_ADMIN' | 'PARK_MANAGER' | 'SALES_STAFF' | 'OPERATIONS_STAFF';
 
 export interface User {
   id: number;
@@ -7,7 +7,7 @@ export interface User {
   email: string;
   phone?: string;
   avatarUrl?: string;
-  role: UserRole;
+  role: AppRole;
   venueId?: number;
   permissions?: string[];
 }

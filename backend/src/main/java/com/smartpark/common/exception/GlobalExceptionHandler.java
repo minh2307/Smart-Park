@@ -26,7 +26,7 @@ public class GlobalExceptionHandler {
         log.warn("Business exception: [{}] {}", ex.getErrorCode(), ex.getMessage());
         return ResponseEntity
                 .status(ex.getHttpStatus())
-                .body(ApiResponse.error(ex.getHttpStatus().value(), ex.getMessage()));
+                .body(ApiResponse.error(ex.getHttpStatus().value(), ex.getErrorCode(), ex.getMessage()));
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)

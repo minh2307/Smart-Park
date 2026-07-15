@@ -92,7 +92,10 @@ export const UserForm: React.FC<UserFormProps> = ({ initialData, onSubmit, loadi
             error={!!errors.role}
             helperText={errors.role?.message as string}
             options={[
-              { value: 'ADMIN', label: 'Quản trị viên (ADMIN)' },
+              { value: 'SYSTEM_ADMIN', label: 'Quản trị hệ thống' },
+            { value: 'PARK_MANAGER', label: 'Quản lý công viên' },
+            { value: 'SALES_STAFF', label: 'Nhân viên bán hàng' },
+            { value: 'OPERATIONS_STAFF', label: 'Nhân viên vận hành' },
               { value: 'NHAN_VIEN', label: 'Nhân viên (NHÂN VIÊN)' },
             ]}
           />

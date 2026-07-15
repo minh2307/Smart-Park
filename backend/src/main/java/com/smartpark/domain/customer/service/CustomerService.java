@@ -42,6 +42,9 @@ public class CustomerService {
         existing.setAddress(updated.getAddress());
         existing.setGender(updated.getGender());
         existing.setBirthDate(updated.getBirthDate());
+        if (updated.getStatus() != null) {
+            existing.setStatus(updated.getStatus());
+        }
         return customerRepository.save(existing);
     }
 

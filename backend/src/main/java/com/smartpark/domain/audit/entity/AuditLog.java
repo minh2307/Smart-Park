@@ -31,6 +31,10 @@ public class AuditLog {
     @Column(nullable = false, length = 20)
     private String action;
 
+    /** Logical API/domain resource affected by the operation. */
+    @Column(length = 100)
+    private String resource;
+
     /** Tên bảng bị tác động */
     @Column(name = "target_table", nullable = false, length = 100)
     private String targetTable;
@@ -50,8 +54,19 @@ public class AuditLog {
     @Column(name = "ip_address", length = 45)
     private String ipAddress;
 
+    @Column(length = 20)
+    private String result;
+
+    @Column(name = "correlation_id", length = 64)
+    private String correlationId;
+
     /** BR-AUD-01: chỉ INSERT, không UPDATE/DELETE */
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
+    @PreUpdate
+    @PreRemove
+    private void rejectMutation() {
+        throw new IllegalStateException("Audit records are immutable");
+    }
 }

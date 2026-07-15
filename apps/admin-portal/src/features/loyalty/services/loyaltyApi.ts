@@ -214,7 +214,7 @@ export const loyaltyApi = createApi({
           type: body.type || 'ADD',
           points: body.points || 0,
           reason: body.reason || 'General adjustment',
-          requestedBy: body.requestedBy || 'admin',
+          requestedBy: body.requestedBy || 'SYSTEM_ADMIN',
           status: 'PENDING',
           createdAt: new Date().toISOString(),
         };

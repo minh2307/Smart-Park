@@ -31,6 +31,18 @@ public class Park {
     @Column(columnDefinition = "TEXT")
     private String description;
 
+    @Column(precision = 10, scale = 7)
+    private java.math.BigDecimal latitude;
+
+    @Column(precision = 10, scale = 7)
+    private java.math.BigDecimal longitude;
+
+    @Column(length = 50)
+    private String timezone;
+
+    @Column(name = "weather_location_code", length = 100)
+    private String weatherLocationCode;
+
     /** BR-PARK-01: must define max capacity */
     @Column(name = "max_capacity")
     private Integer maxCapacity;

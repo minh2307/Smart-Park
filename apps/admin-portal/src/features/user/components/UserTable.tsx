@@ -65,7 +65,12 @@ export const UserTable: React.FC<UserTableProps> = ({
       id: 'role' as any,
       label: 'Vai trò',
       sortable: true,
-      render: (row: User) => row.role === 'ADMIN' ? 'Quản trị viên' : row.role === 'NHAN_VIEN' ? 'Nhân viên' : row.role,
+      render: (row: User) => ({
+        SYSTEM_ADMIN: 'Quản trị hệ thống',
+        PARK_MANAGER: 'Quản lý công viên',
+        SALES_STAFF: 'Nhân viên bán hàng',
+        OPERATIONS_STAFF: 'Nhân viên vận hành',
+      })[row.role] || row.role,
     },
     {
       id: 'status' as any,

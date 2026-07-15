@@ -1,20 +1,40 @@
 package com.smartpark.domain.auth.validation;
 
+import com.smartpark.domain.settings.dto.SecurityPolicyDto;
+import com.smartpark.domain.settings.service.SecurityPolicyService;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import java.util.regex.Pattern;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public class PasswordConstraintValidator implements ConstraintValidator<ValidPassword, String> {
+    private SecurityPolicyService policyService;
 
-    // Must have at least 8 characters, 1 uppercase, 1 lowercase, 1 number
-    private static final String PASSWORD_PATTERN = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z]).{8,}$";
-    private static final Pattern PATTERN = Pattern.compile(PASSWORD_PATTERN);
+    @Autowired(required = false)
+    public void setPolicyService(SecurityPolicyService policyService) {
+        this.policyService = policyService;
+    }
 
     @Override
     public boolean isValid(String password, ConstraintValidatorContext context) {
-        if (password == null) {
-            return false;
+        if (password == null) return false;
+        SecurityPolicyDto.Response p = policyService == null ? defaultPolicy() : policyService.get();
+        boolean valid = password.length() >= p.getPasswordMinLength()
+                && (!p.isPasswordRequireUppercase() || password.chars().anyMatch(Character::isUpperCase))
+                && (!p.isPasswordRequireLowercase() || password.chars().anyMatch(Character::isLowerCase))
+                && (!p.isPasswordRequireNumber() || password.chars().anyMatch(Character::isDigit))
+                && (!p.isPasswordRequireSpecialCharacter()
+                    || password.chars().anyMatch(ch -> !Character.isLetterOrDigit(ch)));
+        if (!valid) {
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate("Password does not satisfy the active security policy")
+                    .addConstraintViolation();
         }
-        return PATTERN.matcher(password).matches();
+        return valid;
+    }
+
+    private SecurityPolicyDto.Response defaultPolicy() {
+        return SecurityPolicyDto.Response.builder().passwordMinLength(8).passwordRequireUppercase(true)
+                .passwordRequireLowercase(true).passwordRequireNumber(true)
+                .passwordRequireSpecialCharacter(false).build();
     }
 }

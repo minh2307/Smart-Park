@@ -107,7 +107,7 @@ export const router = createBrowserRouter([
           {
             path: 'dashboard',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF', 'OPERATIONS_STAFF']}>
                 <ExecutiveDashboardPage />
               </RoleGuard>
             ),
@@ -118,7 +118,7 @@ export const router = createBrowserRouter([
               {
                 path: 'executive',
                 element: (
-                  <RoleGuard allowedRoles={['ADMIN']}>
+                  <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER']}>
                     <ExecutiveDashboardPage />
                   </RoleGuard>
                 ),
@@ -126,7 +126,7 @@ export const router = createBrowserRouter([
               {
                 path: 'revenue',
                 element: (
-                  <RoleGuard allowedRoles={['ADMIN']}>
+                  <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER']}>
                     <RevenueAnalyticsPage />
                   </RoleGuard>
                 ),
@@ -134,7 +134,7 @@ export const router = createBrowserRouter([
               {
                 path: 'customer',
                 element: (
-                  <RoleGuard allowedRoles={['ADMIN']}>
+                  <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER']}>
                     <CustomerAnalyticsPage />
                   </RoleGuard>
                 ),
@@ -142,7 +142,7 @@ export const router = createBrowserRouter([
               {
                 path: 'booking',
                 element: (
-                  <RoleGuard allowedRoles={['ADMIN']}>
+                  <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER']}>
                     <BookingAnalyticsPage />
                   </RoleGuard>
                 ),
@@ -150,7 +150,7 @@ export const router = createBrowserRouter([
               {
                 path: 'ticket',
                 element: (
-                  <RoleGuard allowedRoles={['ADMIN']}>
+                  <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER']}>
                     <TicketAnalyticsPage />
                   </RoleGuard>
                 ),
@@ -158,7 +158,7 @@ export const router = createBrowserRouter([
               {
                 path: 'ride',
                 element: (
-                  <RoleGuard allowedRoles={['ADMIN']}>
+                  <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER']}>
                     <RideAnalyticsPage />
                   </RoleGuard>
                 ),
@@ -166,7 +166,7 @@ export const router = createBrowserRouter([
               {
                 path: 'parking',
                 element: (
-                  <RoleGuard allowedRoles={['ADMIN']}>
+                  <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER']}>
                     <ParkingAnalyticsPage />
                   </RoleGuard>
                 ),
@@ -174,7 +174,7 @@ export const router = createBrowserRouter([
               {
                 path: 'retail-food',
                 element: (
-                  <RoleGuard allowedRoles={['ADMIN']}>
+                  <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER']}>
                     <RetailFoodAnalyticsPage />
                   </RoleGuard>
                 ),
@@ -182,7 +182,7 @@ export const router = createBrowserRouter([
               {
                 path: 'membership',
                 element: (
-                  <RoleGuard allowedRoles={['ADMIN']}>
+                  <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER']}>
                     <MembershipAnalyticsPage />
                   </RoleGuard>
                 ),
@@ -190,7 +190,7 @@ export const router = createBrowserRouter([
               {
                 path: 'promotion',
                 element: (
-                  <RoleGuard allowedRoles={['ADMIN']}>
+                  <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER']}>
                     <PromotionAnalyticsPage />
                   </RoleGuard>
                 ),
@@ -198,7 +198,7 @@ export const router = createBrowserRouter([
               {
                 path: 'bi',
                 element: (
-                  <RoleGuard allowedRoles={['ADMIN']}>
+                  <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER']}>
                     <BusinessIntelligencePage />
                   </RoleGuard>
                 ),
@@ -211,7 +211,7 @@ export const router = createBrowserRouter([
               {
                 index: true,
                 element: (
-                  <RoleGuard allowedRoles={['ADMIN']}>
+                  <RoleGuard allowedRoles={['SYSTEM_ADMIN']}>
                     <UserListPage />
                   </RoleGuard>
                 ),
@@ -219,7 +219,7 @@ export const router = createBrowserRouter([
               {
                 path: ':id',
                 element: (
-                  <RoleGuard allowedRoles={['ADMIN']}>
+                  <RoleGuard allowedRoles={['SYSTEM_ADMIN']}>
                     <UserDetailsPage />
                   </RoleGuard>
                 ),
@@ -233,7 +233,7 @@ export const router = createBrowserRouter([
               {
                 path: 'overview',
                 element: (
-                  <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
+                  <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF']}>
                     <TicketOverviewPage />
                   </RoleGuard>
                 ),
@@ -241,7 +241,7 @@ export const router = createBrowserRouter([
               {
                 path: 'types',
                 element: (
-                  <RoleGuard allowedRoles={['ADMIN']}>
+                  <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER']}>
                     <div style={{ padding: '1rem' }}>Configure Ticket Types & Pricing Matrix</div>
                   </RoleGuard>
                 ),
@@ -251,7 +251,7 @@ export const router = createBrowserRouter([
           {
             path: 'orders',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF']}>
                 <BookingListPage />
               </RoleGuard>
             ),
@@ -259,7 +259,7 @@ export const router = createBrowserRouter([
           {
             path: 'customers',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF']}>
                 <CustomerListPage />
               </RoleGuard>
             ),
@@ -267,7 +267,7 @@ export const router = createBrowserRouter([
           {
             path: 'memberships',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF']}>
                 <MembershipListPage />
               </RoleGuard>
             ),
@@ -275,7 +275,7 @@ export const router = createBrowserRouter([
           {
             path: 'loyalty',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF']}>
                 <LoyaltyDashboardPage />
               </RoleGuard>
             ),
@@ -283,7 +283,7 @@ export const router = createBrowserRouter([
           {
             path: 'campaigns',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF']}>
                 <CampaignListPage />
               </RoleGuard>
             ),
@@ -291,7 +291,7 @@ export const router = createBrowserRouter([
           {
             path: 'promotions',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF']}>
                 <PromotionListPage />
               </RoleGuard>
             ),
@@ -299,7 +299,7 @@ export const router = createBrowserRouter([
           {
             path: 'coupons',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF']}>
                 <CouponListPage />
               </RoleGuard>
             ),
@@ -307,7 +307,7 @@ export const router = createBrowserRouter([
           {
             path: 'vouchers',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF']}>
                 <VoucherListPage />
               </RoleGuard>
             ),
@@ -315,7 +315,7 @@ export const router = createBrowserRouter([
           {
             path: 'visitors',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF', 'OPERATIONS_STAFF']}>
                 <VisitorListPage />
               </RoleGuard>
             ),
@@ -323,7 +323,7 @@ export const router = createBrowserRouter([
           {
             path: 'rides',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER', 'OPERATIONS_STAFF']}>
                 <RideListPage />
               </RoleGuard>
             ),
@@ -331,7 +331,7 @@ export const router = createBrowserRouter([
           {
             path: 'ride-categories',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER', 'OPERATIONS_STAFF']}>
                 <RideCategoryListPage />
               </RoleGuard>
             ),
@@ -339,7 +339,7 @@ export const router = createBrowserRouter([
           {
             path: 'gates',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER', 'OPERATIONS_STAFF']}>
                 <GateListPage />
               </RoleGuard>
             ),
@@ -347,7 +347,7 @@ export const router = createBrowserRouter([
           {
             path: 'ticket-validation',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER', 'OPERATIONS_STAFF']}>
                 <ValidationDashboardPage />
               </RoleGuard>
             ),
@@ -355,7 +355,7 @@ export const router = createBrowserRouter([
           {
             path: 'scanner',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER', 'OPERATIONS_STAFF']}>
                 <ScannerTerminalPage />
               </RoleGuard>
             ),
@@ -363,7 +363,7 @@ export const router = createBrowserRouter([
           {
             path: 'parking',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER', 'OPERATIONS_STAFF']}>
                 <ParkingListPage />
               </RoleGuard>
             ),
@@ -371,7 +371,7 @@ export const router = createBrowserRouter([
           {
             path: 'lockers',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER', 'OPERATIONS_STAFF']}>
                 <LockerListPage />
               </RoleGuard>
             ),
@@ -379,7 +379,7 @@ export const router = createBrowserRouter([
           {
             path: 'food-court',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF']}>
                 <FoodCourtListPage />
               </RoleGuard>
             ),
@@ -387,7 +387,7 @@ export const router = createBrowserRouter([
           {
             path: 'retail',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF']}>
                 <RetailListPage />
               </RoleGuard>
             ),
@@ -395,7 +395,7 @@ export const router = createBrowserRouter([
           {
             path: 'pos',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF']}>
                 <POSScreen />
               </RoleGuard>
             ),
@@ -403,7 +403,7 @@ export const router = createBrowserRouter([
           {
             path: 'notifications',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF', 'OPERATIONS_STAFF']}>
                 <NotificationPage />
               </RoleGuard>
             ),
@@ -411,7 +411,7 @@ export const router = createBrowserRouter([
           {
             path: 'support',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF', 'OPERATIONS_STAFF']}>
                 <SupportPage />
               </RoleGuard>
             ),
@@ -419,7 +419,7 @@ export const router = createBrowserRouter([
           {
             path: 'incidents',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER', 'OPERATIONS_STAFF']}>
                 <IncidentPage />
               </RoleGuard>
             ),
@@ -427,7 +427,7 @@ export const router = createBrowserRouter([
           {
             path: 'operational',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER']}>
                 <OperationalDashboardPage />
               </RoleGuard>
             ),
@@ -435,7 +435,7 @@ export const router = createBrowserRouter([
           {
             path: 'reports',
             element: (
-              <RoleGuard allowedRoles={['ADMIN']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER']}>
                 <ReportsPage />
               </RoleGuard>
             ),
@@ -443,7 +443,7 @@ export const router = createBrowserRouter([
           {
             path: 'exports',
             element: (
-              <RoleGuard allowedRoles={['ADMIN']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER']}>
                 <ExportPage />
               </RoleGuard>
             ),
@@ -451,7 +451,7 @@ export const router = createBrowserRouter([
           {
             path: 'profile',
             element: (
-              <RoleGuard allowedRoles={['ADMIN', 'NHAN_VIEN', 'MANAGER']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF', 'OPERATIONS_STAFF']}>
                 <ProfilePage />
               </RoleGuard>
             ),
@@ -459,7 +459,7 @@ export const router = createBrowserRouter([
           {
             path: 'settings',
             element: (
-              <RoleGuard allowedRoles={['ADMIN']}>
+              <RoleGuard allowedRoles={['SYSTEM_ADMIN']}>
                 <div style={{ padding: '1rem' }}>Global System Configurations & Backup Policies</div>
               </RoleGuard>
             ),

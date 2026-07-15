@@ -53,7 +53,12 @@ export const UserDetails: React.FC<UserDetailsProps> = ({ user }) => {
                 Vai trò
               </Typography>
               <Typography variant="body1" fontWeight={500}>
-                {user.role === 'ADMIN' ? 'Quản trị viên' : user.role === 'NHAN_VIEN' ? 'Nhân viên' : user.role}
+                {({
+  SYSTEM_ADMIN: 'Quản trị hệ thống',
+  PARK_MANAGER: 'Quản lý công viên',
+  SALES_STAFF: 'Nhân viên bán hàng',
+  OPERATIONS_STAFF: 'Nhân viên vận hành',
+})[user.role] || user.role}
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -80,7 +85,12 @@ export const UserDetails: React.FC<UserDetailsProps> = ({ user }) => {
                 ))
               ) : (
                 <Typography variant="body2" color="text.secondary">
-                  Chưa được gán quyền cụ thể nào. Thừa hưởng từ vai trò {user.role === 'ADMIN' ? 'Quản trị viên' : user.role === 'NHAN_VIEN' ? 'Nhân viên' : user.role}.
+                  Chưa được gán quyền cụ thể nào. Thừa hưởng từ vai trò {({
+  SYSTEM_ADMIN: 'Quản trị hệ thống',
+  PARK_MANAGER: 'Quản lý công viên',
+  SALES_STAFF: 'Nhân viên bán hàng',
+  OPERATIONS_STAFF: 'Nhân viên vận hành',
+})[user.role] || user.role}.
                 </Typography>
               )}
             </Box>

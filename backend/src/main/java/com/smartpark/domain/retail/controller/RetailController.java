@@ -27,6 +27,7 @@ public class RetailController {
     }
 
     @PatchMapping("/{id}/stock")
+    @org.springframework.security.access.prepost.PreAuthorize("hasAuthority('RETAIL_UPDATE')")
     public ResponseEntity<ApiResponse<RetailItem>> updateStock(@PathVariable Long id, @RequestParam Integer quantity) {
         return ResponseEntity.ok(ApiResponse.success(retailService.updateStock(id, quantity)));
     }

@@ -32,7 +32,7 @@ export interface Customer {
   birthDate?: string;
   gender?: string;
   address?: string;
-  status: 'ACTIVE' | 'SUSPENDED';
+  status: 'ACTIVE' | 'INACTIVE';
   createdAt: string;
   updatedAt: string;
   membership?: CustomerMembership;

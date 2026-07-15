@@ -5,7 +5,7 @@ export const userCreateSchema = z.object({
   username: z.string().min(3, 'Tên đăng nhập phải có ít nhất 3 ký tự'),
   email: z.string().email('Địa chỉ email không hợp lệ'),
   phone: z.string().min(10, 'Số điện thoại phải có ít nhất 10 số'),
-  role: z.enum(['ADMIN', 'NHAN_VIEN'], { required_error: 'Vui lòng chọn vai trò' }),
+  role: z.enum(['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF', 'OPERATIONS_STAFF'], { required_error: 'Vui lòng chọn vai trò' }),
   status: z.enum(['ACTIVE', 'INACTIVE', 'LOCKED', 'SUSPENDED']).default('ACTIVE'),
   password: z.string().min(6, 'Mật khẩu phải có ít nhất 6 ký tự'),
 });
@@ -15,7 +15,7 @@ export const userUpdateSchema = z.object({
   username: z.string().min(3, 'Tên đăng nhập phải có ít nhất 3 ký tự'),
   email: z.string().email('Địa chỉ email không hợp lệ'),
   phone: z.string().min(10, 'Số điện thoại phải có ít nhất 10 số'),
-  role: z.enum(['ADMIN', 'NHAN_VIEN']),
+  role: z.enum(['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF', 'OPERATIONS_STAFF']),
   status: z.enum(['ACTIVE', 'INACTIVE', 'LOCKED', 'SUSPENDED']),
   password: z.string().min(6, 'Mật khẩu phải có ít nhất 6 ký tự').optional().or(z.literal('')),
 });

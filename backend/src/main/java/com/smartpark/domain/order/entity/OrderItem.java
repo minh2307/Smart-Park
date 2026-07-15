@@ -25,6 +25,12 @@ public class OrderItem {
     @Column(name = "reference_id")
     private Long referenceId;
 
+    @Column(name = "item_sku", length = 50)
+    private String itemSku;
+
+    @Column(name = "item_name", length = 200)
+    private String itemName;
+
     @Column(nullable = false)
     private Integer quantity;
 

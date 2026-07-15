@@ -225,7 +225,8 @@ export const lockerApi = createApi({
       queryFn: async ({ id, status }) => {
         const index = mockLockers.findIndex((l) => l.id === id);
         if (index === -1) return { error: { status: 404, statusText: 'Not Found', data: null } };
-        mockLockers[index].status = status;
+        
+        mockLockers[index] = { ...mockLockers[index], status };
         return { data: mockLockers[index] };
       },
       invalidatesTags: ['Locker', 'LockerDashboard'],
@@ -233,15 +234,15 @@ export const lockerApi = createApi({
 
     rentLocker: builder.mutation<LockerRental, { lockerId: number; customerName: string; deposit: number }>({
       queryFn: async ({ lockerId, customerName, deposit }) => {
-        const locker = mockLockers.find((l) => l.id === lockerId);
-        if (!locker) return { error: { status: 404, statusText: 'Locker Not Found', data: null } };
+        const lockerIndex = mockLockers.findIndex((l) => l.id === lockerId);
+        if (lockerIndex === -1) return { error: { status: 404, statusText: 'Locker Not Found', data: null } };
 
-        locker.status = 'OCCUPIED';
+        mockLockers[lockerIndex] = { ...mockLockers[lockerIndex], status: 'OCCUPIED' };
 
         const newRental: LockerRental = {
           id: mockLockerRentals.length + 1,
           lockerId,
-          lockerCode: locker.lockerCode,
+          lockerCode: mockLockers[lockerIndex].lockerCode,
           customerId: 99, // General guest id
           customerName,
           bookingCode: `BK-L-${Math.floor(100000 + Math.random() * 900000)}`,
@@ -250,7 +251,7 @@ export const lockerApi = createApi({
           status: 'ACTIVE',
         };
 
-        mockLockerRentals.unshift(newRental);
+        mockLockerRentals = [newRental, ...mockLockerRentals];
         return { data: newRental };
       },
       invalidatesTags: ['Locker', 'LockerRental', 'LockerDashboard'],
@@ -258,21 +259,26 @@ export const lockerApi = createApi({
 
     returnLocker: builder.mutation<LockerRental, { rentalId: number; penalty?: number; damageFee?: number }>({
       queryFn: async ({ rentalId, penalty = 0, damageFee = 0 }) => {
-        const rental = mockLockerRentals.find((r) => r.id === rentalId);
-        if (!rental) return { error: { status: 404, statusText: 'Rental Not Found', data: null } };
+        const rentalIndex = mockLockerRentals.findIndex((r) => r.id === rentalId);
+        if (rentalIndex === -1) return { error: { status: 404, statusText: 'Rental Not Found', data: null } };
 
-        rental.status = 'COMPLETED';
-        rental.endTime = new Date().toISOString();
-        rental.penaltyAmount = penalty + damageFee;
-        rental.amountPaid = 50000 + penalty + damageFee; // Base 50k rental cost
+        const updatedRental = {
+          ...mockLockerRentals[rentalIndex],
+          status: 'COMPLETED' as const,
+          endTime: new Date().toISOString(),
+          penaltyAmount: penalty + damageFee,
+          amountPaid: 50000 + penalty + damageFee,
+        };
+
+        mockLockerRentals[rentalIndex] = updatedRental;
 
         // update locker status back to available
-        const locker = mockLockers.find((l) => l.id === rental.lockerId);
-        if (locker) {
-          locker.status = 'AVAILABLE';
+        const lockerIndex = mockLockers.findIndex((l) => l.id === updatedRental.lockerId);
+        if (lockerIndex !== -1) {
+          mockLockers[lockerIndex] = { ...mockLockers[lockerIndex], status: 'AVAILABLE' };
         }
 
-        return { data: rental };
+        return { data: updatedRental };
       },
       invalidatesTags: ['Locker', 'LockerRental', 'LockerDashboard'],
     }),

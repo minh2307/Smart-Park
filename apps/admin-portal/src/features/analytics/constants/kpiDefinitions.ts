@@ -29,6 +29,7 @@ export interface KpiDefinition {
   format: 'currency' | 'number' | 'percentage';
   description: string;
   gridSize: { xs: number; sm: number; md: number; lg: number };
+  allowedRoles?: string[];
 }
 
 export const KPI_DEFINITIONS: KpiDefinition[] = [
@@ -40,6 +41,7 @@ export const KPI_DEFINITIONS: KpiDefinition[] = [
     format: 'currency',
     description: 'Tổng doanh thu trên tất cả địa điểm và kênh bán hàng',
     gridSize: { xs: 12, sm: 6, md: 4, lg: 3 },
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF'],
   },
   {
     key: 'revenueGrowth',
@@ -49,6 +51,7 @@ export const KPI_DEFINITIONS: KpiDefinition[] = [
     format: 'percentage',
     description: 'Tỷ lệ tăng trưởng doanh thu so với kỳ trước',
     gridSize: { xs: 12, sm: 6, md: 4, lg: 3 },
+    allowedRoles: ['SYSTEM_ADMIN'],
   },
   {
     key: 'visitorsToday',
@@ -58,6 +61,7 @@ export const KPI_DEFINITIONS: KpiDefinition[] = [
     format: 'number',
     description: 'Tổng số khách vào cổng hôm nay',
     gridSize: { xs: 12, sm: 6, md: 4, lg: 3 },
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF', 'OPERATIONS_STAFF'],
   },
   {
     key: 'bookingsToday',
@@ -67,6 +71,7 @@ export const KPI_DEFINITIONS: KpiDefinition[] = [
     format: 'number',
     description: 'Số lượt đặt vé mới trong ngày hôm nay',
     gridSize: { xs: 12, sm: 6, md: 4, lg: 3 },
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF'],
   },
   {
     key: 'ticketsSold',
@@ -76,6 +81,7 @@ export const KPI_DEFINITIONS: KpiDefinition[] = [
     format: 'number',
     description: 'Tổng số vé bán ra trong kỳ được chọn',
     gridSize: { xs: 12, sm: 6, md: 4, lg: 3 },
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF'],
   },
   {
     key: 'activeMemberships',
@@ -85,6 +91,7 @@ export const KPI_DEFINITIONS: KpiDefinition[] = [
     format: 'number',
     description: 'Số tài khoản thành viên đang hoạt động',
     gridSize: { xs: 12, sm: 6, md: 4, lg: 3 },
+    allowedRoles: ['SYSTEM_ADMIN'],
   },
   {
     key: 'rideUtilization',
@@ -94,6 +101,7 @@ export const KPI_DEFINITIONS: KpiDefinition[] = [
     format: 'percentage',
     description: 'Hiệu suất khai thác sức chứa trung bình của trò chơi',
     gridSize: { xs: 12, sm: 6, md: 4, lg: 3 },
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'OPERATIONS_STAFF'],
   },
   {
     key: 'parkingUsage',
@@ -103,6 +111,7 @@ export const KPI_DEFINITIONS: KpiDefinition[] = [
     format: 'percentage',
     description: 'Tỷ lệ lấp đầy hiện tại của bãi đỗ xe',
     gridSize: { xs: 12, sm: 6, md: 4, lg: 3 },
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'OPERATIONS_STAFF'],
   },
   {
     key: 'foodCourtRevenue',
@@ -112,6 +121,7 @@ export const KPI_DEFINITIONS: KpiDefinition[] = [
     format: 'currency',
     description: 'Doanh thu từ quầy ăn uống và nhà hàng',
     gridSize: { xs: 12, sm: 6, md: 4, lg: 3 },
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF'],
   },
   {
     key: 'retailRevenue',
@@ -121,6 +131,7 @@ export const KPI_DEFINITIONS: KpiDefinition[] = [
     format: 'currency',
     description: 'Doanh thu từ các cửa hàng quà lưu niệm',
     gridSize: { xs: 12, sm: 6, md: 4, lg: 3 },
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF'],
   },
   {
     key: 'refundRate',
@@ -130,6 +141,7 @@ export const KPI_DEFINITIONS: KpiDefinition[] = [
     format: 'percentage',
     description: 'Tỷ lệ phần trăm đơn hàng bị yêu cầu hoàn tiền',
     gridSize: { xs: 12, sm: 6, md: 4, lg: 3 },
+    allowedRoles: ['SYSTEM_ADMIN'],
   },
   {
     key: 'customerSatisfaction',
@@ -139,6 +151,7 @@ export const KPI_DEFINITIONS: KpiDefinition[] = [
     format: 'percentage',
     description: 'Điểm đánh giá độ hài lòng trung bình của du khách',
     gridSize: { xs: 12, sm: 6, md: 4, lg: 3 },
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'OPERATIONS_STAFF'],
   },
   {
     key: 'netProfit',
@@ -148,6 +161,7 @@ export const KPI_DEFINITIONS: KpiDefinition[] = [
     format: 'currency',
     description: 'Lợi nhuận ròng sau khi trừ tất cả chi phí',
     gridSize: { xs: 12, sm: 6, md: 4, lg: 3 },
+    allowedRoles: ['SYSTEM_ADMIN'],
   },
   {
     key: 'operatingCost',
@@ -157,6 +171,7 @@ export const KPI_DEFINITIONS: KpiDefinition[] = [
     format: 'currency',
     description: 'Tổng các khoản chi phí vận hành hệ thống',
     gridSize: { xs: 12, sm: 6, md: 4, lg: 3 },
+    allowedRoles: ['SYSTEM_ADMIN'],
   },
   {
     key: 'conversionRate',
@@ -166,5 +181,6 @@ export const KPI_DEFINITIONS: KpiDefinition[] = [
     format: 'percentage',
     description: 'Tỷ lệ chuyển đổi từ lượt truy cập sang lượt đặt vé',
     gridSize: { xs: 12, sm: 6, md: 4, lg: 3 },
+    allowedRoles: ['SYSTEM_ADMIN'],
   },
 ];

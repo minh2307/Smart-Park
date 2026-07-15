@@ -183,7 +183,7 @@ export const IncidentPage: React.FC = () => {
           onPageChange={setIncPage}
           onSizeChange={setIncSize}
           onUpdateStatus={async (id, status, notes) => {
-            await updateIncidentStatus({ id, status, notes, updatedBy: 'Admin' }).unwrap();
+            await updateIncidentStatus({ id, status, notes, updatedBy: 'SYSTEM_ADMIN' }).unwrap();
             refetchIncidents();
             refetchStats();
           }}

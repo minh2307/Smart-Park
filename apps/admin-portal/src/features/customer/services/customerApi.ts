@@ -146,7 +146,7 @@ export const mockCustomers: Customer[] = [
     birthDate: '1995-07-08',
     gender: 'FEMALE',
     address: '128 Broadway, New York, NY',
-    status: 'SUSPENDED',
+    status: 'INACTIVE',
     createdAt: '2026-03-05T09:15:00Z',
     updatedAt: '2026-07-05T16:30:00Z',
     membership: {

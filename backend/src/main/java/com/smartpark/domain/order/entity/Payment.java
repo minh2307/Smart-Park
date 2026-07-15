@@ -32,7 +32,7 @@ public class Payment {
      * Mã tham chiếu giao dịch từ cổng thanh toán (VNPay/MoMo transaction ID).
      * BR-PAY-01: dùng để đối soát checksum webhook.
      */
-    @Column(name = "transaction_reference", length = 100)
+    @Column(name = "transaction_reference", unique = true, length = 100)
     private String transactionReference;
 
     @Column(nullable = false, precision = 15, scale = 2)

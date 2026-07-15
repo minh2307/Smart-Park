@@ -73,6 +73,24 @@ public class ParkingTransaction {
     @Column(name = "notes", length = 500)
     private String notes;
 
+    @Column(name = "entry_image_reference", length = 500)
+    private String entryImageReference;
+
+    @Column(name = "exit_image_reference", length = 500)
+    private String exitImageReference;
+
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "entry_device_id")
+    private com.smartpark.domain.device.entity.IoTDevice entryDevice;
+
+    @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name = "exit_device_id")
+    private com.smartpark.domain.device.entity.IoTDevice exitDevice;
+
+    @Column(name = "entry_recognition_confidence", precision = 5, scale = 4)
+    private BigDecimal entryRecognitionConfidence;
+
+    @Column(name = "exit_recognition_confidence", precision = 5, scale = 4)
+    private BigDecimal exitRecognitionConfidence;
+
     public enum VehicleType { MOTORBIKE, CAR, TRUCK, BUS }
     public enum ParkingStatus { PARKED, EXITED, OVERSTAY }
     public enum PaymentStatus { UNPAID, PAID, WAIVED }

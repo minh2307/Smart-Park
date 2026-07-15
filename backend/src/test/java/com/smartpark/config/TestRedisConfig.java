@@ -147,6 +147,14 @@ public class TestRedisConfig {
                 Mockito.doAnswer(inv -> store.get(inv.getArgument(0)))
                        .when(ops).get(Mockito.anyString());
 
+                Mockito.doAnswer(inv -> {
+                    String k = inv.getArgument(0);
+                    String v = store.getOrDefault(k, "0");
+                    long newVal = Long.parseLong(v) + 1;
+                    store.put(k, String.valueOf(newVal));
+                    return newVal;
+                }).when(ops).increment(Mockito.anyString());
+
                 return ops;
             }
 

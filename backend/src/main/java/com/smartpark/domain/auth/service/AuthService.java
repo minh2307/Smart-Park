@@ -6,6 +6,8 @@ import com.smartpark.domain.auth.dto.AuthDto;
 import com.smartpark.domain.auth.entity.SecurityAuditLog;
 import com.smartpark.domain.auth.entity.User;
 import com.smartpark.domain.auth.repository.UserRepository;
+import com.smartpark.domain.settings.dto.SecurityPolicyDto;
+import com.smartpark.domain.settings.service.SecurityPolicyService;
 import com.smartpark.security.JwtService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,36 +33,42 @@ public class AuthService {
     private final StringRedisTemplate redisTemplate;
     private final SecurityAuditService securityAuditService;
     private final UserDetailsService userDetailsService;
+    private final SecurityPolicyService securityPolicyService;
     private final com.smartpark.domain.employee.repository.EmployeeRepository employeeRepository;
     private final com.smartpark.domain.customer.repository.CustomerRepository customerRepository;
     private final com.smartpark.domain.membership.repository.MembershipRepository membershipRepository;
     private final com.smartpark.domain.membership.repository.MembershipTierRepository membershipTierRepository;
 
-    private static final int MAX_FAILED_ATTEMPTS = 5;
-    private static final int LOCK_TIME_DURATION = 15; // minutes
-
     @Transactional(noRollbackFor = BadCredentialsException.class)
     public AuthDto.TokenResponse login(AuthDto.LoginRequest request) {
         User user = userRepository.findByUsernameWithRoles(request.getUsername())
                 .orElseThrow(() -> new BadCredentialsException("Tên đăng nhập hoặc mật khẩu không đúng."));
+        SecurityPolicyDto.Response securityPolicy = securityPolicyService.get();
 
         if (user.getStatus() == User.UserStatus.DISABLED) {
             throw new BusinessException("ERR-AUTH-001", "Tài khoản đã bị vô hiệu hóa.");
         }
 
-        if (user.getStatus() == User.UserStatus.LOCKED || 
-            (user.getLockedUntil() != null && user.getLockedUntil().isAfter(LocalDateTime.now()))) {
+        if (user.getLockedUntil() != null && user.getLockedUntil().isAfter(LocalDateTime.now())) {
             throw new BusinessException("ERR-AUTH-001", "Tài khoản đang bị khóa. Vui lòng thử lại sau.");
+        }
+        if (user.getStatus() == User.UserStatus.LOCKED) {
+            if (user.getLockedUntil() == null) {
+                throw new BusinessException("ERR-AUTH-001", "Tài khoản đang bị khóa. Vui lòng thử lại sau.");
+            }
+            user.setStatus(User.UserStatus.ACTIVE);
+            user.setLockedUntil(null);
+            user.setFailedLoginAttempts(0);
         }
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPasswordHash())) {
-            int newFailures = user.getFailedLoginAttempts() + 1;
+            int newFailures = recordFailedAttempt(user, securityPolicy);
             user.setFailedLoginAttempts(newFailures);
-            if (newFailures >= MAX_FAILED_ATTEMPTS) {
-                user.setLockedUntil(LocalDateTime.now().plusMinutes(LOCK_TIME_DURATION));
+            if (newFailures >= securityPolicy.getMaxLoginAttempts()) {
+                user.setLockedUntil(LocalDateTime.now().plusMinutes(securityPolicy.getAccountLockMinutes()));
                 user.setStatus(User.UserStatus.LOCKED);
             }
-            userRepository.save(user);
+            userRepository.saveAndFlush(user);
             securityAuditService.logAudit(user.getId(), "LOGIN_FAILED");
             throw new BadCredentialsException("Tên đăng nhập hoặc mật khẩu không đúng.");
         }
@@ -72,6 +80,7 @@ public class AuthService {
             user.setStatus(User.UserStatus.ACTIVE);
             userRepository.save(user);
         }
+        deleteLoginAttemptCounter(user.getId());
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
         
@@ -79,7 +88,8 @@ public class AuthService {
         String refreshToken = jwtService.generateRefreshToken(userDetails);
         
         // Store refresh token in Redis (7 days TTL)
-        redisTemplate.opsForValue().set("RT:" + user.getId() + ":" + request.getDeviceId(), refreshToken, 7, TimeUnit.DAYS);
+        redisTemplate.opsForValue().set("RT:" + user.getId() + ":" + request.getDeviceId(), refreshToken,
+                jwtService.currentRefreshTokenDays(), TimeUnit.DAYS);
 
         securityAuditService.logAudit(user.getId(), "LOGIN_SUCCESS");
         log.info("[USER LOGIN] username={}", user.getUsername());
@@ -162,11 +172,13 @@ public class AuthService {
         if (user.getRoles() != null && !user.getRoles().isEmpty()) {
             String dbRole = user.getRoles().iterator().next().getCode();
             if ("SYSTEM_ADMIN".equals(dbRole) || "ADMIN".equals(dbRole)) {
-                mappedRole = "ADMIN";
+                mappedRole = "SYSTEM_ADMIN";
             } else if ("PARK_MANAGER".equals(dbRole) || "QUAN_LY".equals(dbRole) || "MANAGER".equals(dbRole)) {
-                mappedRole = "MANAGER";
+                mappedRole = "PARK_MANAGER";
             } else if ("GATE_STAFF".equals(dbRole) || "NHAN_VIEN".equals(dbRole)) {
-                mappedRole = "NHAN_VIEN";
+                mappedRole = "OPERATIONS_STAFF";
+            } else {
+                mappedRole = dbRole;
             }
         }
         response.setRole(mappedRole);
@@ -246,7 +258,8 @@ public class AuthService {
         String newRefreshToken = jwtService.generateRefreshToken(userDetails);
         
         // Rotate
-        redisTemplate.opsForValue().set("RT:" + user.getId() + ":" + request.getDeviceId(), newRefreshToken, 7, TimeUnit.DAYS);
+        redisTemplate.opsForValue().set("RT:" + user.getId() + ":" + request.getDeviceId(), newRefreshToken,
+                jwtService.currentRefreshTokenDays(), TimeUnit.DAYS);
 
         log.info("[TOKEN REFRESHED] username={}", username);
         return new AuthDto.TokenResponse(newAccessToken, newRefreshToken, user.getId(), user.getUsername(), user.getEmail());
@@ -331,6 +344,25 @@ public class AuthService {
         }
 
         return getMe(username);
+    }
+
+    private int recordFailedAttempt(User user, SecurityPolicyDto.Response policy) {
+        String key = "LOGIN_FAIL:" + user.getId();
+        try {
+            Long failures = redisTemplate.opsForValue().increment(key);
+            if (failures != null && failures == 1) {
+                redisTemplate.expire(key, policy.getLoginAttemptWindowMinutes(), TimeUnit.MINUTES);
+            }
+            return failures == null ? user.getFailedLoginAttempts() + 1 : Math.toIntExact(failures);
+        } catch (RuntimeException ex) {
+            log.warn("Login attempt counter unavailable; using database counter: {}", ex.getMessage());
+            return user.getFailedLoginAttempts() + 1;
+        }
+    }
+
+    private void deleteLoginAttemptCounter(Long userId) {
+        try { redisTemplate.delete("LOGIN_FAIL:" + userId); }
+        catch (RuntimeException ex) { log.warn("Could not clear login attempt counter: {}", ex.getMessage()); }
     }
 
 }

@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.jpa.repository.Lock;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
@@ -31,6 +33,10 @@ public interface ParkingLotRepository extends JpaRepository<ParkingLot, Long> {
      */
     @Query("SELECT p FROM ParkingLot p WHERE p.id = :id AND p.deletedAt IS NULL")
     Optional<ParkingLot> findByIdAndNotDeleted(@Param("id") Long id);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT p FROM ParkingLot p WHERE p.id = :id AND p.deletedAt IS NULL")
+    Optional<ParkingLot> findByIdForUpdate(@Param("id") Long id);
 
     /**
      * Kiểm tra còn active session chưa (để chặn xóa bãi).

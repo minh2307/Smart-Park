@@ -34,7 +34,7 @@ export const UserListPage: React.FC = () => {
   const [assignRole, { isLoading: isAssigning }] = useAssignRolesMutation();
 
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
-  
+
   const [formOpen, setFormOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [roleOpen, setRoleOpen] = useState(false);
@@ -171,7 +171,7 @@ export const UserListPage: React.FC = () => {
           open={roleOpen}
           onClose={() => setRoleOpen(false)}
           onConfirm={handleAssignRoleConfirm}
-          currentRole={selectedUser?.role || 'NHAN_VIEN'}
+          currentRole={selectedUser?.role || 'OPERATIONS_STAFF'}
           username={selectedUser?.username || ''}
           loading={isAssigning}
         />

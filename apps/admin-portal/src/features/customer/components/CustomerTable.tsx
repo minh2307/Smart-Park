@@ -64,12 +64,12 @@ export const CustomerTable: React.FC<CustomerTableProps> = ({
   };
 
   const renderStatus = (status: string) => {
-    const isSuspended = status === 'SUSPENDED';
+    const isInactive = status === 'INACTIVE';
     return (
       <Chip
-        label={status === 'ACTIVE' ? 'HOẠT ĐỘNG' : status === 'SUSPENDED' ? 'TẠM KHÓA' : status}
+        label={status === 'ACTIVE' ? 'HOẠT ĐỘNG' : status === 'INACTIVE' ? 'NGỪNG HOẠT ĐỘNG' : status}
         size="small"
-        color={isSuspended ? 'error' : 'success'}
+        color={isInactive ? 'error' : 'success'}
         variant="outlined"
         sx={{ fontWeight: 'bold' }}
       />

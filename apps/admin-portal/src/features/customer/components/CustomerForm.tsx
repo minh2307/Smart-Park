@@ -76,7 +76,6 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({
                 fullWidth
                 error={!!errors.email}
                 helperText={errors.email?.message}
-                disabled={!!initialData} // Email is typical primary username, lock during edit
               />
             )}
           />
@@ -144,7 +143,7 @@ export const CustomerForm: React.FC<CustomerFormProps> = ({
               render={({ field }) => (
                 <Select {...field} labelId="status-label" label="Trạng thái">
                   <MenuItem value="ACTIVE">Hoạt động</MenuItem>
-                  <MenuItem value="SUSPENDED">Đã khóa</MenuItem>
+                  <MenuItem value="INACTIVE">Ngừng hoạt động</MenuItem>
                 </Select>
               )}
             />

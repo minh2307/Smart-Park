@@ -3,6 +3,7 @@ package com.smartpark.domain.retail.service;
 import com.smartpark.common.exception.BusinessException;
 import com.smartpark.domain.retail.entity.RetailItem;
 import com.smartpark.domain.retail.repository.RetailItemRepository;
+import com.smartpark.domain.inventory.service.InventoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class RetailService {
 
     private final RetailItemRepository retailItemRepository;
+    private final InventoryService inventoryService;
 
     @Transactional(readOnly = true)
     public Page<RetailItem> findAll(Pageable pageable) {
@@ -36,8 +38,6 @@ public class RetailService {
 
     @Transactional
     public RetailItem updateStock(Long id, Integer quantity) {
-        RetailItem item = findById(id);
-        item.setStockQuantity(quantity);
-        return retailItemRepository.save(item);
+        return inventoryService.setStockFromLegacyApi(id, quantity);
     }
 }

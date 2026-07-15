@@ -3,6 +3,10 @@ package com.smartpark.domain.parking.repository;
 import com.smartpark.domain.parking.entity.ParkingTransaction;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import jakarta.persistence.LockModeType;
 
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +14,9 @@ import java.util.Optional;
 @Repository
 public interface ParkingTransactionRepository extends JpaRepository<ParkingTransaction, Long> {
     Optional<ParkingTransaction> findByVehiclePlateAndStatus(String plate, ParkingTransaction.ParkingStatus status);
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("SELECT p FROM ParkingTransaction p WHERE p.parkingLot.id = :lotId AND p.vehiclePlate = :plate AND p.status = :status")
+    Optional<ParkingTransaction> findActiveForUpdate(@Param("lotId") Long lotId, @Param("plate") String plate, @Param("status") ParkingTransaction.ParkingStatus status);
     List<ParkingTransaction> findByParkingLotId(Long lotId);
     long countByExitTimeIsNull();
 

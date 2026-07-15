@@ -31,8 +31,11 @@ export const UserFilterPanel: React.FC<UserFilterPanelProps> = ({
           onChange={(e: any) => onRoleChange(e.target.value as UserRole | '')}
           options={[
             { value: '', label: 'Tất cả vai trò' },
-            { value: 'ADMIN', label: 'Quản trị viên' },
-            { value: 'NHAN_VIEN', label: 'Nhân viên' },
+            { value: 'SYSTEM_ADMIN', label: 'Quản trị hệ thống' },
+            { value: 'PARK_MANAGER', label: 'Quản lý công viên' },
+            { value: 'SALES_STAFF', label: 'Nhân viên bán hàng' },
+            { value: 'OPERATIONS_STAFF', label: 'Nhân viên vận hành' },
+            
           ]}
         />
       </Box>

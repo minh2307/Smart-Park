@@ -1,16 +1,15 @@
 -- Add new columns for payOS integration to the payments table
-ALTER TABLE payments
-    ADD COLUMN provider VARCHAR(50),
-    ADD COLUMN provider_payment_link_id VARCHAR(100),
-    ADD COLUMN provider_transaction_id VARCHAR(100),
-    ADD COLUMN order_code VARCHAR(100),
-    ADD COLUMN checkout_url VARCHAR(500),
-    ADD COLUMN qr_code TEXT,
-    ADD COLUMN provider_status VARCHAR(50),
-    ADD COLUMN paid_at TIMESTAMP,
-    ADD COLUMN cancelled_at TIMESTAMP,
-    ADD COLUMN expired_at TIMESTAMP,
-    ADD COLUMN failure_reason VARCHAR(255);
+ALTER TABLE payments ADD COLUMN provider VARCHAR(50);
+ALTER TABLE payments ADD COLUMN provider_payment_link_id VARCHAR(100);
+ALTER TABLE payments ADD COLUMN provider_transaction_id VARCHAR(100);
+ALTER TABLE payments ADD COLUMN order_code VARCHAR(100);
+ALTER TABLE payments ADD COLUMN checkout_url VARCHAR(500);
+ALTER TABLE payments ADD COLUMN qr_code TEXT;
+ALTER TABLE payments ADD COLUMN provider_status VARCHAR(50);
+ALTER TABLE payments ADD COLUMN paid_at TIMESTAMP;
+ALTER TABLE payments ADD COLUMN cancelled_at TIMESTAMP;
+ALTER TABLE payments ADD COLUMN expired_at TIMESTAMP;
+ALTER TABLE payments ADD COLUMN failure_reason VARCHAR(255);
 
 -- Create webhook_logs table
 CREATE TABLE webhook_logs (

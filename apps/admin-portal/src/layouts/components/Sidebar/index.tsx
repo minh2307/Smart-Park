@@ -38,7 +38,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ open, onToggle }) => {
 
   const hasAccess = (item: MenuItem) => {
     if (!user) return false;
-    if (user.role === 'ADMIN') return true;
+    if (user.role === 'SYSTEM_ADMIN') return true;
     if (item.allowedRoles && !item.allowedRoles.includes(user.role)) {
       return false;
     }

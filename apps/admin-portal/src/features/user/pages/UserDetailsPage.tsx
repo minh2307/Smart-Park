@@ -23,7 +23,7 @@ export const UserDetailsPage: React.FC = () => {
     fullName: 'System Administrator',
     email: 'admin@smartpark.com',
     phone: '0123456789',
-    role: 'ADMIN',
+    role: 'SYSTEM_ADMIN',
     status: 'ACTIVE',
     createdDate: '2026-07-01T08:00:00Z',
     lastUpdated: '2026-07-01T08:00:00Z',

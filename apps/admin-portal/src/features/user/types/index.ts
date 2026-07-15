@@ -1,4 +1,4 @@
-export type UserRole = 'ADMIN' | 'NHAN_VIEN';
+export type UserRole = 'SYSTEM_ADMIN' | 'PARK_MANAGER' | 'SALES_STAFF' | 'OPERATIONS_STAFF';
 export type UserStatus = 'ACTIVE' | 'INACTIVE' | 'LOCKED' | 'SUSPENDED';
 
 export interface User {

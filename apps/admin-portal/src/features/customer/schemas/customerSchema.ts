@@ -28,7 +28,7 @@ export const customerFormSchema = z.object({
     .max(200, 'Address cannot exceed 200 characters')
     .optional()
     .or(z.literal('')),
-  status: z.enum(['ACTIVE', 'SUSPENDED']).default('ACTIVE'),
+  status: z.enum(['ACTIVE', 'INACTIVE']).default('ACTIVE'),
   membershipTierId: z.number().optional().or(z.literal('')),
   initialPoints: z.number().min(0, 'Points cannot be negative').optional(),
 });

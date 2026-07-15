@@ -1,9 +1,16 @@
 import React from 'react';
 import { Box, Button, Typography, Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../features/auth/hooks/useAuth';
 
 export const ForbiddenPage: React.FC = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login');
+  };
 
   return (
     <Container maxWidth="sm">
@@ -41,14 +48,24 @@ export const ForbiddenPage: React.FC = () => {
         <Typography variant="body1" color="text.secondary" maxWidth={400} lineHeight={1.7}>
           You do not have permission to view this resource. Contact your administrator if you believe this is an error.
         </Typography>
-        <Button
-          variant="contained"
-          size="large"
-          onClick={() => navigate('/admin/dashboard')}
-          sx={{ mt: 2, px: 4 }}
-        >
-          Back to dashboard
-        </Button>
+        <Box sx={{ display: 'flex', gap: 2, mt: 2 }}>
+          <Button
+            variant="contained"
+            size="large"
+            onClick={() => navigate('/admin/dashboard')}
+            sx={{ px: 4 }}
+          >
+            Back to dashboard
+          </Button>
+          <Button
+            variant="outlined"
+            size="large"
+            onClick={handleLogout}
+            sx={{ px: 4 }}
+          >
+            Login with another account
+          </Button>
+        </Box>
       </Box>
     </Container>
   );

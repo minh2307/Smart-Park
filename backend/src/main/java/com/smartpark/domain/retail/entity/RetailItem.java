@@ -3,6 +3,7 @@ package com.smartpark.domain.retail.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.math.BigDecimal;
@@ -41,6 +42,14 @@ public class RetailItem {
     @Builder.Default
     private Integer stockQuantity = 0;
 
+    @Column(name = "reserved_quantity", nullable = false)
+    @Builder.Default
+    private Integer reservedQuantity = 0;
+
+    @Column(name = "low_stock_threshold", nullable = false)
+    @Builder.Default
+    private Integer lowStockThreshold = 0;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @Builder.Default
@@ -49,6 +58,14 @@ public class RetailItem {
     @CreatedDate
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @Version
+    @Column(nullable = false)
+    private Long version;
 
     public enum RetailItemStatus { ACTIVE, OUT_OF_STOCK, DISCONTINUED }
 }

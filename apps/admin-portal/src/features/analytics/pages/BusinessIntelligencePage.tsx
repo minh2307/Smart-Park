@@ -100,7 +100,7 @@ export const BusinessIntelligencePage: React.FC = () => {
   }, [pivotData, chartType, valueMetric, mode]);
 
   // Role Check
-  const hasAccessToBI = currentUser?.role === 'ADMIN';
+  const hasAccessToBI = (currentUser?.role === 'SYSTEM_ADMIN' || currentUser?.role === 'PARK_MANAGER');
 
   if (!hasAccessToBI) {
     return (

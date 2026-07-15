@@ -2,11 +2,11 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
-import { UserRole } from '../../features/auth/types';
+import { AppRole } from '../../features/auth/types';
 
 interface RoleGuardProps {
   children: React.ReactNode;
-  allowedRoles: UserRole[];
+  allowedRoles: AppRole[];
 }
 
 export const RoleGuard: React.FC<RoleGuardProps> = ({ children, allowedRoles }) => {

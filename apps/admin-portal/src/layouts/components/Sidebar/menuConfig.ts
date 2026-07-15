@@ -24,12 +24,13 @@ import {
   MdForum,
   MdWarning,
 } from 'react-icons/md';
+import { AppRole } from '../../../features/auth/types';
 
 export interface MenuItem {
   title: string;
   icon: IconType;
   route?: string;
-  allowedRoles?: string[];
+  allowedRoles?: AppRole[];
   children?: MenuItem[];
 }
 
@@ -38,12 +39,12 @@ export const menuConfig: MenuItem[] = [
     title: 'Tổng quan điều hành',
     icon: MdDashboard,
     route: '/admin/dashboard',
-    allowedRoles: ['ADMIN', 'NHAN_VIEN'],
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF', 'OPERATIONS_STAFF'],
   },
   {
     title: 'Phân tích & BI',
     icon: MdDashboard,
-    allowedRoles: ['ADMIN'],
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER'],
     children: [
       {
         title: 'Phân tích doanh thu',
@@ -101,31 +102,31 @@ export const menuConfig: MenuItem[] = [
     title: 'Bảng vận hành hệ thống',
     icon: MdWarning,
     route: '/admin/operational',
-    allowedRoles: ['ADMIN', 'NHAN_VIEN'],
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER'],
   },
   {
     title: 'Trung tâm báo cáo',
     icon: MdInbox,
     route: '/admin/reports',
-    allowedRoles: ['ADMIN'],
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER'],
   },
   {
     title: 'Trung tâm xuất dữ liệu',
     icon: MdRedeem,
     route: '/admin/exports',
-    allowedRoles: ['ADMIN'],
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER'],
   },
   {
     title: 'Người dùng',
     icon: MdPeople,
     route: '/admin/users',
-    allowedRoles: ['ADMIN'],
+    allowedRoles: ['SYSTEM_ADMIN'],
   },
 
   {
     title: 'Kiểm soát ra vào',
     icon: MdSecurity,
-    allowedRoles: ['ADMIN', 'NHAN_VIEN'],
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'OPERATIONS_STAFF'],
     children: [
       {
         title: 'Quản lý cổng',
@@ -147,7 +148,7 @@ export const menuConfig: MenuItem[] = [
   {
     title: 'Quản lý vé',
     icon: MdConfirmationNumber,
-    allowedRoles: ['ADMIN', 'NHAN_VIEN'],
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF'],
     children: [
       {
         title: 'Tổng quan',
@@ -158,7 +159,7 @@ export const menuConfig: MenuItem[] = [
         title: 'Loại vé',
         icon: MdSettings,
         route: '/admin/tickets/types',
-        allowedRoles: ['ADMIN'],
+        allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER'],
       },
     ],
   },
@@ -166,30 +167,30 @@ export const menuConfig: MenuItem[] = [
     title: 'Đơn hàng',
     icon: MdShoppingBag,
     route: '/admin/orders',
-    allowedRoles: ['ADMIN', 'NHAN_VIEN'],
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF'],
   },
   {
     title: 'Khách hàng',
     icon: MdPeople,
     route: '/admin/customers',
-    allowedRoles: ['ADMIN', 'NHAN_VIEN'],
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF'],
   },
   {
     title: 'Thành viên',
     icon: MdCardMembership,
     route: '/admin/memberships',
-    allowedRoles: ['ADMIN', 'NHAN_VIEN'],
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF'],
   },
   {
     title: 'Điểm tích lũy',
     icon: MdStars,
     route: '/admin/loyalty',
-    allowedRoles: ['ADMIN', 'NHAN_VIEN'],
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF'],
   },
   {
     title: 'Khách hàng & Khuyến mãi',
     icon: MdLocalOffer,
-    allowedRoles: ['ADMIN', 'NHAN_VIEN'],
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF'],
     children: [
       {
         title: 'Chiến dịch',
@@ -217,72 +218,72 @@ export const menuConfig: MenuItem[] = [
     title: 'Khách vãng lai',
     icon: MdAssignmentInd,
     route: '/admin/visitors',
-    allowedRoles: ['ADMIN', 'NHAN_VIEN'],
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF', 'OPERATIONS_STAFF'],
   },
   {
     title: 'Trò chơi',
     icon: MdToys,
     route: '/admin/rides',
-    allowedRoles: ['ADMIN', 'NHAN_VIEN'],
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'OPERATIONS_STAFF'],
   },
   {
     title: 'Danh mục trò chơi',
     icon: MdCategory,
     route: '/admin/ride-categories',
-    allowedRoles: ['ADMIN', 'NHAN_VIEN'],
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'OPERATIONS_STAFF'],
   },
   {
     title: 'Bãi đỗ xe',
     icon: MdLocalParking,
     route: '/admin/parking',
-    allowedRoles: ['ADMIN', 'NHAN_VIEN'],
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'OPERATIONS_STAFF'],
   },
   {
     title: 'Tủ đồ thông minh',
     icon: MdInbox,
     route: '/admin/lockers',
-    allowedRoles: ['ADMIN', 'NHAN_VIEN'],
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'OPERATIONS_STAFF'],
   },
   {
     title: 'Khu ẩm thực',
     icon: MdFastfood,
     route: '/admin/food-court',
-    allowedRoles: ['ADMIN', 'NHAN_VIEN'],
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF'],
   },
   {
     title: 'Cửa hàng bán lẻ',
     icon: MdStorefront,
     route: '/admin/retail',
-    allowedRoles: ['ADMIN', 'NHAN_VIEN'],
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF'],
   },
   {
     title: 'Quầy bán vé POS',
     icon: MdPointOfSale,
     route: '/admin/pos',
-    allowedRoles: ['ADMIN', 'NHAN_VIEN'],
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF'],
   },
   {
     title: 'Thông báo',
     icon: MdCampaign,
     route: '/admin/notifications',
-    allowedRoles: ['ADMIN', 'NHAN_VIEN'],
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF', 'OPERATIONS_STAFF'],
   },
   {
     title: 'Hỗ trợ khách hàng',
     icon: MdForum,
     route: '/admin/support',
-    allowedRoles: ['ADMIN', 'NHAN_VIEN'],
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'SALES_STAFF', 'OPERATIONS_STAFF'],
   },
   {
     title: 'Sự cố & An toàn',
     icon: MdWarning,
     route: '/admin/incidents',
-    allowedRoles: ['ADMIN', 'NHAN_VIEN'],
+    allowedRoles: ['SYSTEM_ADMIN', 'PARK_MANAGER', 'OPERATIONS_STAFF'],
   },
   {
     title: 'Cài đặt hệ thống',
     icon: MdSettings,
     route: '/admin/settings',
-    allowedRoles: ['ADMIN'],
+    allowedRoles: ['SYSTEM_ADMIN'],
   },
 ];
